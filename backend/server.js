@@ -5,7 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,76 +13,85 @@ const __dirname = path.dirname(__filename);
 app.use(cors());
 app.use(express.json());
 
+// ============ FUNÇÕES UTILITÁRIAS ============
+
+// Carrega dados JSON de um setor
 function carregarDados(setor) {
-  const caminhoJson = path.join(__dirname, 'setores', setor, 'dados.json');
+  const caminhoJson = path.join(__dirname, 'data', `${setor}.json`);
+  
   if (!fs.existsSync(caminhoJson)) {
     throw new Error(`Dados não encontrados para: ${setor}`);
   }
+  
   const conteudo = fs.readFileSync(caminhoJson, 'utf-8');
   return JSON.parse(conteudo);
 }
 
-function carregarMarkdown(setor, arquivo = 'README') {
-  const caminhoMd = path.join(__dirname, 'setores', setor, 'markdown', `${arquivo}.md`);
-  if (!fs.existsSync(caminhoMd)) {
-    return null;
-  }
-  return fs.readFileSync(caminhoMd, 'utf-8');
-}
+// ============ ROTAS DA API ============
 
+// Listar todos os setores
 app.get('/api/setores', (req, res) => {
   try {
-    const setoresDir = path.join(__dirname, 'setores');
-    const setores = fs.readdirSync(setoresDir)
-      .filter(file => {
-        const stat = fs.statSync(path.join(setoresDir, file));
-        return stat.isDirectory();
-      })
+    const dataDir = path.join(__dirname, 'data');
+    const setores = fs.readdirSync(dataDir)
+      .filter(file => file.endsWith('.json') && file !== 'package.json' && file !== 'package-lock.json')
+      .map(file => file.replace('.json', ''))
       .sort();
-    res.json({ sucesso: true, total: setores.length, setores });
+    
+    res.json({ 
+      sucesso: true,
+      total: setores.length,
+      setores 
+    });
   } catch (erro) {
     res.status(500).json({ sucesso: false, erro: erro.message });
   }
 });
 
+// Obter dados de um setor
 app.get('/api/setor/:setor', (req, res) => {
   try {
     const { setor } = req.params;
     const dados = carregarDados(setor);
-    res.json({ sucesso: true, setor, dados });
+    
+    res.json({
+      sucesso: true,
+      setor,
+      dados
+    });
   } catch (erro) {
-    res.status(404).json({ sucesso: false, erro: erro.message });
+    res.status(404).json({ 
+      sucesso: false,
+      erro: erro.message 
+    });
   }
 });
 
-app.get('/api/setor/:setor/markdown/:arquivo?', (req, res) => {
-  try {
-    const { setor, arquivo } = req.params;
-    const conteudo = carregarMarkdown(setor, arquivo || 'README');
-    if (!conteudo) {
-      return res.status(404).json({ sucesso: false, erro: 'Markdown não encontrado' });
-    }
-    res.json({ sucesso: true, setor, arquivo: arquivo || 'README', conteudo });
-  } catch (erro) {
-    res.status(500).json({ sucesso: false, erro: erro.message });
-  }
-});
-
+// Obter tudo de um setor (dados completos)
 app.get('/api/setor/:setor/completo', (req, res) => {
   try {
     const { setor } = req.params;
     const dados = carregarDados(setor);
-    const markdown = carregarMarkdown(setor);
-    res.json({ sucesso: true, setor, dados, markdown });
+    
+    res.json({
+      sucesso: true,
+      setor,
+      dados
+    });
   } catch (erro) {
-    res.status(404).json({ sucesso: false, erro: erro.message });
+    res.status(404).json({ 
+      sucesso: false,
+      erro: erro.message 
+    });
   }
 });
 
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: '✅ Backend rodando!' });
 });
 
+// Rota raiz
 app.get('/', (req, res) => {
   res.json({ 
     mensagem: 'API SP500 by Sector',
@@ -91,16 +100,17 @@ app.get('/', (req, res) => {
       'GET /api/health',
       'GET /api/setores',
       'GET /api/setor/:setor',
-      'GET /api/setor/:setor/markdown/:arquivo',
       'GET /api/setor/:setor/completo'
     ]
   });
 });
 
+// Erro 404
 app.use((req, res) => {
   res.status(404).json({ erro: 'Rota não encontrada' });
 });
 
+// ============ INICIA O SERVIDOR ============
 app.listen(PORT, () => {
   console.log(`\n🚀 Backend rodando em http://localhost:${PORT}`);
   console.log(`📊 Teste: http://localhost:${PORT}/api/setores\n`);
