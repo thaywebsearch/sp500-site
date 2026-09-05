@@ -12,7 +12,46 @@ const SECTORS = [
   { id: 'utilities', name: 'Utilities' },
 ];
 
-const BASE_PATH = '/data/';
+// Configuração da API
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:5000'
+  : 'https://sp500-site-production.up.railway.app';
+
+// Função para buscar dados do setor
+async function fetchData(setor) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/setor/${setor}/completo`);
+    if (!response.ok) throw new Error(`Erro ao buscar ${setor}`);
+    return await response.json();
+  } catch (error) {
+    console.error(`Erro ao carregar dados de ${setor}:`, error);
+    return null;
+  }
+}
+
+// Função para listar todos os setores
+async function fetchSetores() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/setores`);
+    if (!response.ok) throw new Error('Erro ao buscar setores');
+    return await response.json();
+  } catch (error) {
+    console.error('Erro ao carregar setores:', error);
+    return null;
+  }
+}
+
+// Função para buscar dados simples (só dados.json)
+async function fetchSetorData(setor) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/setor/${setor}`);
+    if (!response.ok) throw new Error(`Erro ao buscar dados de ${setor}`);
+    return await response.json();
+  } catch (error) {
+    console.error(`Erro ao carregar dados de ${setor}:`, error);
+    return null;
+  }
+}
 
 let allCompanies = [];
 let filteredCompanies = [];
@@ -31,25 +70,51 @@ const headerCheckbox = document.getElementById('header-checkbox');
 async function loadAllData() {
   statsEl.textContent = 'Carregando dados...';
   
-  const promises = SECTORS.map(async (sector) => {
-    try {
-      const response = await fetch(`${BASE_PATH}${sector.id}/${sector.id}.json`);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
-      return data.companies.map(c => ({ ...c, sector: sector.id, sectorName: sector.name }));
-    } catch (e) {
-      console.error(`Erro ao carregar ${sector.id}:`, e);
-      return [];
-    }
-  });
-  
-  const results = await Promise.all(promises);
-  allCompanies = results.flat();
-  
-  populateSectorFilter();
-  applyFilters();
-  updateStats();
+  try {
+    // Busca todos os setores do backend
+    const setoresResponse = await fetch(`${API_BASE_URL}/api/setores`);
+    if (!setoresResponse.ok) throw new Error('Erro ao buscar setores');
+    const setoresData = await setoresResponse.json();
+    const setores = setoresData.setores || [];
+    
+    // Carrega dados de cada setor
+    const promises = setores.map(async (setorId) => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/setor/${setorId}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        
+        // Encontra o nome do setor
+        const sector = SECTORS.find(s => s.id === setorId);
+        const sectorName = sector ? sector.name : setorId;
+        
+        // Mapeia os dados corretamente
+        if (data.dados && Array.isArray(data.dados)) {
+          return data.dados.map(c => ({ 
+            ...c, 
+            sector: setorId, 
+            sectorName: sectorName 
+          }));
+        }
+        return [];
+      } catch (e) {
+        console.error(`Erro ao carregar ${setorId}:`, e);
+        return [];
+      }
+    });
+    
+    const results = await Promise.all(promises);
+    allCompanies = results.flat();
+    
+    populateSectorFilter();
+    applyFilters();
+    updateStats();
+  } catch (error) {
+    console.error('Erro ao carregar dados:', error);
+    statsEl.textContent = 'Erro ao carregar dados. Tente novamente.';
+  }
 }
+
 
 function populateSectorFilter() {
   SECTORS.forEach(sector => {
