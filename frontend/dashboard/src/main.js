@@ -14,7 +14,7 @@ const SECTORS = [
 
 // Configuração da API
 const API_BASE_URL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:5000'
+  ? 'http://localhost:5001'
   : 'https://sp500-site-production.up.railway.app';
 
 // Função para buscar dados do setor
