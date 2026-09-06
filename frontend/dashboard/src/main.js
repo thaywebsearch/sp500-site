@@ -89,8 +89,8 @@ async function loadAllData() {
         const sectorName = sector ? sector.name : setorId;
         
         // Mapeia os dados corretamente
-        if (data.companies && Array.isArray(data.companies)) {
-          return data.companies.map(c => ({ 
+        if (data.dados && data.dados.companies && Array.isArray(data.dados.companies)) {
+          return data.dados.companies.map(c => ({
             ...c, 
             sector: setorId, 
             sectorName: sectorName 

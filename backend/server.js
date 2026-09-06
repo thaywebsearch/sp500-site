@@ -57,7 +57,7 @@ app.get('/api/setor/:setor', (req, res) => {
     res.json({
       sucesso: true,
       setor,
-      dados.companies
+      dados
     });
   } catch (erro) {
     res.status(404).json({ 
