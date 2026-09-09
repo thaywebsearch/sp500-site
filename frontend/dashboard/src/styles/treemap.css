@@ -1,0 +1,252 @@
+/* ========== TREEMAP CONTAINER ========== */
+.treemap-container {
+  width: 100%;
+  padding: 30px 20px;
+  background: var(--bg-primary);
+  min-height: 100%;
+  color: var(--text-primary);
+}
+
+/* ========== HEADER ========== */
+.treemap-header {
+  text-align: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 20px;
+}
+
+.treemap-header h2 {
+  font-size: 1.8em;
+  margin: 0 0 10px 0;
+  color: var(--accent-cyan);
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95em;
+  margin: 0;
+}
+
+/* ========== STATS CARDS ========== */
+.treemap-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.stat-card:hover {
+  background: rgba(0, 212, 255, 0.05);
+  border-color: var(--accent-cyan);
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-value {
+  color: var(--accent-cyan);
+  font-size: 1.5em;
+  font-weight: bold;
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* ========== TREEMAP CHART ========== */
+.treemap-chart {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 30px;
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+/* ========== TOOLTIP ========== */
+.treemap-tooltip {
+  background: var(--bg-secondary);
+  border: 1px solid var(--accent-cyan);
+  border-radius: 4px;
+  padding: 12px;
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  font-size: 0.9em;
+}
+
+.tooltip-title {
+  margin: 0 0 10px 0;
+  font-size: 1em;
+  font-weight: bold;
+  color: var(--accent-cyan);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 6px 0;
+  font-size: 0.85em;
+}
+
+.tooltip-row span {
+  color: var(--text-secondary);
+}
+
+.tooltip-row strong {
+  color: var(--accent-cyan);
+  font-weight: 600;
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* ========== LEGEND ========== */
+.treemap-legend {
+  margin-top: 30px;
+}
+
+.treemap-legend h3 {
+  color: var(--accent-cyan);
+  font-size: 1.2em;
+  margin: 0 0 20px 0;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.legend-item {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.legend-item:hover,
+.legend-item.active {
+  background: rgba(0, 212, 255, 0.05);
+  border-color: var(--accent-cyan);
+}
+
+.legend-color {
+  width: 30px;
+  height: 30px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.legend-item:hover .legend-color,
+.legend-item.active .legend-color {
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+}
+
+.legend-info {
+  flex: 1;
+}
+
+.legend-name {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 0.95em;
+}
+
+.legend-details {
+  color: var(--text-secondary);
+  font-size: 0.8em;
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* ========== LOADING ========== */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 20px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent-cyan);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading p {
+  color: var(--text-secondary);
+  font-size: 0.95em;
+}
+
+/* ========== RESPONSIVIDADE ========== */
+@media (max-width: 768px) {
+  .treemap-container {
+    padding: 20px 15px;
+  }
+
+  .treemap-header h2 {
+    font-size: 1.4em;
+  }
+
+  .treemap-stats {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .treemap-chart {
+    padding: 15px;
+    min-height: 350px;
+  }
+
+  .legend-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .legend-item {
+    padding: 10px;
+  }
+
+  .legend-color {
+    width: 25px;
+    height: 25px;
+  }
+}
