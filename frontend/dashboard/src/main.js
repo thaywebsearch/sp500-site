@@ -13,6 +13,7 @@ function updateUI() {
   document.getElementById('dashboard-view').style.display = 'none';
   document.getElementById('treemap-view').style.display = 'none';
   document.getElementById('heatmap-view').style.display = 'none';
+  document.getElementById('bubble-chart-view').style.display = 'none';
 
   // Mostra apenas a aba ativa
   if (currentTab === 'dashboard') {
@@ -24,6 +25,10 @@ function updateUI() {
   } else if (currentTab === 'heatmap') {
     document.getElementById('heatmap-view').style.display = 'block';
     // Heatmap já carrega sozinho
+	else if (currentTab === 'bubble') {
+  document.getElementById('bubble-chart-view').style.display = 'block';
+  loadBubbleChart();
+}
   }
 }
 
