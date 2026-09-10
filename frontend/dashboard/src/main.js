@@ -17,7 +17,7 @@ function updateUI() {
   // Mostra apenas a aba ativa
   if (currentTab === 'dashboard') {
     document.getElementById('dashboard-view').style.display = 'block';
-    loadDashboard();
+
   } else if (currentTab === 'treemap') {
     document.getElementById('treemap-view').style.display = 'block';
     // Treemap já carrega sozinho
