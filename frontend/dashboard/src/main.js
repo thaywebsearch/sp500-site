@@ -1,30 +1,18 @@
-// Importação de estilos para o Vite compilar
 import './style.css';
 import './styles/globals.css';
 
-// 1. IMPORTAÇÃO DOS MÓDULOS DE GRÁFICOS
-// ==========================================
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
 import { loadBubbleChart } from './bubble-chart.js';
 
-// ==========================================
-// 2. ESTADO DA APLICAÇÃO E NAVEGAÇÃO
-// ==========================================
 let currentTab = 'dashboard';
 
-/**
- * Altera a aba ativa e dispara a atualização da UI
- * @param {string} tab - ID da aba ('dashboard', 'treemap', 'heatmap', 'bubble')
- */
 function setActiveTab(tab) {
+  console.log('➡️ A mudar para a aba:', tab);
   currentTab = tab;
   updateUI();
 }
 
-/**
- * Atualiza a visibilidade das vistas e carrega os gráficos sob procura
- */
 function updateUI() {
   // 1. Oculta todas as vistas
   const views = ['dashboard-view', 'treemap-view', 'heatmap-view', 'bubble-chart-view'];
@@ -33,7 +21,7 @@ function updateUI() {
     if (el) el.style.display = 'none';
   });
 
-  // 2. Atualiza os botões (adiciona/remove a classe 'active')
+  // 2. Atualiza estado visual dos botões
   document.querySelectorAll('.nav-tab').forEach(btn => {
     if (btn.dataset.tab === currentTab) {
       btn.classList.add('active');
@@ -42,7 +30,7 @@ function updateUI() {
     }
   });
 
-  // 3. Exibe a vista ativa e dispara a renderização apenas do gráfico selecionado
+  // 3. Exibe a vista ativa e executa o respetivo gráfico
   if (currentTab === 'dashboard') {
     const dash = document.getElementById('dashboard-view');
     if (dash) dash.style.display = 'block';
@@ -64,12 +52,13 @@ function updateUI() {
   }
 }
 
-// ==========================================
-// 3. EVENT LISTENERS E INICIALIZAÇÃO
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-  // Atribui os ouvintes de clique aos botões de navegação
-  document.querySelectorAll('.nav-tab').forEach(btn => {
+// Configuração dos eventos após o carregamento completo do DOM
+function initApp() {
+  console.log('🚀 App iniciada. A procurar botões .nav-tab...');
+  const buttons = document.querySelectorAll('.nav-tab');
+  console.log(`Encontrados ${buttons.length} botões.`);
+
+  buttons.forEach(btn => {
     btn.addEventListener('click', (e) => {
       const targetBtn = e.target.closest('.nav-tab');
       if (targetBtn && targetBtn.dataset.tab) {
@@ -78,6 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Carrega o Dashboard inicialmente
+  // Renderiza o Dashboard inicialmente
   updateUI();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
