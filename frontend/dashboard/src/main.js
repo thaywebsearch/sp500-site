@@ -25,12 +25,12 @@ function updateUI() {
   } else if (currentTab === 'heatmap') {
     document.getElementById('heatmap-view').style.display = 'block';
     // Heatmap já carrega sozinho
-	else if (currentTab === 'bubble') {
+  }	else if (currentTab === 'bubble') {
   document.getElementById('bubble-chart-view').style.display = 'block';
   loadBubbleChart();
 }
   }
-}
+
 
 // Atualiza botões de navegação
 function updateTabButtons() {
