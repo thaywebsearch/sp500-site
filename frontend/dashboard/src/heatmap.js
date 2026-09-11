@@ -178,3 +178,4 @@ function changeMetricHeat(metric) {
   // Recarrega o heatmap (você pode otimizar isso depois)
   loadHeatmap();
 }
+export { loadHeatmap };
