@@ -294,4 +294,4 @@ if (typeof THREE === 'undefined') {
     console.log('Three.js carregado');
   };
 }
-export { loadBubbleChart };
+

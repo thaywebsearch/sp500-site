@@ -162,4 +162,4 @@ function renderTreemap(data, totalCap) {
 
   container.innerHTML = html;
 }
-export { loadTreemap };
+
