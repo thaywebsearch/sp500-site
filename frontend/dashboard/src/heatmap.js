@@ -1,5 +1,5 @@
 // Configuração da API
-const API_BASE_URL_HEAT = window.location.hostname === 'localhost' 
+const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:5001'
   : 'https://sp500-site-production.up.railway.app';
 
@@ -26,14 +26,14 @@ async function loadHeatmap() {
   container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Carregando heatmap...</p></div>';
 
   try {
-    const setoresResponse = await fetch(`${API_BASE_URL_HEAT}/api/setores`);
+    const setoresResponse = await fetch(`${API_BASE_URL}/api/setores`);
     const setoresData = await setoresResponse.json();
     const setores = setoresData.setores || [];
 
     const sectorStats = await Promise.all(
       setores.map(async (setorId) => {
         try {
-          const response = await fetch(`${API_BASE_URL_HEAT}/api/setor/${setorId}`);
+          const response = await fetch(`${API_BASE_URL}/api/setor/${setorId}`);
           const sectorData = await response.json();
           
           const sector = SECTORS_HEAT.find(s => s.id === setorId);

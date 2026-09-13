@@ -1,5 +1,5 @@
 // Configuração da API
-const API_BASE_URL_BUBBLE = window.location.hostname === 'localhost' 
+const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:5001'
   : 'https://sp500-site-production.up.railway.app';
 
@@ -26,14 +26,14 @@ async function loadBubbleChart() {
   container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Carregando Bubble Chart 3D...</p></div>';
 
   try {
-    const setoresResponse = await fetch(`${API_BASE_URL_BUBBLE}/api/setores`);
+    const setoresResponse = await fetch(`${API_BASE_URL}/api/setores`);
     const setoresData = await setoresResponse.json();
     const setores = setoresData.setores || [];
 
     const sectorStats = await Promise.all(
       setores.map(async (setorId) => {
         try {
-          const response = await fetch(`${API_BASE_URL_BUBBLE}/api/setor/${setorId}`);
+          const response = await fetch(`${API_BASE_URL}/api/setor/${setorId}`);
           const sectorData = await response.json();
           
           const sector = SECTORS_BUBBLE.find(s => s.id === setorId);
