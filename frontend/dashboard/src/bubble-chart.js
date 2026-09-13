@@ -1,5 +1,4 @@
-// Configuração da API
-const API_BASE_URL = window.location.hostname === 'localhost' 
+const API_BASE_URL_BUBBLE = window.location.hostname === 'localhost' 
   ? 'http://localhost:5001'
   : 'https://sp500-site-production.up.railway.app';
 
