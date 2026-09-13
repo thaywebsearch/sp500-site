@@ -1,6 +1,4 @@
-const API_BASE_URL_BUBBLE = window.location.hostname === 'localhost' 
-  ? 'http://localhost:5001'
-  : 'https://sp500-site-production.up.railway.app';
+// Usa API_BASE_URL definida em main.js - NÃO redeclare!
 
 const SECTORS_BUBBLE = [
   { id: 'communication-services', name: 'Communication Services', color: 0x00d4ff },
@@ -87,7 +85,11 @@ function renderBubbleChart(data, container) {
   const threeContainer = container.querySelector('#three-container');
   const legendGrid = container.querySelector('#bubble-legend-grid');
 
-  // Three.js Setup
+  if (typeof THREE === 'undefined') {
+    console.error('Three.js not loaded');
+    return;
+  }
+
   bubbleScene = new THREE.Scene();
   bubbleScene.background = new THREE.Color(0x101018);
   
@@ -100,7 +102,6 @@ function renderBubbleChart(data, container) {
   bubbleRenderer.shadowMap.enabled = true;
   threeContainer.appendChild(bubbleRenderer.domElement);
 
-  // Lights
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
   bubbleScene.add(ambientLight);
 
@@ -108,22 +109,18 @@ function renderBubbleChart(data, container) {
   pointLight.position.set(100, 100, 100);
   bubbleScene.add(pointLight);
 
-  // Axes
   const axesHelper = new THREE.AxesHelper(100);
   bubbleScene.add(axesHelper);
 
-  // Grid
   const gridHelper = new THREE.GridHelper(200, 10, 0x2a2a3e, 0x1a1a2e);
   bubbleScene.add(gridHelper);
 
-  // Normaliza dados
   const maxMarketCap = Math.max(...data.map(s => s.marketCap));
   const maxCompanies = Math.max(...data.map(s => s.companies));
   const maxDividend = Math.max(...data.map(s => s.avgDividend));
 
   bubbleSpheres = [];
 
-  // Cria bolhas
   data.forEach((sector) => {
     const x = (sector.marketCap / maxMarketCap - 0.5) * 200;
     const y = (sector.avgDividend / maxDividend - 0.5) * 150;
@@ -142,7 +139,6 @@ function renderBubbleChart(data, container) {
     sphere.receiveShadow = true;
     sphere.position.set(x, y, z);
     
-    // Armazenar dados
     sphere.userData = {
       name: sector.name,
       marketCap: sector.marketCap,
@@ -155,7 +151,6 @@ function renderBubbleChart(data, container) {
     bubbleSpheres.push({ sphere, originalPosition: { x, y, z } });
   });
 
-  // Mouse controls
   let isDragging = false;
   let previousMousePosition = { x: 0, y: 0 };
 
@@ -180,39 +175,11 @@ function renderBubbleChart(data, container) {
     isDragging = false;
   });
 
-  // Zoom
   threeContainer.addEventListener('wheel', (e) => {
     e.preventDefault();
     bubbleCamera.position.z += e.deltaY * 0.1;
   });
 
-  // Hover effect
-  const raycaster = new THREE.Raycaster();
-  const mouse = new THREE.Vector2();
-
-  threeContainer.addEventListener('mousemove', (event) => {
-    mouse.x = (event.clientX / threeContainer.clientWidth) * 2 - 1;
-    mouse.y = -(event.clientY / threeContainer.clientHeight) * 2 + 1;
-
-    raycaster.setFromCamera(mouse, bubbleCamera);
-    const intersects = raycaster.intersectObjects(bubbleSpheres.map(s => s.sphere));
-
-    bubbleSpheres.forEach(({ sphere, originalPosition }) => {
-      sphere.scale.set(1, 1, 1);
-      sphere.material.emissiveIntensity = 0.2;
-    });
-
-    if (intersects.length > 0) {
-      const hovered = intersects[0].object;
-      hovered.scale.set(1.3, 1.3, 1.3);
-      hovered.material.emissiveIntensity = 0.6;
-      
-      // Mostra info
-      showBubbleInfo(hovered.userData);
-    }
-  });
-
-  // Legend
   data.forEach((sector) => {
     const item = document.createElement('div');
     item.className = 'legend-item';
@@ -236,14 +203,12 @@ function renderBubbleChart(data, container) {
     legendGrid.appendChild(item);
   });
 
-  // Animation loop
   function animate() {
     requestAnimationFrame(animate);
     bubbleRenderer.render(bubbleScene, bubbleCamera);
   }
   animate();
 
-  // Handle resize
   window.addEventListener('resize', () => {
     const width = threeContainer.clientWidth;
     const height = threeContainer.clientHeight;
@@ -252,45 +217,3 @@ function renderBubbleChart(data, container) {
     bubbleRenderer.setSize(width, height);
   });
 }
-
-function showBubbleInfo(data) {
-  let infoDiv = document.getElementById('bubble-info-popup');
-  if (!infoDiv) {
-    infoDiv = document.createElement('div');
-    infoDiv.id = 'bubble-info-popup';
-    infoDiv.style.cssText = `
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--accent-cyan);
-      border-radius: 8px;
-      padding: 15px;
-      color: var(--text-primary);
-      font-size: 0.9em;
-      max-width: 300px;
-      z-index: 1000;
-      font-family: "JetBrains Mono", monospace;
-    `;
-    document.body.appendChild(infoDiv);
-  }
-
-  infoDiv.innerHTML = `
-    <strong style="color: var(--accent-cyan);">${data.name}</strong><br>
-    Market Cap: <strong>$${data.marketCap.toFixed(1)}B</strong><br>
-    Empresas: <strong>${data.companies}</strong><br>
-    Div. Yield: <strong>${data.avgDividend.toFixed(2)}%</strong><br>
-    Top: <strong>${data.topCompany}</strong>
-  `;
-}
-
-// Carrega Three.js se não estiver disponível
-if (typeof THREE === 'undefined') {
-  const script = document.createElement('script');
-  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-  document.head.appendChild(script);
-  script.onload = () => {
-    console.log('Three.js carregado');
-  };
-}
-

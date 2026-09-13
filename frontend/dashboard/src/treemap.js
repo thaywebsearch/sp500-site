@@ -1,6 +1,4 @@
-const API_BASE_URL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:5001'
-  : 'https://sp500-site-production.up.railway.app';
+// Usa API_BASE_URL definida em main.js - NÃO redeclare!
 
 const SECTORS = [
   { id: 'communication-services', name: 'Communication Services' },
@@ -99,7 +97,6 @@ function renderTreemap(data, totalCap) {
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; padding: 20px;">
   `;
 
-  // Renderiza retângulos coloridos
   data.forEach((sector, idx) => {
     const colors = ['#00d4ff', '#00e676', '#ffab00', '#ff5252', '#8bc34a', '#4caf50', '#2196f3', '#9c27b0', '#ff9800', '#f44336', '#00bcd4'];
     const color = colors[idx % colors.length];
@@ -161,4 +158,3 @@ function renderTreemap(data, totalCap) {
 
   container.innerHTML = html;
 }
-

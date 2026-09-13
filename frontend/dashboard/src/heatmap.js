@@ -1,7 +1,5 @@
-const API_BASE_URL_HEAT = window.location.hostname === 'localhost' 
-  ? 'http://localhost:5001'
-  : 'https://sp500-site-production.up.railway.app';
-  
+// Usa API_BASE_URL definida em main.js - NÃO redeclare!
+
 const SECTORS_HEAT = [
   { id: 'communication-services', name: 'Communication Services' },
   { id: 'consumer-discretionary', name: 'Consumer Discretionary' },
@@ -117,7 +115,7 @@ function renderHeatmap(data) {
       <div class="heatmap-row">
         <div class="heatmap-cell sector-name">${sector.name}</div>
         <div class="heatmap-cell metric-cell" style="${selectedMetricHeat === 'marketCap' ? `background-color: ${getColorIntensity(sector.marketCap / 1e9, maxMarketCap)}; opacity: 0.7; color: white; font-weight: bold;` : ''}">
-          $${(sector.marketCap / 1e9).toFixed(1)}B
+          $${(sector.marketCap / 1e9 > 0 ? (sector.marketCap / 1e9).toFixed(1) : '0')}B
         </div>
         <div class="heatmap-cell metric-cell" style="${selectedMetricHeat === 'companies' ? `background-color: ${getColorIntensity(sector.companies, maxCompanies)}; opacity: 0.7; color: white; font-weight: bold;` : ''}">
           ${sector.companies}
@@ -168,13 +166,9 @@ function renderHeatmap(data) {
 
 function changeMetricHeat(metric) {
   selectedMetricHeat = metric;
-  // Atualiza botões
   document.querySelectorAll('.metric-btn').forEach(btn => {
     btn.classList.remove('active');
   });
   event.target.classList.add('active');
-  
-  // Recarrega o heatmap (você pode otimizar isso depois)
   loadHeatmap();
 }
-
