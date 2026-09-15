@@ -26,33 +26,3 @@ if __name__ == "__main__":
     df = fetch_sp500()
     save_files(df)
     print("S&P 500 atualizado com sucesso!")
-
-    
-  
-       
-       
-   
-    
-
-
-     
-            
-
-    
-
-   
-  
-   
-     
-
-     
-    
-      
- 
-
-     
-    
-
-
-
-  

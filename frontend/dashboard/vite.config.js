@@ -1,12 +1,9 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/sp500-by-sector/dashboard/',
+  base: './',
   build: {
     outDir: '../docs',
-    emptyOutDir: true
+    emptyOutDir: true,
   },
-  server: {
-    port: 3000
-  }
-})
+});

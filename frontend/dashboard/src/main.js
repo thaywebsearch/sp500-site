@@ -1,21 +1,9 @@
 // ========== CONFIGURAÇÃO ==========
-const API_BASE_URL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:5001'
-  : 'https://sp500-site-production.up.railway.app';
-
-const SECTORS = [
-  { id: 'communication-services', name: 'Communication Services' },
-  { id: 'consumer-discretionary', name: 'Consumer Discretionary' },
-  { id: 'consumer-staples', name: 'Consumer Staples' },
-  { id: 'energy', name: 'Energy' },
-  { id: 'financials', name: 'Financials' },
-  { id: 'health-care', name: 'Health Care' },
-  { id: 'industrials', name: 'Industrials' },
-  { id: 'information-technology', name: 'Information Technology' },
-  { id: 'materials', name: 'Materials' },
-  { id: 'real-estate', name: 'Real Estate' },
-  { id: 'utilities', name: 'Utilities' },
-];
+import { API_BASE_URL, SECTORS } from './config.js';
+import { loadTreemap } from './treemap.js';
+import { loadHeatmap } from './heatmap.js';
+import { loadBubbleChart } from './bubble-chart.js';
+import { formatMarketCap, escapeHtml, debounce, filterCompanies, sortCompanies } from './utils.js';
 
 // ========== VARIÁVEIS GLOBAIS ==========
 let allCompanies = [];
@@ -40,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   headerCheckbox = document.getElementById('header-checkbox');
 
   // Event listeners para navegação
-  document.querySelectorAll('.nav-tab').forEach(btn => {
+  document.querySelectorAll('.nav-tab').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       setActiveTab(e.target.dataset.tab);
     });
@@ -54,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (headerCheckbox) {
     headerCheckbox.addEventListener('change', () => {
       const visibleCheckboxes = tableBody.querySelectorAll('.row-checkbox');
-      visibleCheckboxes.forEach(cb => {
+      visibleCheckboxes.forEach((cb) => {
         cb.checked = headerCheckbox.checked;
         cb.dispatchEvent(new Event('change'));
       });
@@ -68,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (selectAllBtn) {
     selectAllBtn.addEventListener('click', () => {
-      filteredCompanies.forEach(c => selectedRows.add(c.symbol));
+      filteredCompanies.forEach((c) => selectedRows.add(c.symbol));
       renderTable();
       updateStats();
     });
@@ -130,7 +118,7 @@ function updateUI() {
 
 function updateTabButtons() {
   const buttons = document.querySelectorAll('.nav-tab');
-  buttons.forEach(btn => {
+  buttons.forEach((btn) => {
     btn.classList.remove('active');
     if (btn.dataset.tab === currentTab) {
       btn.classList.add('active');
@@ -154,14 +142,14 @@ async function loadDashboardData() {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
 
-        const sector = SECTORS.find(s => s.id === setorId);
+        const sector = SECTORS.find((s) => s.id === setorId);
         const sectorName = sector ? sector.name : setorId;
 
         if (data.dados && data.dados.companies && Array.isArray(data.dados.companies)) {
-          return data.dados.companies.map(c => ({
+          return data.dados.companies.map((c) => ({
             ...c,
             sector: setorId,
-            sectorName: sectorName
+            sectorName: sectorName,
           }));
         }
         return [];
@@ -186,9 +174,9 @@ async function loadDashboardData() {
 // ========== FILTROS E BUSCA ==========
 function populateSectorFilter() {
   if (!sectorFilter) return;
-  
+
   sectorFilter.innerHTML = '<option value="">Todos os Setores</option>';
-  SECTORS.forEach(sector => {
+  SECTORS.forEach((sector) => {
     const option = document.createElement('option');
     option.value = sector.id;
     option.textContent = sector.name;
@@ -197,40 +185,14 @@ function populateSectorFilter() {
 }
 
 function applyFilters() {
-  let result = [...allCompanies];
-
   const sectorValue = sectorFilter?.value || '';
-  if (sectorValue) {
-    result = result.filter(c => c.sector === sectorValue);
-  }
-
-  const searchValue = searchInput?.value?.toLowerCase().trim() || '';
-  if (searchValue) {
-    result = result.filter(c =>
-      c.symbol.toLowerCase().includes(searchValue) ||
-      c.name.toLowerCase().includes(searchValue) ||
-      (c.subIndustry && c.subIndustry.toLowerCase().includes(searchValue)) ||
-      (c.headquarters && c.headquarters.toLowerCase().includes(searchValue))
-    );
-  }
-
+  const searchValue = searchInput?.value || '';
   const sortValue = sortSelect?.value || 'symbol-asc';
-  result.sort((a, b) => {
-    switch (sortValue) {
-      case 'marketCap-desc':
-        return (b.marketCap || 0) - (a.marketCap || 0);
-      case 'marketCap-asc':
-        return (a.marketCap || 0) - (b.marketCap || 0);
-      case 'symbol-asc':
-        return a.symbol.localeCompare(b.symbol);
-      case 'name-asc':
-        return a.name.localeCompare(b.name);
-      case 'dividendYield-desc':
-        return (b.dividendYield || 0) - (a.dividendYield || 0);
-      default:
-        return 0;
-    }
-  });
+
+  const result = sortCompanies(
+    filterCompanies(allCompanies, { sector: sectorValue, search: searchValue }),
+    sortValue
+  );
 
   filteredCompanies = result;
   currentPage = 1;
@@ -260,16 +222,19 @@ function renderTable() {
     return;
   }
 
-  tableBody.innerHTML = pageCompanies.map((company, index) => {
-    const globalIndex = start + index + 1;
-    const isSelected = selectedRows.has(company.symbol);
-    const marketCap = formatMarketCap(company.marketCap);
-    const dividendYield = company.dividendYield !== null && company.dividendYield !== undefined
-      ? `${company.dividendYield.toFixed(2)}%`
-      : '—';
-    const dividendClass = company.dividendYield !== null && company.dividendYield !== undefined ? 'positive' : 'none';
+  tableBody.innerHTML = pageCompanies
+    .map((company, index) => {
+      const globalIndex = start + index + 1;
+      const isSelected = selectedRows.has(company.symbol);
+      const marketCap = formatMarketCap(company.marketCap);
+      const dividendYield =
+        company.dividendYield !== null && company.dividendYield !== undefined
+          ? `${company.dividendYield.toFixed(2)}%`
+          : '—';
+      const dividendClass =
+        company.dividendYield !== null && company.dividendYield !== undefined ? 'positive' : 'none';
 
-    return `
+      return `
       <tr data-symbol="${company.symbol}" class="${isSelected ? 'selected' : ''}">
         <td><input type="checkbox" class="row-checkbox" ${isSelected ? 'checked' : ''}></td>
         <td>${globalIndex}</td>
@@ -282,7 +247,8 @@ function renderTable() {
         <td class="dividend ${dividendClass}">${dividendYield}</td>
       </tr>
     `;
-  }).join('');
+    })
+    .join('');
 
   attachRowListeners();
   updateHeaderCheckbox();
@@ -291,7 +257,7 @@ function renderTable() {
 function attachRowListeners() {
   if (!tableBody) return;
 
-  tableBody.querySelectorAll('.row-checkbox').forEach(checkbox => {
+  tableBody.querySelectorAll('.row-checkbox').forEach((checkbox) => {
     checkbox.addEventListener('change', (e) => {
       const row = e.target.closest('tr');
       const symbol = row.dataset.symbol;
@@ -306,7 +272,7 @@ function attachRowListeners() {
     });
   });
 
-  tableBody.querySelectorAll('tr[data-symbol]').forEach(row => {
+  tableBody.querySelectorAll('tr[data-symbol]').forEach((row) => {
     row.addEventListener('click', (e) => {
       if (e.target.type === 'checkbox') return;
       const checkbox = row.querySelector('.row-checkbox');
@@ -374,7 +340,7 @@ function renderPagination() {
 
   paginationEl.innerHTML = html;
 
-  paginationEl.querySelectorAll('button[data-page]').forEach(btn => {
+  paginationEl.querySelectorAll('button[data-page]').forEach((btn) => {
     btn.addEventListener('click', () => {
       currentPage = parseInt(btn.dataset.page);
       renderTable();
@@ -420,7 +386,7 @@ function updateStats() {
 
 // ========== EXPORTAR DADOS ==========
 function getSelectedCompanies() {
-  return allCompanies.filter(c => selectedRows.has(c.symbol));
+  return allCompanies.filter((c) => selectedRows.has(c.symbol));
 }
 
 function exportCSV() {
@@ -430,8 +396,19 @@ function exportCSV() {
     return;
   }
 
-  const headers = ['Símbolo', 'Empresa', 'Setor', 'Subindústria', 'Sede', 'Market Cap', 'Dividend Yield', 'Data Inclusão', 'CIK', 'Fundação'];
-  const rows = companies.map(c => [
+  const headers = [
+    'Símbolo',
+    'Empresa',
+    'Setor',
+    'Subindústria',
+    'Sede',
+    'Market Cap',
+    'Dividend Yield',
+    'Data Inclusão',
+    'CIK',
+    'Fundação',
+  ];
+  const rows = companies.map((c) => [
     c.symbol,
     `"${c.name}"`,
     c.sectorName,
@@ -441,10 +418,10 @@ function exportCSV() {
     c.dividendYield !== null && c.dividendYield !== undefined ? c.dividendYield.toFixed(2) : '',
     c.dateAdded || '',
     c.cik || '',
-    c.founded || ''
+    c.founded || '',
   ]);
 
-  const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
   downloadFile(csv, 'sp500-selecao.csv', 'text/csv');
 }
 
@@ -469,28 +446,4 @@ function downloadFile(content, filename, mimeType) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-}
-
-// ========== UTILIDADES ==========
-function formatMarketCap(marketCap) {
-  if (!marketCap) return 'N/A';
-  if (marketCap >= 1e12) return `$${(marketCap / 1e12).toFixed(2)}T`;
-  if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}B`;
-  if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}M`;
-  return `$${marketCap.toLocaleString()}`;
-}
-
-function escapeHtml(text) {
-  if (!text) return '';
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-function debounce(fn, delay) {
-  let timeoutId;
-  return (...args) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => fn.apply(this, args), delay);
-  };
 }

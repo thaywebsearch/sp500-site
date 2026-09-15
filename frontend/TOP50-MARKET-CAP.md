@@ -1,6 +1,6 @@
 # S&P 500 — Top 50 por Market Cap (Consolidado)
 
-> Gerado em: 2026-08-29 · Total de empresas no S&P 500: 503
+> Gerado em: 2026-09-15 · Total de empresas no S&P 500: 503
 
 | # | Símbolo | Empresa | Setor | Market Cap | Subindústria | Dividend Yield |
 |---|---------|---------|-------|------------|--------------|----------------|

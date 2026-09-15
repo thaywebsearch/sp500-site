@@ -67,25 +67,6 @@ app.get('/api/setor/:setor', (req, res) => {
   }
 });
 
-// Obter tudo de um setor (dados completos)
-app.get('/api/setor/:setor/completo', (req, res) => {
-  try {
-    const { setor } = req.params;
-    const dados = carregarDados(setor);
-    
-    res.json({
-      sucesso: true,
-      setor,
-      dados
-    });
-  } catch (erro) {
-    res.status(404).json({ 
-      sucesso: false,
-      erro: erro.message 
-    });
-  }
-});
-
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: '✅ Backend rodando!' });
@@ -99,8 +80,7 @@ app.get('/', (req, res) => {
     endpoints: [
       'GET /api/health',
       'GET /api/setores',
-      'GET /api/setor/:setor',
-      'GET /api/setor/:setor/completo'
+      'GET /api/setor/:setor'
     ]
   });
 });

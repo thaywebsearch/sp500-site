@@ -1,1 +1,46 @@
+# Dependências
 node_modules/
+
+# Builds / dist
+dist/
+.vite/
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+env/
+ENV/
+
+# Ambiente e segredos
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE / editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Artefatos de dados temporários
+sp500.json

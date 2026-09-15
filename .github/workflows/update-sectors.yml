@@ -2,13 +2,13 @@ name: Atualização Semanal do S&P 500 por Setores
 
 on:
   schedule:
-    - cron: '0 6 * * 1'
+    - cron: "0 6 * * 1"
   workflow_dispatch:
     inputs:
       force:
-        description: 'Forçar atualização mesmo sem mudanças'
+        description: "Forçar atualização mesmo sem mudanças"
         required: false
-        default: 'false'
+        default: "false"
 
 permissions:
   contents: write
@@ -16,6 +16,9 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
     steps:
       - name: Checkout repositório
         uses: actions/checkout@v4
@@ -26,7 +29,7 @@ jobs:
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Executar script de atualização
         run: python scripts/update_sectors.py

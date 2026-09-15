@@ -1,10 +1,13 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import yahooFinance from 'yahoo-finance2';
 
 const yf = new yahooFinance({ suppressNotices: ['yahooSurvey'] });
 
-const DATA_DIR = 'C:\\FirstDemo\\data\\sp500-by-sector';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const DATA_DIR = __dirname;
 
 const sectors = [
   'communication-services',
@@ -44,7 +47,7 @@ async function fetchCompanyData(symbol) {
       hasDividend: hasDividendYield(quote.dividendYield)
     };
   } catch (error) {
-    console.error(`Error fetching ${symbol}:`, error.message);
+    console.error(`Erro ao buscar ${symbol}:`, error.message);
     return {
       symbol,
       marketCap: null,
@@ -96,7 +99,7 @@ async function enrichSectorFile(sectorDir) {
 }
 
 async function main() {
-  console.log('Starting data enrichment...\n');
+  console.log('Iniciando enriquecimento de dados...\n');
   
   for (const sector of sectors) {
     try {
@@ -106,7 +109,7 @@ async function main() {
     }
   }
   
-  console.log('\n✓ All sectors enriched!');
+  console.log('\n✓ Todos os setores enriquecidos!');
 }
 
 main().catch(console.error);

@@ -50,7 +50,7 @@
 | 44 | CARR | Carrier Global | $48.25B | Building Products | Palm Beach Gardens, Florida | 1.63% |
 | 45 | ROK | Rockwell Automation | $47.75B | Electrical Components & Equipment | Milwaukee, Wisconsin | 1.27% |
 | 46 | PAYX | Paychex | $45.18B | Human Resource & Employment Services | Penfield, New York | 3.76% |
-| 47 | FERG | Ferguson Enterprises | $44.23B | Building Products | Newport News, Virginia | 1.51% |
+| 47 | FERG | Ferguson Enterprises | $44.23B | Trading Companies & Distributors | Newport News, Virginia | 1.51% |
 | 48 | ODFL | Old Dominion | $41.46B | Cargo Ground Transportation | Thomasville, North Carolina | 0.58% |
 | 49 | UAL | United Airlines Holdings | $36.01B | Passenger Airlines | Chicago, Illinois | — |
 | 50 | EME | Emcor | $32.76B | Construction & Engineering | Norwalk, Connecticut | 0.21% |

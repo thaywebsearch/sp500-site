@@ -1,7 +1,9 @@
-async function loadHeatmap() {
+import { API_BASE_URL, SECTORS } from './config.js';
+
+export async function loadHeatmap() {
   const container = document.getElementById('heatmap-view');
   if (!container) return;
-  
+
   container.style.display = 'flex';
   container.style.flexDirection = 'column';
   container.style.height = '100%';
@@ -9,31 +11,35 @@ async function loadHeatmap() {
   container.style.margin = '0';
   container.style.padding = '0';
   container.style.background = 'var(--bg-primary)';
-  
-  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando heatmap...</div>';
+
+  container.innerHTML =
+    '<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando heatmap...</div>';
 
   try {
     const res = await fetch(`${API_BASE_URL}/api/setores`);
     const data = await res.json();
     const setores = data.setores || [];
-    
-    const stats = await Promise.all(setores.map(async (id) => {
-      const r = await fetch(`${API_BASE_URL}/api/setor/${id}`);
-      const d = await r.json();
-      const s = SECTORS.find(x => x.id === id);
-      const cos = d.dados?.companies || [];
-      const totalCap = cos.reduce((a, c) => a + (c.marketCap || 0), 0);
-      const avgDiv = cos.length > 0 ? cos.reduce((a, c) => a + (c.dividendYield || 0), 0) / cos.length : 0;
-      const withDiv = cos.filter(c => c.hasDividend === 'Sim').length;
-      
-      return { 
-        name: s?.name || id,
-        cap: (totalCap / 1e9).toFixed(1),
-        companies: cos.length,
-        avgDiv: parseFloat(avgDiv.toFixed(2)),
-        withDiv: withDiv
-      };
-    }));
+
+    const stats = await Promise.all(
+      setores.map(async (id) => {
+        const r = await fetch(`${API_BASE_URL}/api/setor/${id}`);
+        const d = await r.json();
+        const s = SECTORS.find((x) => x.id === id);
+        const cos = d.dados?.companies || [];
+        const totalCap = cos.reduce((a, c) => a + (c.marketCap || 0), 0);
+        const avgDiv =
+          cos.length > 0 ? cos.reduce((a, c) => a + (c.dividendYield || 0), 0) / cos.length : 0;
+        const withDiv = cos.filter((c) => c.hasDividend === 'Sim').length;
+
+        return {
+          name: s?.name || id,
+          cap: (totalCap / 1e9).toFixed(1),
+          companies: cos.length,
+          avgDiv: parseFloat(avgDiv.toFixed(2)),
+          withDiv: withDiv,
+        };
+      })
+    );
 
     function getColor(value, max) {
       const pct = (value / max) * 100;
@@ -44,9 +50,9 @@ async function loadHeatmap() {
       return '#4caf50';
     }
 
-    const maxCap = Math.max(...stats.map(s => parseFloat(s.cap)));
-    const maxDiv = Math.max(...stats.map(s => s.avgDiv));
-    const maxCompanies = Math.max(...stats.map(s => s.companies));
+    const maxCap = Math.max(...stats.map((s) => parseFloat(s.cap)));
+    const maxDiv = Math.max(...stats.map((s) => s.avgDiv));
+    const maxCompanies = Math.max(...stats.map((s) => s.companies));
 
     let html = `
       <div style="
@@ -173,7 +179,7 @@ async function loadHeatmap() {
         "
         onmouseover="this.style.boxShadow='0 0 16px ${capColor}44';this.style.transform='scale(1.05)'"
         onmouseout="this.style.boxShadow='none';this.style.transform='scale(1)'"
-        >\$${s.cap}</div>
+        >$${s.cap}</div>
         
         <div style="
           padding: 16px;
@@ -267,8 +273,8 @@ async function loadHeatmap() {
     `;
 
     container.innerHTML = html;
-    
-  } catch (e) { 
-    container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar heatmap</div>';
+  } catch {
+    container.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar heatmap</div>';
   }
 }

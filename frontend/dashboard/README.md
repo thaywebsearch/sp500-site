@@ -52,9 +52,10 @@ dashboard/
 
 ## Dados
 
-Os dados vêm dos arquivos JSON em `../<setor>/<setor>.json`, gerados pelo script `scripts/generate_marketcap_tables.py`.
+Os dados vêm dos arquivos JSON em `../<setor>/<setor>.json` (fonte única), sincronizados para `public/data/` pelo script `scripts/update_sectors.py`.
 
 Campos disponíveis por empresa:
+
 - `symbol`, `name`, `sector`, `subIndustry`, `headquarters`
 - `marketCap`, `marketCapClassification`
 - `dividendYield`, `hasDividend`
