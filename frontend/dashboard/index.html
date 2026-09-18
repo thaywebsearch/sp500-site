@@ -1,237 +1,260 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SP500 Dashboard</title>
-    <link rel="stylesheet" href="src/styles/globals.css" />
-    <style>
-      /* Estilos adicionais se necessário */
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        background: var(--bg-secondary);
-        color: var(--text-primary);
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SP500 Dashboard</title>
+  <link rel="stylesheet" href="src/style.css">
+  <link rel="stylesheet" href="src/styles/globals.css">
+  <style>
+    /* Estilos adicionais se necessário */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+    
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    th {
+      background: rgba(0, 212, 255, 0.1);
+      color: var(--accent-cyan);
+      font-weight: bold;
+    }
+    
+    tr:hover {
+      background: rgba(0, 212, 255, 0.05);
+    }
+    
+    .app-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 0;
+    }
 
-      th,
-      td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid var(--border);
-      }
+    .app-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 16px rgba(0, 212, 255, 0.4));
+      transition: all 0.3s ease;
+    }
 
-      th {
-        background: rgba(0, 212, 255, 0.1);
-        color: var(--accent-cyan);
-        font-weight: bold;
-      }
+    .app-logo:hover {
+      filter: drop-shadow(0 0 24px rgba(0, 212, 255, 0.6));
+      transform: scale(1.05);
+    }
+    
+    .dashboard-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .control-group label {
+      color: var(--text-secondary);
+      font-size: 0.9em;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .control-group input,
+    .control-group select {
+      padding: 10px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      border-radius: 4px;
+      font-family: "JetBrains Mono", monospace;
+    }
+    
+    .control-group input:focus,
+    .control-group select:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    
+    button {
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      font-family: "JetBrains Mono", monospace;
+    }
+    
+    button:hover {
+      color: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+      background: rgba(0, 212, 255, 0.05);
+    }
+    
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .pagination {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .pagination button {
+      padding: 8px 12px;
+      font-size: 0.9em;
+    }
+    
+    .pagination button.active {
+      background: rgba(0, 212, 255, 0.2);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+    
+    .ellipsis {
+      color: var(--text-secondary);
+    }
+    
+    .pagination-info {
+      color: var(--text-secondary);
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Navegação -->
+    <nav class="app-nav">
+      <div class="nav-content">
+        <h1 class="app-title">
+          <img src="./src/assets/venomf-logo.png" alt="SP500 Logo" class="app-logo">
+          SP500 Dashboard
+        </h1>
+        <div class="nav-tabs">
+          <button class="nav-tab active" data-tab="dashboard">📋 Dashboard</button>
+          <button class="nav-tab" data-tab="treemap">🗺️ Mapa de Setores</button>
+          <button class="nav-tab" data-tab="heatmap">🔥 Heatmap</button>
+          <button class="nav-tab" data-tab="bubble">🫧 Bubble Chart</button>
+        </div>
+      </div>
+    </nav>
 
-      tr:hover {
-        background: rgba(0, 212, 255, 0.05);
-      }
-
-      .dashboard-controls {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin-bottom: 30px;
-      }
-
-      .control-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .control-group label {
-        color: var(--text-secondary);
-        font-size: 0.9em;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .control-group input,
-      .control-group select {
-        padding: 10px;
-        background: var(--bg-secondary);
-        border: 1px solid var(--border);
-        color: var(--text-primary);
-        border-radius: 4px;
-        font-family: 'JetBrains Mono', monospace;
-      }
-
-      .control-group input:focus,
-      .control-group select:focus {
-        outline: none;
-        border-color: var(--accent-cyan);
-        box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
-      }
-
-      .button-group {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-        margin-bottom: 30px;
-        flex-wrap: wrap;
-      }
-
-      button {
-        padding: 10px 20px;
-        background: transparent;
-        border: 1px solid var(--border);
-        color: var(--text-primary);
-        cursor: pointer;
-        border-radius: 4px;
-        transition: all 0.2s ease;
-        font-family: 'JetBrains Mono', monospace;
-      }
-
-      button:hover {
-        color: var(--accent-cyan);
-        border-color: var(--accent-cyan);
-        background: rgba(0, 212, 255, 0.05);
-      }
-
-      button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-
-      .pagination {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-        flex-wrap: wrap;
-        align-items: center;
-      }
-
-      .pagination button {
-        padding: 8px 12px;
-        font-size: 0.9em;
-      }
-
-      .pagination button.active {
-        background: rgba(0, 212, 255, 0.2);
-        border-color: var(--accent-cyan);
-        color: var(--accent-cyan);
-      }
-
-      .ellipsis {
-        color: var(--text-secondary);
-      }
-
-      .pagination-info {
-        color: var(--text-secondary);
-        font-size: 0.9em;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="app-container">
-      <!-- Navegação -->
-      <nav class="app-nav">
-        <div class="nav-content">
-          <h1 class="app-title">📊 SP500 Dashboard</h1>
-          <div class="nav-tabs">
-            <button class="nav-tab active" data-tab="dashboard">📋 Dashboard</button>
-            <button class="nav-tab" data-tab="treemap">🗺️ Mapa de Setores</button>
-            <button class="nav-tab" data-tab="heatmap">🔥 Heatmap</button>
-            <button class="nav-tab" data-tab="bubble">🫧 Bubble Chart</button>
+    <!-- Conteúdo Principal -->
+    <main class="app-main">
+      <!-- Dashboard View -->
+      <div id="dashboard-view" class="dashboard-view">
+        <!-- Controles -->
+        <div class="dashboard-controls">
+          <div class="control-group">
+            <label for="sector-filter">Setor</label>
+            <select id="sector-filter"></select>
+          </div>
+          
+          <div class="control-group">
+            <label for="search-input">Buscar</label>
+            <input type="text" id="search-input" placeholder="Símbolo, Empresa, Indústria...">
+          </div>
+          
+          <div class="control-group">
+            <label for="sort-select">Ordenar por</label>
+            <select id="sort-select">
+              <option value="symbol-asc">Símbolo (A-Z)</option>
+              <option value="name-asc">Empresa (A-Z)</option>
+              <option value="marketCap-desc">Market Cap (maior)</option>
+              <option value="marketCap-asc">Market Cap (menor)</option>
+              <option value="dividendYield-desc">Dividend Yield (%)</option>
+            </select>
           </div>
         </div>
-      </nav>
 
-      <!-- Conteúdo Principal -->
-      <main class="app-main">
-        <!-- Dashboard View -->
-        <div id="dashboard-view" class="dashboard-view">
-          <!-- Controles -->
-          <div class="dashboard-controls">
-            <div class="control-group">
-              <label for="sector-filter">Setor</label>
-              <select id="sector-filter"></select>
-            </div>
-
-            <div class="control-group">
-              <label for="search-input">Buscar</label>
-              <input type="text" id="search-input" placeholder="Símbolo, Empresa, Indústria..." />
-            </div>
-
-            <div class="control-group">
-              <label for="sort-select">Ordenar por</label>
-              <select id="sort-select">
-                <option value="symbol-asc">Símbolo (A-Z)</option>
-                <option value="name-asc">Empresa (A-Z)</option>
-                <option value="marketCap-desc">Market Cap (maior)</option>
-                <option value="marketCap-asc">Market Cap (menor)</option>
-                <option value="dividendYield-desc">Dividend Yield (%)</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Botões de Ação -->
-          <div class="button-group">
-            <button id="select-all">✓ Selecionar Tudo</button>
-            <button id="deselect-all">✗ Limpar Seleção</button>
-            <button id="export-csv">📥 Exportar CSV</button>
-            <button id="export-json">📥 Exportar JSON</button>
-          </div>
-
-          <!-- Estatísticas -->
-          <div
-            style="
-              margin-bottom: 20px;
-              padding: 15px;
-              background: var(--bg-secondary);
-              border: 1px solid var(--border);
-              border-radius: 4px;
-            "
-          >
-            <strong id="stats" style="color: var(--accent-cyan)">Carregando...</strong>
-          </div>
-
-          <!-- Tabela -->
-          <div style="overflow-x: auto; border: 1px solid var(--border); border-radius: 4px">
-            <table>
-              <thead>
-                <tr>
-                  <th style="width: 40px">
-                    <input type="checkbox" id="header-checkbox" />
-                  </th>
-                  <th style="width: 50px">#</th>
-                  <th>Símbolo</th>
-                  <th>Empresa</th>
-                  <th>Setor</th>
-                  <th>Market Cap</th>
-                  <th>Subindústria</th>
-                  <th>Sede</th>
-                  <th>Div. Yield</th>
-                </tr>
-              </thead>
-              <tbody id="table-body">
-                <tr>
-                  <td colspan="9" style="text-align: center; padding: 3rem">Carregando dados...</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Paginação -->
-          <div id="pagination" class="pagination"></div>
+        <!-- Botões de Ação -->
+        <div class="button-group">
+          <button id="select-all">✓ Selecionar Tudo</button>
+          <button id="deselect-all">✗ Limpar Seleção</button>
+          <button id="export-csv">📥 Exportar CSV</button>
+          <button id="export-json">📥 Exportar JSON</button>
         </div>
 
-        <!-- Treemap View -->
-        <div id="treemap-view" style="display: none"></div>
+        <!-- Estatísticas -->
+        <div style="margin-bottom: 20px; padding: 15px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px;">
+          <strong id="stats" style="color: var(--accent-cyan);">Carregando...</strong>
+        </div>
 
-        <!-- Heatmap View -->
-        <div id="heatmap-view" style="display: none"></div>
+        <!-- Tabela -->
+        <div style="overflow-x: auto; border: 1px solid var(--border); border-radius: 4px;">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 40px;">
+                  <input type="checkbox" id="header-checkbox">
+                </th>
+                <th style="width: 50px;">#</th>
+                <th>Símbolo</th>
+                <th>Empresa</th>
+                <th>Setor</th>
+                <th>Market Cap</th>
+                <th>Subindústria</th>
+                <th>Sede</th>
+                <th>Div. Yield</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <tr>
+                <td colspan="9" style="text-align: center; padding: 3rem;">Carregando dados...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-        <!-- Bubble Chart View -->
-        <div id="bubble-chart-view" style="display: none"></div>
-      </main>
-    </div>
+        <!-- Paginação -->
+        <div id="pagination" class="pagination"></div>
+      </div>
 
-    <script type="module" src="/src/main.js"></script>
-  </body>
+      <!-- Treemap View -->
+      <div id="treemap-view" style="display:none;">
+      </div>
+
+      <!-- Heatmap View -->
+      <div id="heatmap-view" style="display:none;">
+      </div>
+
+      <!-- Bubble Chart View -->
+      <div id="bubble-chart-view" style="display:none;">
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="src/treemap.js"></script>
+  <script src="src/heatmap.js"></script>
+  <script src="src/bubble-chart.js"></script>
+  <script src="src/main.js"></script>
+</body>
 </html>
