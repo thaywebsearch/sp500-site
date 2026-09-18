@@ -1,9 +1,7 @@
-import { API_BASE_URL, SECTORS } from './config.js';
-
-export async function loadHeatmap() {
+async function loadHeatmap() {
   const container = document.getElementById('heatmap-view');
   if (!container) return;
-
+  
   container.style.display = 'flex';
   container.style.flexDirection = 'column';
   container.style.height = '100%';
@@ -11,37 +9,32 @@ export async function loadHeatmap() {
   container.style.margin = '0';
   container.style.padding = '0';
   container.style.background = 'var(--bg-primary)';
-
-  container.innerHTML =
-    '<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando heatmap...</div>';
+  
+  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando heatmap...</div>';
 
   try {
     const res = await fetch(`${API_BASE_URL}/api/setores`);
     const data = await res.json();
     const setores = data.setores || [];
+    
+    const sectorData = await Promise.all(setores.map(async (id) => {
+      const r = await fetch(`${API_BASE_URL}/api/setor/${id}`);
+      const d = await r.json();
+      const s = SECTORS.find(x => x.id === id);
+      const cos = d.dados?.companies || [];
+      
+      // Top 4 empresas por Market Cap
+      const top4 = cos
+        .sort((a, b) => (b.marketCap || 0) - (a.marketCap || 0))
+        .slice(0, 4);
+      
+      return { 
+        name: s?.name || id,
+        companies: top4
+      };
+    }));
 
-    const stats = await Promise.all(
-      setores.map(async (id) => {
-        const r = await fetch(`${API_BASE_URL}/api/setor/${id}`);
-        const d = await r.json();
-        const s = SECTORS.find((x) => x.id === id);
-        const cos = d.dados?.companies || [];
-        const totalCap = cos.reduce((a, c) => a + (c.marketCap || 0), 0);
-        const avgDiv =
-          cos.length > 0 ? cos.reduce((a, c) => a + (c.dividendYield || 0), 0) / cos.length : 0;
-        const withDiv = cos.filter((c) => c.hasDividend === 'Sim').length;
-
-        return {
-          name: s?.name || id,
-          cap: (totalCap / 1e9).toFixed(1),
-          companies: cos.length,
-          avgDiv: parseFloat(avgDiv.toFixed(2)),
-          withDiv: withDiv,
-        };
-      })
-    );
-
-    function getColor(value, max) {
+    function getHeatColor(value, max) {
       const pct = (value / max) * 100;
       if (pct >= 80) return '#ff5252';
       if (pct >= 60) return '#ff9800';
@@ -50,9 +43,13 @@ export async function loadHeatmap() {
       return '#4caf50';
     }
 
-    const maxCap = Math.max(...stats.map((s) => parseFloat(s.cap)));
-    const maxDiv = Math.max(...stats.map((s) => s.avgDiv));
-    const maxCompanies = Math.max(...stats.map((s) => s.companies));
+    // Encontra o maior Market Cap para normalizar cores
+    let maxCap = 0;
+    sectorData.forEach(sector => {
+      sector.companies.forEach(company => {
+        if (company.marketCap > maxCap) maxCap = company.marketCap;
+      });
+    });
 
     let html = `
       <div style="
@@ -63,218 +60,207 @@ export async function loadHeatmap() {
         padding: 40px;
         box-sizing: border-box;
         overflow-y: auto;
+        gap: 24px;
       ">
-        <div style="
-          display: grid;
-          grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-          gap: 12px;
-          margin-bottom: 20px;
-        ">
-          <div style="
-            padding: 16px;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 8px;
-            font-size: 12px;
+        <div>
+          <h2 style="
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            color: var(--text-primary);
+            font-weight: 600;
+          ">🔥 Heatmap - Top 4 Empresas por Setor</h2>
+          <p style="
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--accent-cyan);
-            font-weight: 600;
-          ">Setor</div>
-          <div style="
-            padding: 16px;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 8px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent-cyan);
-            font-weight: 600;
-            text-align: center;
-          ">Market Cap (B)</div>
-          <div style="
-            padding: 16px;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 8px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent-cyan);
-            font-weight: 600;
-            text-align: center;
-          ">Empresas</div>
-          <div style="
-            padding: 16px;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 8px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent-cyan);
-            font-weight: 600;
-            text-align: center;
-          ">Avg Div %</div>
-          <div style="
-            padding: 16px;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 8px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent-cyan);
-            font-weight: 600;
-            text-align: center;
-          ">Com Div</div>
+          ">Market Cap | Cores indicam força relativa do mercado</p>
         </div>
-        
+
         <div style="
           display: grid;
-          grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-          gap: 12px;
+          grid-template-columns: 200px 1fr;
+          gap: 20px;
           flex: 1;
         ">
     `;
 
-    stats.forEach((s) => {
-      const capColor = getColor(parseFloat(s.cap), maxCap);
-      const compColor = getColor(s.companies, maxCompanies);
-      const divColor = getColor(s.avgDiv, maxDiv);
-      const withDivColor = getColor(s.withDiv, s.companies);
-
+    sectorData.forEach((sector) => {
       html += `
         <div style="
-          padding: 16px;
-          background: var(--bg-secondary);
+          padding: 20px;
+          background: rgba(26, 26, 46, 0.5);
           border: 1px solid var(--border);
-          border-radius: 8px;
+          border-radius: 12px;
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--text-primary);
           display: flex;
           align-items: center;
-          color: var(--text-primary);
-          font-weight: 500;
-          font-size: 14px;
-          transition: all 0.3s ease;
-          cursor: pointer;
+          justify-content: center;
+          text-align: center;
+          word-wrap: break-word;
+          min-height: 160px;
         "
         onmouseover="this.style.borderColor='var(--accent-cyan)';this.style.background='rgba(0,212,255,0.05)'"
-        onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-secondary)'"
-        >${s.name}</div>
-        
+        onmouseout="this.style.borderColor='var(--border)';this.style.background='rgba(26, 26, 46, 0.5)'"
+        >${sector.name}</div>
+
         <div style="
-          padding: 16px;
-          background: ${capColor}22;
-          border: 1px solid ${capColor}44;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: ${capColor};
-          font-weight: 700;
-          font-size: 16px;
-          transition: all 0.3s ease;
-          cursor: pointer;
-        "
-        onmouseover="this.style.boxShadow='0 0 16px ${capColor}44';this.style.transform='scale(1.05)'"
-        onmouseout="this.style.boxShadow='none';this.style.transform='scale(1)'"
-        >$${s.cap}</div>
-        
-        <div style="
-          padding: 16px;
-          background: ${compColor}22;
-          border: 1px solid ${compColor}44;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: ${compColor};
-          font-weight: 700;
-          font-size: 16px;
-          transition: all 0.3s ease;
-          cursor: pointer;
-        "
-        onmouseover="this.style.boxShadow='0 0 16px ${compColor}44';this.style.transform='scale(1.05)'"
-        onmouseout="this.style.boxShadow='none';this.style.transform='scale(1)'"
-        >${s.companies}</div>
-        
-        <div style="
-          padding: 16px;
-          background: ${divColor}22;
-          border: 1px solid ${divColor}44;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: ${divColor};
-          font-weight: 700;
-          font-size: 16px;
-          transition: all 0.3s ease;
-          cursor: pointer;
-        "
-        onmouseover="this.style.boxShadow='0 0 16px ${divColor}44';this.style.transform='scale(1.05)'"
-        onmouseout="this.style.boxShadow='none';this.style.transform='scale(1)'"
-        >${s.avgDiv}%</div>
-        
-        <div style="
-          padding: 16px;
-          background: ${withDivColor}22;
-          border: 1px solid ${withDivColor}44;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: ${withDivColor};
-          font-weight: 700;
-          font-size: 16px;
-          transition: all 0.3s ease;
-          cursor: pointer;
-        "
-        onmouseover="this.style.boxShadow='0 0 16px ${withDivColor}44';this.style.transform='scale(1.05)'"
-        onmouseout="this.style.boxShadow='none';this.style.transform='scale(1)'"
-        >${s.withDiv}/${s.companies}</div>
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 12px;
+          align-content: start;
+        ">
       `;
+
+      sector.companies.forEach((company) => {
+        const color = getHeatColor(company.marketCap, maxCap);
+        const capB = (company.marketCap / 1e9).toFixed(2);
+        const dividend = company.dividendYield !== null && company.dividendYield !== undefined 
+          ? company.dividendYield.toFixed(2) 
+          : '—';
+
+        html += `
+          <div style="
+            background: ${color}22;
+            border: 1px solid ${color}44;
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+          "
+          onmouseover="
+            this.style.borderColor='${color}';
+            this.style.background='${color}44';
+            this.style.transform='translateY(-4px)';
+            this.style.boxShadow='0 12px 32px ${color}33';
+          "
+          onmouseout="
+            this.style.borderColor='${color}44';
+            this.style.background='${color}22';
+            this.style.transform='translateY(0)';
+            this.style.boxShadow='none';
+          "
+          title="${company.name}"
+          >
+            <div>
+              <div style="
+                font-size: 13px;
+                font-weight: 700;
+                color: ${color};
+                margin-bottom: 4px;
+              ">${company.symbol}</div>
+              <div style="
+                font-size: 11px;
+                color: var(--text-secondary);
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              ">${company.name}</div>
+            </div>
+
+            <div style="
+              border-top: 1px solid ${color}33;
+              padding-top: 12px;
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 8px;
+              margin-top: 12px;
+            ">
+              <div>
+                <div style="
+                  font-size: 10px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.5px;
+                  color: var(--text-secondary);
+                  margin-bottom: 3px;
+                ">Market Cap</div>
+                <div style="
+                  font-size: 14px;
+                  font-weight: 700;
+                  color: ${color};
+                ">\$${capB}B</div>
+              </div>
+              <div>
+                <div style="
+                  font-size: 10px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.5px;
+                  color: var(--text-secondary);
+                  margin-bottom: 3px;
+                ">Div %</div>
+                <div style="
+                  font-size: 14px;
+                  font-weight: 700;
+                  color: var(--text-primary);
+                ">${dividend}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
     });
 
     html += `
         </div>
-        
+
         <div style="
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-          gap: 16px;
-          margin-top: 40px;
-          padding-top: 40px;
-          border-top: 1px solid var(--border);
+          padding: 24px;
+          background: rgba(26, 26, 46, 0.5);
+          border: 1px solid var(--border);
+          border-radius: 12px;
         ">
-          <div style="text-align: center;">
-            <div style="width: 24px; height: 24px; background: #4caf50; border-radius: 4px; margin: 0 auto 8px;"></div>
-            <div style="font-size: 12px; color: var(--text-secondary);">Baixo (&lt;20%)</div>
-          </div>
-          <div style="text-align: center;">
-            <div style="width: 24px; height: 24px; background: #8bc34a; border-radius: 4px; margin: 0 auto 8px;"></div>
-            <div style="font-size: 12px; color: var(--text-secondary);">Baixo-Médio (20-40%)</div>
-          </div>
-          <div style="text-align: center;">
-            <div style="width: 24px; height: 24px; background: #ffeb3b; border-radius: 4px; margin: 0 auto 8px;"></div>
-            <div style="font-size: 12px; color: var(--text-secondary);">Médio (40-60%)</div>
-          </div>
-          <div style="text-align: center;">
-            <div style="width: 24px; height: 24px; background: #ff9800; border-radius: 4px; margin: 0 auto 8px;"></div>
-            <div style="font-size: 12px; color: var(--text-secondary);">Alto (60-80%)</div>
-          </div>
-          <div style="text-align: center;">
-            <div style="width: 24px; height: 24px; background: #ff5252; border-radius: 4px; margin: 0 auto 8px;"></div>
-            <div style="font-size: 12px; color: var(--text-secondary);">Muito Alto (&gt;80%)</div>
+          <h3 style="
+            margin: 0 0 16px 0;
+            font-size: 14px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+          ">📊 Legenda de Cores</h3>
+          <div style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            font-size: 12px;
+            color: var(--text-secondary);
+          ">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 20px; height: 20px; background: #4caf50; border-radius: 4px;"></div>
+              <span>Baixo (&lt;20%)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 20px; height: 20px; background: #8bc34a; border-radius: 4px;"></div>
+              <span>Baixo-Médio (20-40%)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 20px; height: 20px; background: #ffeb3b; border-radius: 4px;"></div>
+              <span>Médio (40-60%)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 20px; height: 20px; background: #ff9800; border-radius: 4px;"></div>
+              <span>Alto (60-80%)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 20px; height: 20px; background: #ff5252; border-radius: 4px;"></div>
+              <span>Muito Alto (&gt;80%)</span>
+            </div>
           </div>
         </div>
       </div>
     `;
 
     container.innerHTML = html;
-  } catch {
-    container.innerHTML =
-      '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar heatmap</div>';
+    
+  } catch (e) { 
+    console.error('Erro:', e);
+    container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar heatmap</div>';
   }
 }
