@@ -1,0 +1,206 @@
+{
+  "generatedAt": "2026-09-19 21:43:49 UTC",
+  "referenceDate": "2026-09-18",
+  "topGainers": [
+    {
+      "symbol": "COIN",
+      "name": "Coinbase",
+      "sector": "Financials",
+      "lastPrice": 194.25,
+      "changePct": 11.66
+    },
+    {
+      "symbol": "SNDK",
+      "name": "Sandisk",
+      "sector": "Information Technology",
+      "lastPrice": 1791.82,
+      "changePct": 10.99
+    },
+    {
+      "symbol": "HOOD",
+      "name": "Robinhood Markets",
+      "sector": "Financials",
+      "lastPrice": 119.82,
+      "changePct": 9.12
+    },
+    {
+      "symbol": "COHR",
+      "name": "Coherent Corp.",
+      "sector": "Information Technology",
+      "lastPrice": 317.36,
+      "changePct": 7.22
+    },
+    {
+      "symbol": "LRCX",
+      "name": "Lam Research",
+      "sector": "Information Technology",
+      "lastPrice": 288.11,
+      "changePct": 6.98
+    },
+    {
+      "symbol": "STX",
+      "name": "Seagate Technology",
+      "sector": "Information Technology",
+      "lastPrice": 858.79,
+      "changePct": 6.93
+    },
+    {
+      "symbol": "AMAT",
+      "name": "Applied Materials",
+      "sector": "Information Technology",
+      "lastPrice": 444.57,
+      "changePct": 6.51
+    },
+    {
+      "symbol": "TER",
+      "name": "Teradyne",
+      "sector": "Information Technology",
+      "lastPrice": 371.47,
+      "changePct": 5.19
+    }
+  ],
+  "topLosers": [
+    {
+      "symbol": "HON",
+      "name": "Honeywell Technologies",
+      "sector": "Industrials",
+      "lastPrice": 206.46,
+      "changePct": -0.01
+    },
+    {
+      "symbol": "TKO",
+      "name": "TKO Group Holdings",
+      "sector": "Communication Services",
+      "lastPrice": 189.26,
+      "changePct": -0.02
+    },
+    {
+      "symbol": "ABBV",
+      "name": "AbbVie",
+      "sector": "Health Care",
+      "lastPrice": 263.96,
+      "changePct": -0.02
+    },
+    {
+      "symbol": "XYL",
+      "name": "Xylem Inc.",
+      "sector": "Industrials",
+      "lastPrice": 107.56,
+      "changePct": -0.04
+    },
+    {
+      "symbol": "NDSN",
+      "name": "Nordson Corporation",
+      "sector": "Industrials",
+      "lastPrice": 311.57,
+      "changePct": -0.05
+    },
+    {
+      "symbol": "WMT",
+      "name": "Walmart",
+      "sector": "Consumer Staples",
+      "lastPrice": 106.73,
+      "changePct": -0.06
+    },
+    {
+      "symbol": "TECH",
+      "name": "Bio-Techne",
+      "sector": "Health Care",
+      "lastPrice": 72.37,
+      "changePct": -0.06
+    },
+    {
+      "symbol": "APTV",
+      "name": "Aptiv",
+      "sector": "Consumer Discretionary",
+      "lastPrice": 43.59,
+      "changePct": -0.07
+    }
+  ],
+  "sectorPerformance": [
+    {
+      "name": "Information Technology",
+      "avgChangePct": 0.34,
+      "gainers": 33,
+      "losers": 40,
+      "total": 73
+    },
+    {
+      "name": "Financials",
+      "avgChangePct": 0.21,
+      "gainers": 33,
+      "losers": 42,
+      "total": 76
+    },
+    {
+      "name": "Industrials",
+      "avgChangePct": 0.11,
+      "gainers": 40,
+      "losers": 43,
+      "total": 83
+    },
+    {
+      "name": "Energy",
+      "avgChangePct": -0.18,
+      "gainers": 9,
+      "losers": 12,
+      "total": 21
+    },
+    {
+      "name": "Health Care",
+      "avgChangePct": -0.5,
+      "gainers": 16,
+      "losers": 43,
+      "total": 59
+    },
+    {
+      "name": "Consumer Discretionary",
+      "avgChangePct": -0.9,
+      "gainers": 10,
+      "losers": 37,
+      "total": 47
+    },
+    {
+      "name": "Real Estate",
+      "avgChangePct": -1.1,
+      "gainers": 3,
+      "losers": 27,
+      "total": 30
+    },
+    {
+      "name": "Consumer Staples",
+      "avgChangePct": -1.11,
+      "gainers": 6,
+      "losers": 28,
+      "total": 34
+    },
+    {
+      "name": "Utilities",
+      "avgChangePct": -1.36,
+      "gainers": 0,
+      "losers": 31,
+      "total": 31
+    },
+    {
+      "name": "Communication Services",
+      "avgChangePct": -1.58,
+      "gainers": 4,
+      "losers": 20,
+      "total": 24
+    },
+    {
+      "name": "Materials",
+      "avgChangePct": -1.89,
+      "gainers": 2,
+      "losers": 23,
+      "total": 25
+    }
+  ],
+  "marketMood": "bearish",
+  "stats": {
+    "gainers": 156,
+    "losers": 346,
+    "neutral": 1,
+    "total": 503
+  }
+}

@@ -1,7 +1,7 @@
 {
   "sector": "Information Technology",
   "count": 73,
-  "generatedAt": "2026-09-15",
+  "generatedAt": "2026-09-16",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -97,9 +97,9 @@
       "dateAdded": "1982-11-30",
       "cik": 320193,
       "founded": "1977",
-      "marketCap": 4662475882496,
+      "marketCap": 4851251544064,
       "marketCapClassification": "Mega",
-      "dividendYield": 0.34,
+      "dividendYield": 33.0,
       "hasDividend": "Sim"
     },
     {
@@ -1026,5 +1026,6 @@
       "dividendYield": null,
       "hasDividend": "Não"
     }
-  ]
+  ],
+  "liveUpdatedAt": "2026-09-16 21:56:56 +0100"
 }
