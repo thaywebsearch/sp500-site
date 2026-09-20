@@ -543,3 +543,89 @@ button:disabled {
   background: rgba(0, 212, 255, 0.1);
   box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
 }
+/* ========== Calendario de Dividendos ========== */
+.dividend-calendar {
+  margin: 1.25rem 0 2rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+}
+
+.dividend-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.15rem;
+}
+
+.dividend-head h3 { margin: 0; font-size: 1.05rem; }
+.dividend-horizon,
+.dividend-ref { font-size: 0.78rem; color: var(--text-muted); }
+
+.dividend-body { margin-top: 0.9rem; }
+
+.dividend-day {
+  margin: 0 0 0.9rem;
+  padding-left: 0.85rem;
+  border-left: 3px solid var(--border-soft);
+}
+
+.dividend-day-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0 0 0.45rem;
+  font-size: 0.92rem;
+  color: var(--text-strong);
+}
+
+.dividend-day-count {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.dividend-events-mensal,
+.dividend-events-semanal,
+.dividend-events-trimestral,
+.dividend-events {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.dividend-event-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.7rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--surface-raised, rgba(255,255,255,0.03));
+  border-radius: 8px;
+  font-size: 0.86rem;
+}
+
+.dividend-symbol {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.dividend-name { color: var(--text-secondary); }
+
+.dividend-cadence {
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 99px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.dividend-amount {
+  margin-left: auto;
+  font-weight: 700;
+  color: var(--positive);
+  font-variant-numeric: tabular-nums;
+}
+
+.dividend-empty { color: var(--text-muted); font-style: italic; }

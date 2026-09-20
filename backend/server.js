@@ -139,6 +139,34 @@ app.get('/api/resumo-dia', (req, res) => {
   }
 });
 
+// Calendário de dividendos (próximos eventos estimados por empresa)
+app.get('/api/calendario-dividendos', (req, res) => {
+  const caminhoJson = path.join(__dirname, 'data', 'dividend-calendar.json');
+
+  if (!fs.existsSync(caminhoJson)) {
+    return res.status(404).json({
+      sucesso: false,
+      erro: 'Calendário de dividendos ainda não gerado',
+    });
+  }
+
+  try {
+    const conteudo = fs.readFileSync(caminhoJson, 'utf-8');
+    const dados = JSON.parse(conteudo);
+    const max = parseInt(req.query.max, 10);
+    const eventos = Number.isFinite(max) && max > 0 ? dados.events.slice(0, max) : dados.events;
+
+    res.json({
+      sucesso: true,
+      dados: { ...dados, events: eventos },
+      total: dados.count,
+      retornou: eventos.length,
+    });
+  } catch (erro) {
+    res.status(500).json({ sucesso: false, erro: erro.message });
+  }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: '✅ Backend rodando!' });

@@ -1,6 +1,6 @@
 // ========== CONFIGURAÇÃO ==========
 import { SECTORS } from './config.js';
-import { getAllSectorData, getDailySummary } from './api.js';
+import { getAllSectorData, getDailySummary, getDividendCalendar } from './api.js';
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
 import { loadBubbleChart } from './bubble-chart.js';
@@ -185,6 +185,7 @@ async function loadDashboardData() {
     applyFilters();
     updateStats();
     loadDailySummary();
+    loadDividendCalendar();
   } catch (error) {
     console.error('Erro ao carregar dados:', error);
     if (statsEl) statsEl.textContent = 'Erro ao carregar dados. Tente novamente.';
@@ -288,6 +289,152 @@ async function loadDailySummary() {
     });
   } catch (error) {
     console.error('Resumo do dia indisponível:', error);
+    container.style.display = 'none';
+  }
+}
+
+function dividendFormatAmountBR(valor) {
+  const num = Number(valor);
+  if (!Number.isFinite(num)) return '—';
+  return `R$ ${num.toFixed(2).replace('.', ',')}`;
+}
+
+function formatDividendBR(conteudo) {
+  if (!conteudo) return '—';
+  const p = String(conteudo).split('-');
+  if (p.length !== 3) return String(conteudo);
+  return `${p[2]}/${p[1]}/${p[0]}`;
+}
+
+function dividendCadenceLabel(cadence) {
+  const mapa = {
+    mensal: 'Mensal',
+    trimestral: 'Trimestral',
+    semestral: 'Semestral',
+    anual: 'Anual',
+    indefinida: 'Sem cadência',
+  };
+  return mapa[cadence] || String(cadence || '—');
+}
+
+function dividendCadenceId(cadence) {
+  const mapa = {
+    mensal: 'cad-mensal',
+    trimestral: 'cad-trimestral',
+    semestral: 'cad-semestral',
+    anual: 'cad-anual',
+    indefinida: 'cad-indefinida',
+  };
+  return mapa[cadence] || 'cad-desconhecida';
+}
+
+function dividendCadenceClass(cadence) {
+  const mapa = {
+    mensal: 'dividend-cadence monthly',
+    trimestral: 'dividend-cadence quarterly',
+    semestral: 'dividend-cadence semiannual',
+    anual: 'dividend-cadence annual',
+    indefinida: 'dividend-cadence unknown',
+  };
+  return mapa[cadence] || 'dividend-cadence unknown';
+}
+
+function dividendAmountBR(valor) {
+  const num = Number(valor);
+  if (!Number.isFinite(num)) return '—';
+  return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function isDividendWithinHorizon(evento, horizonDays) {
+  if (!evento?.nextEstimatedDate) return false;
+  const p = String(evento.nextEstimatedDate).split('-');
+  if (p.length !== 3) return false;
+  const alvo = new Date(Date.UTC(p[0], p[1] - 1, p[2]));
+  const hoje = new Date();
+  const diffDias = Math.floor((alvo.getTime() - Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth(), hoje.getUTCDate())) / 86400000);
+  return diffDias >= 0 && diffDias <= Number(horizonDays || 90);
+}
+
+function renderDividendCalendar(dados) {
+  const horizon = Number(dados?.horizonDays) || 90;
+  const events = Array.isArray(dados?.events) ? dados.events : [];
+
+  const eventosFiltrados = events.filter((e) => isDividendWithinHorizon(e, horizon));
+  if (eventosFiltrados.length === 0) {
+    return `
+      <p class="dividend-empty">
+        Nenhum dividendo estimado nos próximos ${horizon} dias.
+      </p>`;
+  }
+
+  const porData = new Map();
+  eventosFiltrados.forEach((e) => {
+    const chave = e.nextEstimatedDate || 'sem-data';
+    if (!porData.has(chave)) porData.set(chave, []);
+    porData.get(chave).push(e);
+  });
+
+  const linhas = [...porData.entries()]
+    .sort((a, b) => (a[0] === 'sem-data' ? 1 : b[0] === 'sem-data' ? -1 : a[0].localeCompare(b[0])))
+    .map(([data, lista]) => {
+      const cabecalho =
+        data === 'sem-data'
+          ? 'Data ainda não estimada'
+          : `${formatDividendBR(data)} · em ${(lista[0]?.daysAhead ?? '?')} dia(s)`;
+
+      const itens = lista
+        .map((e) => {
+          const amount = e.nextEstimatedAmount ?? e.lastAmount ?? null;
+          return `
+            <div class="dividend-event">
+              <button
+                type="button"
+                class="dividend-open"
+                data-symbol="${escapeHtml(e.symbol)}"
+                title="Ver detalhes de ${escapeHtml(e.name)}"
+              >
+                <strong class="dividend-symbol">${escapeHtml(e.symbol)}</strong>
+                <span class="dividend-name">${escapeHtml(e.name)}</span>
+              </button>
+              <span class="dividend-cadence ${dividendCadenceClass(e.cadence)}">
+                ${dividendCadenceLabel(e.cadence)}
+              </span>
+              <strong class="dividend-amount">${dividendAmountBR(amount)}</strong>
+            </div>`;
+        })
+        .join('');
+
+      return `
+        <div class="dividend-day">
+          <h4 class="dividend-day-head">📅 ${cabecalho}</h4>
+          <div class="dividend-day-list">${itens}</div>
+        </div>`;
+    })
+    .join('');
+
+  return `
+    <div class="dividend-calendar">
+      <div class="dividend-head">
+        <h3>📅 Próximos Dividendos</h3>
+        <span class="dividend-horizon">horizonte: ${horizon} dias · ${eventosFiltrados.length} evento(s)</span>
+      </div>
+      <div class="dividend-body">${linhas}</div>
+      ${dados?.generatedAt ? `<p class="dividend-ref">Gerado em ${escapeHtml(dados.generatedAt)}</p>` : ''}
+    </div>`;
+}
+
+// ========== CALENDÁRIO DE DIVIDENDOS ==========
+async function loadDividendCalendar() {
+  const container = document.getElementById('dividend-calendar');
+  if (!container) return;
+
+  try {
+    const dados = await getDividendCalendar();
+    if (!dados) throw new Error('Sem dados');
+    container.style.display = '';
+    container.innerHTML = renderDividendCalendar(dados );
+  } catch (error) {
+    console.error('Calendário de dividendos indisponível:', error);
     container.style.display = 'none';
   }
 }
