@@ -1,7 +1,9 @@
-async function loadHeatmap() {
+import { getAllSectorData } from './api.js';
+
+export async function loadHeatmap() {
   const container = document.getElementById('heatmap-view');
   if (!container) return;
-  
+
   container.style.display = 'flex';
   container.style.flexDirection = 'column';
   container.style.height = '100%';
@@ -9,30 +11,21 @@ async function loadHeatmap() {
   container.style.margin = '0';
   container.style.padding = '0';
   container.style.background = 'var(--bg-primary)';
-  
-  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando heatmap...</div>';
+
+  container.innerHTML =
+    '<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando heatmap...</div>';
 
   try {
-    const res = await fetch(`${API_BASE_URL}/api/setores`);
-    const data = await res.json();
-    const setores = data.setores || [];
-    
-    const sectorData = await Promise.all(setores.map(async (id) => {
-      const r = await fetch(`${API_BASE_URL}/api/setor/${id}`);
-      const d = await r.json();
-      const s = SECTORS.find(x => x.id === id);
-      const cos = d.dados?.companies || [];
-      
-      // Top 4 empresas por Market Cap
-      const top4 = cos
+    const sectorData = (await getAllSectorData()).map((sector) => {
+      const companies = [...sector.companies]
         .sort((a, b) => (b.marketCap || 0) - (a.marketCap || 0))
         .slice(0, 4);
-      
-      return { 
-        name: s?.name || id,
-        companies: top4
+
+      return {
+        name: sector.name,
+        companies,
       };
-    }));
+    });
 
     function getHeatColor(value, max) {
       const pct = (value / max) * 100;
@@ -45,8 +38,8 @@ async function loadHeatmap() {
 
     // Encontra o maior Market Cap para normalizar cores
     let maxCap = 0;
-    sectorData.forEach(sector => {
-      sector.companies.forEach(company => {
+    sectorData.forEach((sector) => {
+      sector.companies.forEach((company) => {
         if (company.marketCap > maxCap) maxCap = company.marketCap;
       });
     });
@@ -90,7 +83,7 @@ async function loadHeatmap() {
       html += `
         <div style="
           padding: 20px;
-          background: rgba(26, 26, 46, 0.5);
+          background: var(--surface);
           border: 1px solid var(--border);
           border-radius: 12px;
           font-size: 14px;
@@ -104,7 +97,7 @@ async function loadHeatmap() {
           min-height: 160px;
         "
         onmouseover="this.style.borderColor='var(--accent-cyan)';this.style.background='rgba(0,212,255,0.05)'"
-        onmouseout="this.style.borderColor='var(--border)';this.style.background='rgba(26, 26, 46, 0.5)'"
+        onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--surface)'"
         >${sector.name}</div>
 
         <div style="
@@ -118,9 +111,10 @@ async function loadHeatmap() {
       sector.companies.forEach((company) => {
         const color = getHeatColor(company.marketCap, maxCap);
         const capB = (company.marketCap / 1e9).toFixed(2);
-        const dividend = company.dividendYield !== null && company.dividendYield !== undefined 
-          ? company.dividendYield.toFixed(2) 
-          : '—';
+        const dividend =
+          company.dividendYield !== null && company.dividendYield !== undefined
+            ? company.dividendYield.toFixed(2)
+            : '—';
 
         html += `
           <div style="
@@ -185,7 +179,7 @@ async function loadHeatmap() {
                   font-size: 14px;
                   font-weight: 700;
                   color: ${color};
-                ">\$${capB}B</div>
+                ">$${capB}B</div>
               </div>
               <div>
                 <div style="
@@ -214,7 +208,7 @@ async function loadHeatmap() {
 
         <div style="
           padding: 24px;
-          background: rgba(26, 26, 46, 0.5);
+          background: var(--surface);
           border: 1px solid var(--border);
           border-radius: 12px;
         ">
@@ -258,9 +252,9 @@ async function loadHeatmap() {
     `;
 
     container.innerHTML = html;
-    
-  } catch (e) { 
+  } catch (e) {
     console.error('Erro:', e);
-    container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar heatmap</div>';
+    container.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar heatmap</div>';
   }
 }

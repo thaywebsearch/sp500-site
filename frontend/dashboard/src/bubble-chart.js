@@ -1,7 +1,9 @@
-async function loadBubbleChart() {
+import { getAllSectorData } from './api.js';
+
+export async function loadBubbleChart() {
   const container = document.getElementById('bubble-chart-view');
   if (!container) return;
-  
+
   container.style.display = 'flex';
   container.style.flexDirection = 'column';
   container.style.height = '100%';
@@ -9,63 +11,74 @@ async function loadBubbleChart() {
   container.style.margin = '0';
   container.style.padding = '0';
   container.style.background = 'var(--bg-primary)';
-  
-  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando bubble chart...</div>';
+
+  container.innerHTML =
+    '<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando bubble chart...</div>';
 
   try {
-    const res = await fetch(`${API_BASE_URL}/api/setores`);
-    const data = await res.json();
-    const setores = data.setores || [];
-    
-    const stats = await Promise.all(setores.map(async (id) => {
-      const r = await fetch(`${API_BASE_URL}/api/setor/${id}`);
-      const d = await r.json();
-      const s = SECTORS.find(x => x.id === id);
-      const cos = d.dados?.companies || [];
+    const stats = (await getAllSectorData()).map((sector) => {
+      const cos = sector.companies;
       const totalCap = cos.reduce((a, c) => a + (c.marketCap || 0), 0);
-      const avgDiv = cos.length > 0 ? cos.reduce((a, c) => a + (c.dividendYield || 0), 0) / cos.length : 0;
-      
-      return { 
-        id,
-        name: s?.name || id,
+      const avgDiv =
+        cos.length > 0 ? cos.reduce((a, c) => a + (c.dividendYield || 0), 0) / cos.length : 0;
+
+      return {
+        id: sector.id,
+        name: sector.name,
         cap: (totalCap / 1e9).toFixed(1),
         companies: cos.length,
         avgDiv: parseFloat(avgDiv.toFixed(2)),
-        topCompany: cos.length > 0 ? cos[0].symbol : 'N/A'
+        topCompany: cos.length > 0 ? cos[0].symbol : 'N/A',
       };
-    }));
+    });
 
-    const colors = ['#00d4ff', '#00e676', '#ffab00', '#ff5252', '#8bc34a', '#4caf50', '#2196f3', '#9c27b0', '#ff9800', '#f44336', '#00bcd4'];
-    
-    const maxCap = Math.max(...stats.map(s => parseFloat(s.cap)));
-    const maxCompanies = Math.max(...stats.map(s => s.companies));
-    const maxDiv = Math.max(...stats.map(s => s.avgDiv));
+    const colors = [
+      '#00d4ff',
+      '#00e676',
+      '#ffab00',
+      '#ff5252',
+      '#8bc34a',
+      '#4caf50',
+      '#2196f3',
+      '#9c27b0',
+      '#ff9800',
+      '#f44336',
+      '#00bcd4',
+    ];
 
-    let bubbleHTML = '<svg viewBox="0 0 1000 600" style="width:100%;height:100%;border-radius:8px;background:rgba(16,16,24,0.5)">';
-    
+    const maxCap = Math.max(...stats.map((s) => parseFloat(s.cap)));
+    const maxCompanies = Math.max(...stats.map((s) => s.companies));
+
+    let bubbleHTML =
+      '<svg viewBox="0 0 1000 600" style="width:100%;height:100%;border-radius:8px;background:var(--plot-bg)">';
+
     // Eixos
-    bubbleHTML += '<line x1="80" y1="550" x2="950" y2="550" stroke="rgba(42,42,62,0.5)" stroke-width="2"/>';
-    bubbleHTML += '<line x1="80" y1="550" x2="80" y2="50" stroke="rgba(42,42,62,0.5)" stroke-width="2"/>';
-    
+    bubbleHTML +=
+      '<line x1="80" y1="550" x2="950" y2="550" stroke="var(--chart-axis)" stroke-width="2"/>';
+    bubbleHTML +=
+      '<line x1="80" y1="550" x2="80" y2="50" stroke="var(--chart-axis)" stroke-width="2"/>';
+
     // Labels dos eixos
-    bubbleHTML += '<text x="500" y="590" text-anchor="middle" font-size="12" fill="rgba(136,136,160,0.8)">Market Cap (B$)</text>';
-    bubbleHTML += '<text x="30" y="300" text-anchor="middle" font-size="12" fill="rgba(136,136,160,0.8)" transform="rotate(-90 30 300)">Empresas</text>';
-    
+    bubbleHTML +=
+      '<text x="500" y="590" text-anchor="middle" font-size="12" fill="var(--chart-label)">Market Cap (B$)</text>';
+    bubbleHTML +=
+      '<text x="30" y="300" text-anchor="middle" font-size="12" fill="var(--chart-label)" transform="rotate(-90 30 300)">Empresas</text>';
+
     // Grid
     for (let i = 0; i <= 5; i++) {
-      const x = 80 + (i * 174);
-      const y = 550 - (i * 100);
-      bubbleHTML += `<line x1="${x}" y1="545" x2="${x}" y2="555" stroke="rgba(42,42,62,0.5)" stroke-width="1"/>`;
-      bubbleHTML += `<line x1="75" y1="${y}" x2="85" y2="${y}" stroke="rgba(42,42,62,0.5)" stroke-width="1"/>`;
-      bubbleHTML += `<text x="${x}" y="570" text-anchor="middle" font-size="10" fill="rgba(136,136,160,0.8)">\$${(i * maxCap / 5).toFixed(0)}B</text>`;
-      bubbleHTML += `<text x="60" y="${y + 4}" text-anchor="end" font-size="10" fill="rgba(136,136,160,0.8)">${Math.round(i * maxCompanies / 5)}</text>`;
+      const x = 80 + i * 174;
+      const y = 550 - i * 100;
+      bubbleHTML += `<line x1="${x}" y1="545" x2="${x}" y2="555" stroke="var(--chart-axis)" stroke-width="1"/>`;
+      bubbleHTML += `<line x1="75" y1="${y}" x2="85" y2="${y}" stroke="var(--chart-axis)" stroke-width="1"/>`;
+      bubbleHTML += `<text x="${x}" y="570" text-anchor="middle" font-size="10" fill="var(--chart-label)">$${((i * maxCap) / 5).toFixed(0)}B</text>`;
+      bubbleHTML += `<text x="60" y="${y + 4}" text-anchor="end" font-size="10" fill="var(--chart-label)">${Math.round((i * maxCompanies) / 5)}</text>`;
     }
 
     // Bolhas
     stats.forEach((s, idx) => {
       const color = colors[idx % colors.length];
-      const x = 80 + ((parseFloat(s.cap) / maxCap) * 870);
-      const y = 550 - ((s.companies / maxCompanies) * 500);
+      const x = 80 + (parseFloat(s.cap) / maxCap) * 870;
+      const y = 550 - (s.companies / maxCompanies) * 500;
       const radius = Math.max(15, (parseFloat(s.cap) / maxCap) * 60);
 
       bubbleHTML += `
@@ -81,7 +94,7 @@ async function loadBubbleChart() {
           data-div="${s.avgDiv}"
         />
         <text x="${x}" y="${y - 8}" text-anchor="middle" font-size="12" font-weight="600" fill="${color}" style="pointer-events:none">${s.name.split(' ')[0]}</text>
-        <text x="${x}" y="${y + 8}" text-anchor="middle" font-size="11" fill="rgba(224,224,224,0.8)" style="pointer-events:none">\$${s.cap}B</text>
+        <text x="${x}" y="${y + 8}" text-anchor="middle" font-size="11" fill="var(--chart-text)" style="pointer-events:none">$${s.cap}B</text>
       `;
     });
 
@@ -118,7 +131,7 @@ async function loadBubbleChart() {
           flex: 1;
           border: 1px solid var(--border);
           border-radius: 12px;
-          background: rgba(26, 26, 46, 0.5);
+          background: var(--surface);
           padding: 20px;
           min-height: 300px;
           display: flex;
@@ -137,9 +150,8 @@ async function loadBubbleChart() {
 
     stats.forEach((s, idx) => {
       const color = colors[idx % colors.length];
-      const capPct = (parseFloat(s.cap) / maxCap * 100).toFixed(1);
-      const compPct = (s.companies / maxCompanies * 100).toFixed(1);
-      const divPct = (s.avgDiv / maxDiv * 100).toFixed(1);
+      const capPct = ((parseFloat(s.cap) / maxCap) * 100).toFixed(1);
+      const compPct = ((s.companies / maxCompanies) * 100).toFixed(1);
 
       html += `
         <div style="
@@ -201,7 +213,7 @@ async function loadBubbleChart() {
                 font-size: 18px;
                 font-weight: 700;
                 color: ${color};
-              ">\$${s.cap}B</div>
+              ">$${s.cap}B</div>
               <div style="
                 font-size: 10px;
                 color: var(--text-secondary);
@@ -276,7 +288,7 @@ async function loadBubbleChart() {
 
         <div style="
           padding: 24px;
-          background: rgba(26, 26, 46, 0.5);
+          background: var(--surface);
           border: 1px solid var(--border);
           border-radius: 12px;
         ">
@@ -313,8 +325,8 @@ async function loadBubbleChart() {
     `;
 
     container.innerHTML = html;
-    
-  } catch (e) { 
-    container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar bubble chart</div>';
+  } catch {
+    container.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar bubble chart</div>';
   }
 }

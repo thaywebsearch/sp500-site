@@ -1,4 +1,4 @@
-import { API_BASE_URL, SECTORS } from './config.js';
+import { getAllSectorData } from './api.js';
 
 export async function loadTreemap() {
   const container = document.getElementById('treemap-view');
@@ -16,30 +16,21 @@ export async function loadTreemap() {
     '<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando setores...</div>';
 
   try {
-    const res = await fetch(`${API_BASE_URL}/api/setores`);
-    const data = await res.json();
-    const setores = data.setores || [];
+    const stats = (await getAllSectorData()).map((sector) => {
+      const cos = sector.companies;
+      const totalCap = cos.reduce((a, c) => a + (c.marketCap || 0), 0);
+      const avgDiv =
+        cos.length > 0 ? cos.reduce((a, c) => a + (c.dividendYield || 0), 0) / cos.length : 0;
 
-    const stats = await Promise.all(
-      setores.map(async (id) => {
-        const r = await fetch(`${API_BASE_URL}/api/setor/${id}`);
-        const d = await r.json();
-        const s = SECTORS.find((x) => x.id === id);
-        const cos = d.dados?.companies || [];
-        const totalCap = cos.reduce((a, c) => a + (c.marketCap || 0), 0);
-        const avgDiv =
-          cos.length > 0 ? cos.reduce((a, c) => a + (c.dividendYield || 0), 0) / cos.length : 0;
-
-        return {
-          id,
-          name: s?.name || id,
-          value: totalCap,
-          companies: cos.length,
-          avgDiv: parseFloat(avgDiv.toFixed(2)),
-          topCompany: cos.length > 0 ? cos[0].symbol : 'N/A',
-        };
-      })
-    );
+      return {
+        id: sector.id,
+        name: sector.name,
+        value: totalCap,
+        companies: cos.length,
+        avgDiv: parseFloat(avgDiv.toFixed(2)),
+        topCompany: cos.length > 0 ? cos[0].symbol : 'N/A',
+      };
+    });
 
     const totalCap = stats.reduce((a, s) => a + s.value, 0);
     const colors = [
