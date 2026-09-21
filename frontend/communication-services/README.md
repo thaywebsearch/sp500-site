@@ -1,6 +1,6 @@
 # S&P 500 — Setor Communication Services
 
-> Fonte: `communication-services.json` · Ordenado por Market Cap (maior para menor) · Total: 24 empresas
+> Fonte: `communication-services.json` · Ordenado por Market Cap (maior para menor) · Total: 23 empresas
 
 | # | Símbolo | Empresa | Market Cap | Subindústria | Sedes | Dividend Yield |
 |---|---------|---------|------------|--------------|-------|----------------|
@@ -27,4 +27,3 @@
 | 21 | NWS | News Corp (Class B) | $18.71B | Publishing | New York City, New York | 0.57% |
 | 22 | NWSA | News Corp (Class A) | $16.63B | Publishing | New York City, New York | 0.64% |
 | 23 | PSKY | Paramount Skydance Corporation | $12.16B | Movies & Entertainment | Los Angeles, California | 1.85% |
-| 24 | TTD | Trade Desk (The) | $6.36B | Advertising | Ventura, California | — |

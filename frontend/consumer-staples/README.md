@@ -1,6 +1,6 @@
 # S&P 500 — Setor Consumer Staples
 
-> Fonte: `consumer-staples.json` · Ordenado por Market Cap (maior para menor) · Total: 34 empresas
+> Fonte: `consumer-staples.json` · Ordenado por Market Cap (maior para menor) · Total: 33 empresas
 
 | # | Símbolo | Empresa | Market Cap | Subindústria | Sedes | Dividend Yield |
 |---|---------|---------|------------|--------------|-------|----------------|
@@ -36,5 +36,4 @@
 | 30 | SJM | J.M. Smucker Company (The) | $14.19B | Packaged Foods & Meats | Orrville, Ohio | 3.40% |
 | 31 | CLX | Clorox | $12.42B | Household Products | Oakland, California | 4.82% |
 | 32 | HRL | Hormel Foods | $11.78B | Packaged Foods & Meats | Austin, Minnesota | 5.50% |
-| 33 | TAP | Molson Coors Beverage Company | $7.73B | Brewers | Chicago, Illinois | 4.56% |
-| 34 | BF.B | Brown–Forman | N/A | Distillers & Vintners | Louisville, Kentucky | — |
+| 33 | BF.B | Brown–Forman | N/A | Distillers & Vintners | Louisville, Kentucky | — |

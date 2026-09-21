@@ -6,14 +6,14 @@ Repositório de dados limpos e organizados do S&P 500 divididos nos **11 setores
 
 ```
 sp500-by-sector/
-├── communication-services/     # Communication Services (24 empresas)
+├── communication-services/     # Communication Services (23 empresas)
 ├── consumer-discretionary/     # Consumer Discretionary (47 empresas)
-├── consumer-staples/     # Consumer Staples (34 empresas)
+├── consumer-staples/     # Consumer Staples (33 empresas)
 ├── energy/     # Energy (21 empresas)
 ├── financials/     # Financials (76 empresas)
-├── health-care/     # Health Care (59 empresas)
+├── health-care/     # Health Care (60 empresas)
 ├── industrials/     # Industrials (83 empresas)
-├── information-technology/     # Information Technology (73 empresas)
+├── information-technology/     # Information Technology (74 empresas)
 ├── materials/     # Materials (25 empresas)
 ├── real-estate/     # Real Estate (30 empresas)
 ├── utilities/     # Utilities (31 empresas)
@@ -28,14 +28,14 @@ Cada pasta de setor contém:
 
 | Setor | Pasta | Empresas | Descrição |
 |-------|-------|----------|-----------|
-| **Communication Services** | [`communication-services/`](communication-services/) | 24 | Mídia, telecom, entretenimento interativo |
+| **Communication Services** | [`communication-services/`](communication-services/) | 23 | Mídia, telecom, entretenimento interativo |
 | **Consumer Discretionary** | [`consumer-discretionary/`](consumer-discretionary/) | 47 | Varejo, automóveis, lazer, bens duráveis |
-| **Consumer Staples** | [`consumer-staples/`](consumer-staples/) | 34 | Alimentos, bebidas, produtos de higiene |
+| **Consumer Staples** | [`consumer-staples/`](consumer-staples/) | 33 | Alimentos, bebidas, produtos de higiene |
 | **Energy** | [`energy/`](energy/) | 21 | Petróleo, gás, equipamentos energéticos |
 | **Financials** | [`financials/`](financials/) | 76 | Bancos, seguros, gestão de ativos |
-| **Health Care** | [`health-care/`](health-care/) | 59 | Farmacêuticas, biotecnologia, equipamentos médicos |
+| **Health Care** | [`health-care/`](health-care/) | 60 | Farmacêuticas, biotecnologia, equipamentos médicos |
 | **Industrials** | [`industrials/`](industrials/) | 83 | Aeroespacial, construção, maquinaria, transporte |
-| **Information Technology** | [`information-technology/`](information-technology/) | 73 | Software, hardware, semicondutores, serviços de TI |
+| **Information Technology** | [`information-technology/`](information-technology/) | 74 | Software, hardware, semicondutores, serviços de TI |
 | **Materials** | [`materials/`](materials/) | 25 | Químicos, construção, embalagens, metais |
 | **Real Estate** | [`real-estate/`](real-estate/) | 30 | REITs, gestão imobiliária, desenvolvimento |
 | **Utilities** | [`utilities/`](utilities/) | 31 | Elétricas, gás, água, energias renováveis |
@@ -44,7 +44,7 @@ Cada pasta de setor contém:
 
 - **Origem**: [datasets/s-and-p-500-companies](https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv) no GitHub
 - **Classificação**: GICS (Global Industry Classification Standard)
-- **Atualização**: 2026-09-15
+- **Atualização**: 2026-09-21
 
 ## Uso
 
@@ -79,4 +79,4 @@ Dados públicos do S&P 500. Consulte a [fonte original](https://github.com/datas
 
 ---
 
-*Gerado automaticamente — Última atualização: 2026-09-15*
+*Gerado automaticamente — Última atualização: 2026-09-21*

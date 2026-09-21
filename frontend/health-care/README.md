@@ -1,6 +1,6 @@
 # S&P 500 — Setor Health Care
 
-> Fonte: `health-care.json` · Ordenado por Market Cap (maior para menor) · Total: 59 empresas
+> Fonte: `health-care.json` · Ordenado por Market Cap (maior para menor) · Total: 60 empresas
 
 | # | Símbolo | Empresa | Market Cap | Subindústria | Sedes | Dividend Yield |
 |---|---------|---------|------------|--------------|-------|----------------|
@@ -63,3 +63,4 @@
 | 57 | UHS | Universal Health Services | $10.14B | Health Care Facilities | King of Prussia, Pennsylvania | 0.46% |
 | 58 | PODD | Insulet Corporation | $10.10B | Health Care Equipment | Acton, Massachusetts | — |
 | 59 | HSIC | Henry Schein | $9.99B | Health Care Distributors | Melville, New York | — |
+| 60 | ILMN | Illumina, Inc. | N/A | Life Sciences Tools & Services | San Diego, California | — |

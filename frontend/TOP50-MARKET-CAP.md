@@ -1,11 +1,11 @@
 # S&P 500 — Top 50 por Market Cap (Consolidado)
 
-> Gerado em: 2026-09-15 · Total de empresas no S&P 500: 503
+> Gerado em: 2026-09-21 · Total de empresas no S&P 500: 503
 
 | # | Símbolo | Empresa | Setor | Market Cap | Subindústria | Dividend Yield |
 |---|---------|---------|-------|------------|--------------|----------------|
 | 1 | NVDA | Nvidia | Information Technology | $5.24T | Semiconductors | 0.44% |
-| 2 | AAPL | Apple Inc. | Information Technology | $4.66T | Technology Hardware, Storage & Peripherals | 0.34% |
+| 2 | AAPL | Apple Inc. | Information Technology | $4.85T | Technology Hardware, Storage & Peripherals | 33.00% |
 | 3 | GOOGL | Alphabet Inc. (Class A) | Communication Services | $4.24T | Interactive Media & Services | 0.26% |
 | 4 | GOOG | Alphabet Inc. (Class C) | Communication Services | $4.20T | Interactive Media & Services | 0.26% |
 | 5 | MSFT | Microsoft | Information Technology | $3.82T | Systems Software | 0.72% |
