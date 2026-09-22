@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-19 21:43:49 UTC",
+  "generatedAt": "2026-09-22 00:14:12 UTC",
   "referenceDate": "2026-09-18",
   "topGainers": [
     {
@@ -121,9 +121,9 @@
     {
       "name": "Information Technology",
       "avgChangePct": 0.34,
-      "gainers": 33,
+      "gainers": 34,
       "losers": 40,
-      "total": 73
+      "total": 74
     },
     {
       "name": "Financials",
@@ -134,9 +134,9 @@
     },
     {
       "name": "Industrials",
-      "avgChangePct": 0.11,
-      "gainers": 40,
-      "losers": 43,
+      "avgChangePct": 0.03,
+      "gainers": 39,
+      "losers": 44,
       "total": 83
     },
     {
@@ -148,10 +148,10 @@
     },
     {
       "name": "Health Care",
-      "avgChangePct": -0.5,
+      "avgChangePct": -0.53,
       "gainers": 16,
-      "losers": 43,
-      "total": 59
+      "losers": 44,
+      "total": 60
     },
     {
       "name": "Consumer Discretionary",
@@ -161,18 +161,18 @@
       "total": 47
     },
     {
+      "name": "Consumer Staples",
+      "avgChangePct": -1.02,
+      "gainers": 6,
+      "losers": 27,
+      "total": 33
+    },
+    {
       "name": "Real Estate",
       "avgChangePct": -1.1,
       "gainers": 3,
       "losers": 27,
       "total": 30
-    },
-    {
-      "name": "Consumer Staples",
-      "avgChangePct": -1.11,
-      "gainers": 6,
-      "losers": 28,
-      "total": 34
     },
     {
       "name": "Utilities",
@@ -183,10 +183,10 @@
     },
     {
       "name": "Communication Services",
-      "avgChangePct": -1.58,
+      "avgChangePct": -1.55,
       "gainers": 4,
-      "losers": 20,
-      "total": 24
+      "losers": 19,
+      "total": 23
     },
     {
       "name": "Materials",
