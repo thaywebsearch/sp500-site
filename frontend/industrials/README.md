@@ -86,4 +86,4 @@
 | 80 | GNRC | Generac | $11.02B | Heavy Electrical Equipment | Waukesha, Wisconsin | — |
 | 81 | PNR | Pentair | $9.81B | Industrial Machinery & Supplies & Components | Worsley, United Kingdom | 1.71% |
 | 82 | AOS | A. O. Smith | $8.20B | Building Products | Milwaukee, Wisconsin | 2.32% |
-| 83 | BLDR | Builders FirstSource | $7.21B | Building Products | Irving, Texas | — |
+| 83 | BE | Bloom Energy | N/A | Electrical Components & Equipment | San Jose, California | — |

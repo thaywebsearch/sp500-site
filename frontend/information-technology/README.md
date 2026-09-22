@@ -1,11 +1,11 @@
 # S&P 500 — Setor Information Technology
 
-> Fonte: `information-technology.json` · Ordenado por Market Cap (maior para menor) · Total: 73 empresas
+> Fonte: `information-technology.json` · Ordenado por Market Cap (maior para menor) · Total: 74 empresas
 
 | # | Símbolo | Empresa | Market Cap | Subindústria | Sedes | Dividend Yield |
 |---|---------|---------|------------|--------------|-------|----------------|
 | 1 | NVDA | Nvidia | $5.24T | Semiconductors | Santa Clara, California | 0.44% |
-| 2 | AAPL | Apple Inc. | $4.66T | Technology Hardware, Storage & Peripherals | Cupertino, California | 0.34% |
+| 2 | AAPL | Apple Inc. | $4.85T | Technology Hardware, Storage & Peripherals | Cupertino, California | 33.00% |
 | 3 | MSFT | Microsoft | $3.82T | Systems Software | Redmond, Washington | 0.72% |
 | 4 | AVGO | Broadcom | $1.75T | Semiconductors | Palo Alto, California | 0.70% |
 | 5 | MU | Micron Technology | $1.05T | Semiconductors | Boise, Idaho | 0.06% |
@@ -77,3 +77,4 @@
 | 71 | IT | Gartner | $12.51B | IT Consulting & Other Services | Stamford, Connecticut | — |
 | 72 | GDDY | GoDaddy | $12.18B | Internet Services & Infrastructure | Tempe, Arizona | — |
 | 73 | SWKS | Skyworks Solutions | $9.79B | Semiconductors | Irvine, California | 4.13% |
+| 74 | P | Everpure | N/A | Technology Hardware, Storage & Peripherals | Santa Clara, California | — |

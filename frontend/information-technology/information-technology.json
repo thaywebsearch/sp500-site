@@ -1,7 +1,7 @@
 {
   "sector": "Information Technology",
-  "count": 73,
-  "generatedAt": "2026-09-16",
+  "count": 74,
+  "generatedAt": "2026-09-21",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -297,6 +297,16 @@
       "marketCapClassification": "Mega",
       "dividendYield": 0.53,
       "hasDividend": "Sim"
+    },
+    {
+      "symbol": "P",
+      "name": "Everpure",
+      "sector": "Information Technology",
+      "subIndustry": "Technology Hardware, Storage & Peripherals",
+      "headquarters": "Santa Clara, California",
+      "dateAdded": "2026-09-21",
+      "cik": 1474432,
+      "founded": "2009"
     },
     {
       "symbol": "FFIV",
@@ -1026,6 +1036,5 @@
       "dividendYield": null,
       "hasDividend": "Não"
     }
-  ],
-  "liveUpdatedAt": "2026-09-16 21:56:56 +0100"
+  ]
 }
