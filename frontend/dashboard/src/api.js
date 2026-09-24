@@ -37,6 +37,21 @@ export async function getAllSectorData() {
   return entries;
 }
 
+async function fetchSector(id) {
+  if (sectorDataCache.has(id)) return sectorDataCache.get(id);
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/setor/${encodeURIComponent(id)}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const companies = data.dados?.companies || data.companies || [];
+    sectorDataCache.set(id, companies);
+    return companies;
+  } catch (err) {
+    console.error(`Erro ao buscar setor ${id}:`, err);
+    return [];
+  }
+}
+
 export function clearCache() {
   sectorsListPromise = null;
   sectorDataCache.clear();

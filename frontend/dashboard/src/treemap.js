@@ -27,6 +27,7 @@ async function loadTreemap() {
       const withDiv = cos.filter(c => c.hasDividend === 'Sim').length;
       
       return { 
+        id,
         name: s?.name || id,
         cap: (totalCap / 1e9).toFixed(1),
         companies: cos.length,
@@ -71,7 +72,7 @@ async function loadTreemap() {
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 1px;
-          ">Análise completa de todos os 11 setores do índice</p>
+          ">Clique em qualquer setor para explorar as empresas 👇</p>
         </div>
 
         <div style="
@@ -85,6 +86,10 @@ async function loadTreemap() {
     stats.forEach((s) => {
       const color = getColor(parseFloat(s.cap), maxCap);
       const capPct = (parseFloat(s.cap) / maxCap * 100).toFixed(1);
+
+      const sectorPageUrl = s.id === 'consumer-staples' 
+        ? './sectors/consumer-staples.html' 
+        : '#';
 
       html += `
         <div style="
@@ -100,8 +105,8 @@ async function loadTreemap() {
         "
         onmouseover="this.style.borderColor='${color}';this.style.background='rgba(${parseInt(color.slice(1,3),16)},${parseInt(color.slice(3,5),16)},${parseInt(color.slice(5,7),16)},0.05)';this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px ${color}22'"
         onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-secondary)';this.style.transform='translateY(0)';this.style.boxShadow='none'"
+        onclick="navigateToSector('${sectorPageUrl}', '${s.id}')"
         >
-          <!-- Header com nome e percentual -->
           <div style="
             display: flex;
             justify-content: space-between;
@@ -127,31 +132,25 @@ async function loadTreemap() {
               font-size: 13px;
               font-weight: 700;
               color: ${color};
-              text-align: center;
             ">
               ${capPct}%
             </div>
           </div>
 
-          <!-- Barra de Progresso -->
-          <div>
+          <div style="
+            width: 100%;
+            height: 6px;
+            background: rgba(42, 42, 62, 0.5);
+            border-radius: 3px;
+            overflow: hidden;
+          ">
             <div style="
-              width: 100%;
-              height: 6px;
-              background: rgba(42, 42, 62, 0.5);
-              border-radius: 3px;
-              overflow: hidden;
-            ">
-              <div style="
-                width: ${capPct}%;
-                height: 100%;
-                background: linear-gradient(90deg, ${color}44, ${color});
-                transition: width 0.3s ease;
-              "></div>
-            </div>
+              width: ${capPct}%;
+              height: 100%;
+              background: linear-gradient(90deg, ${color}44, ${color});
+            "></div>
           </div>
 
-          <!-- Grid de Métricas -->
           <div style="
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -237,6 +236,36 @@ async function loadTreemap() {
               ">${s.withDiv}/${s.companies}</div>
             </div>
           </div>
+
+          ${s.id === 'consumer-staples' ? `
+            <div style="
+              padding: 12px;
+              background: linear-gradient(90deg, var(--accent-green)44, var(--accent-cyan)44);
+              border-radius: 8px;
+              text-align: center;
+              font-size: 12px;
+              font-weight: 600;
+              color: var(--accent-cyan);
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            ">
+              🚀 Ver Empresas →
+            </div>
+          ` : `
+            <div style="
+              padding: 12px;
+              background: rgba(42, 42, 62, 0.5);
+              border-radius: 8px;
+              text-align: center;
+              font-size: 12px;
+              font-weight: 600;
+              color: var(--text-secondary);
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            ">
+              🔒 Em Desenvolvimento
+            </div>
+          `}
         </div>
       `;
     });
@@ -256,7 +285,7 @@ async function loadTreemap() {
             color: var(--text-primary);
             text-transform: uppercase;
             letter-spacing: 1px;
-          ">📊 Legenda de Cores (Market Cap Relativo)</h3>
+          ">📊 Legenda de Cores</h3>
           <div style="
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -295,4 +324,12 @@ async function loadTreemap() {
     console.error('Erro:', e);
     container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar mapa de setores</div>';
   }
+}
+
+function navigateToSector(url, sectorId) {
+  if (url === '#') {
+    alert(`🔒 O setor "${sectorId}" ainda está em desenvolvimento.\n\nApenas Consumer Staples está disponível por enquanto!`);
+    return;
+  }
+  window.location.href = url;
 }
