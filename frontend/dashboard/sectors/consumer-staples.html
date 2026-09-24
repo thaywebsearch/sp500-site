@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consumer Staples - SP500 Setor</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #101018;
+      --bg-secondary: #1a1a2e;
+      --bg-sidebar: #141422;
+      --border: #2a2a3e;
+      --text-primary: #e0e0e0;
+      --text-secondary: #8888a0;
+      --accent-cyan: #00d4ff;
+      --accent-green: #00e676;
+      --accent-amber: #ffab00;
+      --accent-red: #ff5252;
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      margin-bottom: 40px;
+    }
+
+    .back-btn:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .header {
+      margin-bottom: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .header-content h1 {
+      font-size: 48px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #00e676 0%, #00d4ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-content p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .header-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, rgba(0, 230, 118, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+      border: 1px solid rgba(0, 230, 118, 0.2);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat-card .value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent-green);
+      margin-bottom: 8px;
+    }
+
+    .stat-card .label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .filter-group label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+    }
+
+    .filter-group input,
+    .filter-group select {
+      padding: 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .filter-group input:focus,
+    .filter-group select:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 12px rgba(0, 212, 255, 0.2);
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .view-btn {
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .view-btn:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .view-btn.active {
+      background: rgba(0, 212, 255, 0.2);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .companies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+
+    .company-card {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 230, 118, 0.02) 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .company-card:hover {
+      border-color: var(--accent-cyan);
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 230, 118, 0.05) 100%);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0, 212, 255, 0.15);
+    }
+
+    .company-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .company-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .company-symbol {
+      font-size: 12px;
+      background: rgba(0, 212, 255, 0.2);
+      color: var(--accent-cyan);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .company-subinfo {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .company-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .metric {
+      background: rgba(0, 212, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent-green);
+      margin-bottom: 4px;
+    }
+
+    .metric-label {
+      font-size: 10px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .companies-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      display: none;
+    }
+
+    .companies-table.active {
+      display: table;
+    }
+
+    .companies-table th {
+      background: rgba(0, 212, 255, 0.1);
+      color: var(--accent-cyan);
+      padding: 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--border);
+      cursor: pointer;
+    }
+
+    .companies-table th:hover {
+      background: rgba(0, 212, 255, 0.15);
+    }
+
+    .companies-table td {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .companies-table tr:hover {
+      background: rgba(0, 212, 255, 0.05);
+    }
+
+    .companies-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-secondary);
+    }
+
+    .info-box {
+      background: rgba(0, 212, 255, 0.05);
+      border-left: 4px solid var(--accent-cyan);
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 40px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .info-box strong {
+      color: var(--accent-cyan);
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+      }
+
+      .header-content h1 {
+        font-size: 32px;
+      }
+
+      .companies-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="back-btn" onclick="goBack()">← Voltar ao Mapa de Setores</button>
+
+    <div class="header">
+      <div class="header-content">
+        <h1>Consumer Staples</h1>
+        <p>🛒 Produtos de Consumo Essenciais - Bens de primeira necessidade</p>
+      </div>
+      <div class="header-stats">
+        <div class="stat-card">
+          <div class="value" id="total-companies">0</div>
+          <div class="label">Empresas</div>
+        </div>
+        <div class="stat-card">
+          <div class="value" id="total-market-cap">$0B</div>
+          <div class="label">Market Cap Total</div>
+        </div>
+        <div class="stat-card">
+          <div class="value" id="avg-dividend">0%</div>
+          <div class="label">Dividendo Médio</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <div class="filter-group">
+        <label for="search">Buscar por Nome ou Símbolo</label>
+        <input type="text" id="search" placeholder="Ex: Walmart, WMT...">
+      </div>
+      <div class="filter-group">
+        <label for="sort">Ordenar por</label>
+        <select id="sort">
+          <option value="symbol">Símbolo (A-Z)</option>
+          <option value="name">Nome (A-Z)</option>
+          <option value="marketcap">Market Cap (maior)</option>
+          <option value="dividend">Dividend Yield (maior)</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="min-dividend">Dividend Mínimo (%)</label>
+        <input type="number" id="min-dividend" placeholder="Ex: 2.5" min="0" step="0.1">
+      </div>
+    </div>
+
+    <div class="view-toggle">
+      <button class="view-btn active" onclick="switchView('cards')">🃏 Cards</button>
+      <button class="view-btn" onclick="switchView('table')">📊 Tabela</button>
+    </div>
+
+    <div id="loading" class="loading">Carregando empresas de Consumer Staples...</div>
+
+    <div id="cards-view" class="companies-grid" style="display: none;"></div>
+
+    <table id="table-view" class="companies-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable('symbol')">Símbolo</th>
+          <th onclick="sortTable('name')">Empresa</th>
+          <th onclick="sortTable('subindustry')">Subindústria</th>
+          <th onclick="sortTable('headquarters')">Sede</th>
+          <th onclick="sortTable('marketcap')">Market Cap</th>
+          <th onclick="sortTable('dividend')">Dividend Yield</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+
+    <div class="info-box">
+      <strong>💡 Sobre Consumer Staples:</strong> Este setor inclui empresas que produzem e distribuem produtos de consumo essenciais, como alimentos, bebidas, produtos de higiene e limpeza. Estas empresas tendem a ter receitas mais previsíveis e resistentes a crises económicas, sendo frequentemente escolhidas por investidores defensivos.
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = window.location.hostname === 'localhost' 
+      ? 'http://localhost:5001'
+      : 'https://sp500-site-production.up.railway.app';
+
+    let allCompanies = [];
+    let filteredCompanies = [];
+    let currentView = 'cards';
+    let sortBy = 'symbol';
+
+    // Inicializar ao carregar
+    window.addEventListener('load', loadSectorData);
+
+    async function loadSectorData() {
+      try {
+        console.log('Carregando dados de consumer-staples...');
+        const response = await fetch(`${API_BASE_URL}/api/setor/consumer-staples`);
+        const data = await response.json();
+        
+        console.log('Dados recebidos:', data);
+        
+        if (data.dados && data.dados.companies) {
+          allCompanies = data.dados.companies;
+          console.log(`Carregadas ${allCompanies.length} empresas`);
+          
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('cards-view').style.display = 'grid';
+          
+          filterAndRender();
+          updateStats();
+        } else {
+          throw new Error('Dados inválidos recebidos da API');
+        }
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+        document.getElementById('loading').innerHTML = `
+          <div style="color: var(--accent-red); font-size: 16px;">
+            ❌ Erro ao carregar empresas de Consumer Staples
+            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 10px;">
+              ${error.message}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function filterAndRender() {
+      const search = document.getElementById('search').value.toLowerCase();
+      const minDividend = parseFloat(document.getElementById('min-dividend').value) || 0;
+
+      filteredCompanies = allCompanies.filter(company => {
+        const matchesSearch = !search || 
+          company.symbol.toLowerCase().includes(search) || 
+          company.name.toLowerCase().includes(search);
+        
+        const matchesDividend = (company.dividendYield || 0) >= minDividend;
+        
+        return matchesSearch && matchesDividend;
+      });
+
+      sortCompanies();
+      renderView();
+    }
+
+    function sortCompanies() {
+      filteredCompanies.sort((a, b) => {
+        switch (sortBy) {
+          case 'symbol':
+            return a.symbol.localeCompare(b.symbol);
+          case 'name':
+            return a.name.localeCompare(b.name);
+          case 'marketcap':
+            return (b.marketCap || 0) - (a.marketCap || 0);
+          case 'dividend':
+            return (b.dividendYield || 0) - (a.dividendYield || 0);
+          case 'subindustry':
+            return (a.subIndustry || '').localeCompare(b.subIndustry || '');
+          case 'headquarters':
+            return (a.headquarters || '').localeCompare(b.headquarters || '');
+          default:
+            return 0;
+        }
+      });
+    }
+
+    function renderView() {
+      if (currentView === 'cards') {
+        renderCards();
+      } else {
+        renderTable();
+      }
+    }
+
+    function renderCards() {
+      const container = document.getElementById('cards-view');
+      container.innerHTML = filteredCompanies.map(company => `
+        <div class="company-card">
+          <div class="company-header">
+            <div>
+              <div class="company-name">${company.name}</div>
+              <div class="company-subinfo">${company.subIndustry || 'N/A'}</div>
+            </div>
+            <div class="company-symbol">${company.symbol}</div>
+          </div>
+          
+          <div class="company-metrics">
+            <div class="metric">
+              <div class="metric-value">$${(company.marketCap / 1e9).toFixed(1)}B</div>
+              <div class="metric-label">Market Cap</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">${(company.dividendYield || 0).toFixed(2)}%</div>
+              <div class="metric-label">Dividend</div>
+            </div>
+          </div>
+
+          <div style="font-size: 11px; color: var(--text-secondary); border-top: 1px solid rgba(0, 212, 255, 0.1); padding-top: 12px;">
+            📍 ${company.headquarters || 'N/A'}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('table-body');
+      tbody.innerHTML = filteredCompanies.map(company => `
+        <tr>
+          <td><strong>${company.symbol}</strong></td>
+          <td>${company.name}</td>
+          <td>${company.subIndustry || 'N/A'}</td>
+          <td>${company.headquarters || 'N/A'}</td>
+          <td>$${(company.marketCap / 1e9).toFixed(2)}B</td>
+          <td><strong style="color: var(--accent-green)">${(company.dividendYield || 0).toFixed(2)}%</strong></td>
+        </tr>
+      `).join('');
+    }
+
+    function updateStats() {
+      const totalCap = allCompanies.reduce((sum, c) => sum + (c.marketCap || 0), 0);
+      const avgDiv = allCompanies.length > 0 
+        ? allCompanies.reduce((sum, c) => sum + (c.dividendYield || 0), 0) / allCompanies.length
+        : 0;
+
+      document.getElementById('total-companies').textContent = allCompanies.length;
+      document.getElementById('total-market-cap').textContent = `$${(totalCap / 1e9).toFixed(1)}B`;
+      document.getElementById('avg-dividend').textContent = avgDiv.toFixed(2) + '%';
+    }
+
+    function switchView(view) {
+      currentView = view;
+      document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      document.getElementById('cards-view').style.display = view === 'cards' ? 'grid' : 'none';
+      document.getElementById('table-view').classList.toggle('active');
+    }
+
+    function sortTable(column) {
+      sortBy = column;
+      sortCompanies();
+      renderView();
+    }
+
+    function goBack() {
+      window.location.href = '/sp500-by-sector/dashboard/#treemap';
+    }
+
+    // Event Listeners
+    document.getElementById('search').addEventListener('input', filterAndRender);
+    document.getElementById('sort').addEventListener('change', (e) => {
+      sortBy = e.target.value;
+      sortCompanies();
+      renderView();
+    });
+    document.getElementById('min-dividend').addEventListener('input', filterAndRender);
+  </script>
+</body>
+</html>
