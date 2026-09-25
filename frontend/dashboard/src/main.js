@@ -1,22 +1,7 @@
 // ========== CONFIGURAÇÃO ==========
 
-const API_BASE_URL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:5001'
-  : 'https://sp500-site-production.up.railway.app';
-
-const SECTORS = [
-  { id: 'communication-services', name: 'Communication Services' },
-  { id: 'consumer-discretionary', name: 'Consumer Discretionary' },
-  { id: 'consumer-staples', name: 'Consumer Staples' },
-  { id: 'energy', name: 'Energy' },
-  { id: 'financials', name: 'Financials' },
-  { id: 'health-care', name: 'Health Care' },
-  { id: 'industrials', name: 'Industrials' },
-  { id: 'information-technology', name: 'Information Technology' },
-  { id: 'materials', name: 'Materials' },
-  { id: 'real-estate', name: 'Real Estate' },
-  { id: 'utilities', name: 'Utilities' },
-];
+const API_BASE_URL = window.API_BASE_URL;
+const SECTORS = window.SECTORS;
 
 // ========== VARIÁVEIS GLOBAIS ==========
 let allCompanies = [];
@@ -207,6 +192,18 @@ async function loadDailySummary() {
 
   try {
     const data = await getDailySummary();
+    
+    // Se API falhar ou não existir, calcula localmente
+    let useLocal = false;
+    if (!data) {
+      useLocal = true;
+    }
+
+    if (useLocal && allCompanies.length > 0) {
+      renderLocalDailySummary(container);
+      return;
+    }
+
     if (!data) {
       container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">Resumo do dia indisponível</p>';
       return;
@@ -261,8 +258,101 @@ async function loadDailySummary() {
     `;
   } catch (err) {
     console.error('Erro ao carregar resumo do dia:', err);
-    container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">Erro ao carregar resumo</p>';
+    if (allCompanies.length > 0) {
+      renderLocalDailySummary(container);
+    } else {
+      container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">Erro ao carregar resumo</p>';
+    }
   }
+}
+
+function renderLocalDailySummary(container) {
+  if (allCompanies.length === 0) {
+    container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">Carregando dados...</p>';
+    return;
+  }
+
+  // Calcula variação baseada em dividendYield como proxy (já que não temos preço anterior)
+  // Usamos dividendYield como proxy de performance para demonstração
+  const companiesWithDiv = allCompanies.filter(c => c.dividendYield !== null && c.dividendYield !== undefined && c.dividendYield > 0);
+  const sortedByDiv = [...companiesWithDiv].sort((a, b) => (b.dividendYield || 0) - (a.dividendYield || 0));
+  
+  // Top 4 "ganhadoras" (maior dividend yield como proxy)
+  const topGainers = sortedByDiv.slice(0, 4);
+  // Top 4 "perdedoras" (menor dividend yield > 0)
+  const topLosers = sortedByDiv.slice(-4).reverse();
+
+  const formatPct = (v) => v !== null && v !== undefined ? (v >= 0 ? '+' : '') + v.toFixed(2) + '%' : 'N/A';
+  const formatNum = (v) => v !== null && v !== undefined ? v.toLocaleString('pt-BR') : 'N/A';
+
+  const today = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  container.innerHTML = `
+    <div class="daily-summary-header">
+      <h2>📊 Resumo do Dia (Calculado Localmente)</h2>
+      <span class="daily-date">${today}</span>
+    </div>
+    <div class="daily-summary-grid">
+      <div class="daily-card">
+        <span class="daily-label">Empresas (S&P 500)</span>
+        <span class="daily-value">${allCompanies.length}</span>
+      </div>
+      <div class="daily-card">
+        <span class="daily-label">Com Dividend Yield</span>
+        <span class="daily-value">${companiesWithDiv.length}</span>
+      </div>
+      <div class="daily-card positive">
+        <span class="daily-label">Maior Div. Yield</span>
+        <span class="daily-value">${topGainers[0]?.simbolo || '—'} ${formatPct(topGainers[0]?.dividendYield)}</span>
+      </div>
+      <div class="daily-card negative">
+        <span class="daily-label">Menor Div. Yield (>0)</span>
+        <span class="daily-value">${topLosers[0]?.simbolo || '—'} ${formatPct(topLosers[0]?.dividendYield)}</span>
+      </div>
+      <div class="daily-card">
+        <span class="daily-label">Setores</span>
+        <span class="daily-value">${new Set(allCompanies.map(c => c.sector)).size}</span>
+      </div>
+    </div>
+
+    <div class="daily-movers">
+      <div class="movers-section">
+        <h3>🚀 Top 4 Maiores Dividend Yield</h3>
+        <div class="movers-grid">
+          ${topGainers.map((c, i) => `
+            <div class="mover-card positive">
+              <span class="mover-rank">${i + 1}º</span>
+              <div class="mover-info">
+                <span class="mover-symbol">${c.simbolo}</span>
+                <span class="mover-name">${c.name}</span>
+              </div>
+              <span class="mover-value">${formatPct(c.dividendYield)}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="movers-section">
+        <h3>📉 Top 4 Menores Dividend Yield (>0)</h3>
+        <div class="movers-grid">
+          ${topLosers.map((c, i) => `
+            <div class="mover-card negative">
+              <span class="mover-rank">${i + 1}º</span>
+              <div class="mover-info">
+                <span class="mover-symbol">${c.simbolo}</span>
+                <span class="mover-name">${c.name}</span>
+              </div>
+              <span class="mover-value">${formatPct(c.dividendYield)}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+
+    <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 1.5rem;">
+      * Dados calculados localmente usando Dividend Yield como proxy de performance. 
+      Para variação real de preço, necessário endpoint de histórico.
+    </p>
+  `;
 }
 
 // ========== AÇÃO DO DIA ==========
@@ -308,6 +398,9 @@ async function loadStockOfDay() {
 function analyzeStockOfDay() {
   return new Promise((resolve) => {
     setTimeout(() => {
+      const today = new Date().toISOString().slice(0, 10);
+      const daySeed = dateToSeed(today);
+
       const scored = allCompanies
         .filter(c => c.marketCap && c.marketCap > 1e9)
         .map(c => {
@@ -336,18 +429,31 @@ function analyzeStockOfDay() {
         })
         .sort((a, b) => b.score - a.score);
 
-    const top = scored[0];
-    const runnersUp = scored.slice(1, 4);
+      // Rotação diária: pega os top 10 e usa seed do dia para escolher
+      const topCandidates = scored.slice(0, Math.min(10, scored.length));
+      const dayIndex = daySeed % topCandidates.length;
+      const top = topCandidates[dayIndex];
+      const runnersUp = topCandidates.filter((_, i) => i !== dayIndex).slice(0, 3);
 
-    resolve({
-      date: new Date().toISOString().slice(0, 10),
-      primary: top,
-      alternatives: runnersUp,
-      marketContext: getMarketContext(),
-      generatedAt: new Date().toISOString()
-    });
-  }, 100);
-});
+      resolve({
+        date: today,
+        primary: top,
+        alternatives: runnersUp,
+        marketContext: getMarketContext(),
+        generatedAt: new Date().toISOString()
+      });
+    }, 100);
+  });
+}
+
+function dateToSeed(dateStr) {
+  // Converte YYYY-MM-DD em número determinístico
+  let hash = 0;
+  for (let i = 0; i < dateStr.length; i++) {
+    hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
+    hash |= 0; // 32-bit int
+  }
+  return Math.abs(hash);
 }
 
 function calculateBaseScore(company) {
