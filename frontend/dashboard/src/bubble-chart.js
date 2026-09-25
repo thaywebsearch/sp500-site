@@ -1,6 +1,6 @@
-import { getAllSectorData } from './api.js';
 
-export async function loadBubbleChart() {
+
+  async function loadBubbleChart() {
   const container = document.getElementById('bubble-chart-view');
   if (!container) return;
 

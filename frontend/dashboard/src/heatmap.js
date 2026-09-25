@@ -1,6 +1,6 @@
-import { getAllSectorData } from './api.js';
 
-export async function loadHeatmap() {
+
+  async function loadHeatmap() {
   const container = document.getElementById('heatmap-view');
   if (!container) return;
 
