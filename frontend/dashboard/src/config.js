@@ -1,9 +1,11 @@
-export const API_BASE_URL =
-  window.location.hostname === 'localhost'
-    ? 'http://localhost:5001'
-    : 'https://sp500-site-production.up.railway.app';
+// ========== CONFIGURAÇÃO GLOBAL ==========
+// Este arquivo deve carregar PRIMEIRO em index.html
 
-export const SECTORS = [
+window.API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:5001'
+  : 'https://sp500-site-production.up.railway.app';
+
+window.SECTORS = [
   { id: 'communication-services', name: 'Communication Services' },
   { id: 'consumer-discretionary', name: 'Consumer Discretionary' },
   { id: 'consumer-staples', name: 'Consumer Staples' },
@@ -16,3 +18,5 @@ export const SECTORS = [
   { id: 'real-estate', name: 'Real Estate' },
   { id: 'utilities', name: 'Utilities' },
 ];
+
+console.log('✅ Configuração global carregada:', window.API_BASE_URL);
