@@ -1,11 +1,12 @@
 // ========== CONFIGURAÇÃO GLOBAL ==========
 // Este arquivo deve carregar PRIMEIRO em index.html
 
-window.API_BASE_URL = window.location.hostname === 'localhost' 
+const hostname = window.location.hostname;
+export const API_BASE_URL = hostname === 'localhost' || hostname === '127.0.0.1'
   ? 'http://localhost:5001'
   : 'https://sp500-site-production.up.railway.app';
 
-window.SECTORS = [
+export const SECTORS = [
   { id: 'communication-services', name: 'Communication Services' },
   { id: 'consumer-discretionary', name: 'Consumer Discretionary' },
   { id: 'consumer-staples', name: 'Consumer Staples' },
@@ -19,4 +20,8 @@ window.SECTORS = [
   { id: 'utilities', name: 'Utilities' },
 ];
 
-console.log('✅ Configuração global carregada:', window.API_BASE_URL);
+// Backward compatibility - também define no window
+window.API_BASE_URL = API_BASE_URL;
+window.SECTORS = SECTORS;
+
+console.log('✅ Configuração global carregada:', API_BASE_URL);

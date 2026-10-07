@@ -33,6 +33,7 @@
           </div>
           <div class="nav-tabs">
             <button class="nav-tab active" data-tab="dashboard">📋 Dashboard</button>
+			<button class="nav-tab" data-tab="daily-curiosity">🌟 Curiosidade do Dia</button>
             <button class="nav-tab" data-tab="stock-of-day">🎯 Ação do Dia</button>
             <button class="nav-tab" data-tab="treemap">🗺️ Mapa de Setores</button>
             <button class="nav-tab" data-tab="heatmap">🔥 Heatmap</button>
@@ -134,6 +135,9 @@
           <!-- Paginação -->
           <div id="pagination" class="pagination"></div>
         </div>
+		
+		<!-- Curiosidade do Dia View -->
+        <div id="daily-curiosity-view" style="display: none"></div>
 
         <!-- Treemap View -->
         <div id="treemap-view" style="display: none"></div>
@@ -152,12 +156,8 @@
       </main>
     </div>
 	
-  <script src="src/config.js"></script>
+  <script type="module" src="src/config.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="src/action-of-day.js"></script>
-  <script src="src/treemap.js"></script>
-  <script src="src/heatmap.js"></script>
-  <script src="src/bubble-chart.js"></script>
-  <script src="src/main.js"></script>
+  <script type="module" src="src/main.js"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-async function loadHeatmap() {
+export async function loadHeatmap() {
   const container = document.getElementById('heatmap-view');
   if (!container) return;
 

@@ -1,4 +1,4 @@
-async function loadTreemap() {
+export async function loadTreemap() {
   const container = document.getElementById('treemap-view');
   if (!container) return;
   
@@ -88,9 +88,9 @@ async function loadTreemap() {
       const color = getColor(parseFloat(s.cap), maxCap);
       const capPct = (parseFloat(s.cap) / maxCap * 100).toFixed(1);
 
-      const isAvailable = s.id === 'consumer-staples';
+      const isAvailable = ['consumer-staples', 'communication-services', 'consumer-discretionary', 'energy', 'financials', 'health-care', 'industrials', 'information-technology', 'materials', 'real-estate', 'utilities'].includes(s.id);
       const sectorPageUrl = isAvailable 
-        ? '/sp500-by-sector/dashboard/sectors/consumer-staples.html' 
+        ? `/sectors/${s.id}.html` 
         : '#';
 
       html += `
@@ -108,7 +108,7 @@ async function loadTreemap() {
         "
         onmouseover="${isAvailable ? `this.style.borderColor='${color}';this.style.background='rgba(${parseInt(color.slice(1,3),16)},${parseInt(color.slice(3,5),16)},${parseInt(color.slice(5,7),16)},0.05)';this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px ${color}22'` : ''}"
         onmouseout="${isAvailable ? `this.style.borderColor='var(--border)';this.style.background='var(--bg-secondary)';this.style.transform='translateY(0)';this.style.boxShadow='none'` : ''}"
-        onclick="${isAvailable ? `navigateToSector('${sectorPageUrl}', '${s.id}')` : `alert('🔒 O setor \\\"${s.name}\\\" ainda está em desenvolvimento.\\n\\nApenas Consumer Staples está disponível por enquanto!')`}"
+        onclick="${isAvailable ? `navigateToSector('${sectorPageUrl}', '${s.id}')` : `alert('🔒 O setor \\\"${s.name}\\\" ainda está em desenvolvimento.\\n\\nApenas Consumer Staples, Communication Services, Consumer Discretionary, Energy, Financials, Health Care, Industrials, Information Technology, Materials, Real Estate e Utilities estão disponíveis por enquanto!')`}"
         >
           <!-- Header com nome e percentual -->
           <div style="
@@ -340,9 +340,12 @@ async function loadTreemap() {
 // Função de navegação para setores - ABRE EM NOVA ABA
 function navigateToSector(url, sectorId) {
   if (url === '#') {
-    alert(`🔒 O setor "${sectorId}" ainda está em desenvolvimento.\n\nApenas Consumer Staples está disponível por enquanto!`);
+    alert(`🔒 O setor "${sectorId}" ainda está em desenvolvimento.\n\nApenas Consumer Staples, Communication Services, Consumer Discretionary, Energy, Financials, Health Care, Industrials, Information Technology, Materials, Real Estate e Utilities estão disponíveis por enquanto!`);
     return;
   }
   // Abre em nova aba - mais eficaz e seguro
   window.open(url, '_blank');
 }
+
+// Torna a função acessível globalmente para os handlers onclick
+window.navigateToSector = navigateToSector;

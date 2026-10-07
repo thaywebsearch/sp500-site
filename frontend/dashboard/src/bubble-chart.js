@@ -1,4 +1,4 @@
-async function loadBubbleChart() {
+export async function loadBubbleChart() {
   const container = document.getElementById('bubble-chart-view');
   if (!container) return;
 
