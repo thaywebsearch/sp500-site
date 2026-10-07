@@ -1,0 +1,22 @@
+{
+  "curiosidades": [
+    {
+      "simbolo": "AAPL",
+      "empresa": "Apple Inc.",
+      "setor": "Technology",
+      "titulo": "A Maior Empresa de Tecnologia do Mundo",
+      "descricao": "Apple é a empresa mais valiosa do mundo.",
+      "dividendYield": "0.45%",
+      "marketCap": "3.2T"
+    },
+    {
+      "simbolo": "MSFT",
+      "empresa": "Microsoft Corporation",
+      "setor": "Technology",
+      "titulo": "Líder em Software Empresarial",
+      "descricao": "Microsoft é uma das maiores empresas de tecnologia.",
+      "dividendYield": "0.82%",
+      "marketCap": "2.8T"
+    }
+  ]
+}
