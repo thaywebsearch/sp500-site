@@ -3,6 +3,9 @@ import { API_BASE_URL, SECTORS } from './config.js';
 import { loadCuriosidades } from './daily-curiosity.js';
 import { escapeHtml } from './utils.js';
 import { openCompanyDetails } from './company-details.js';
+import { loadTreemap } from './treemap.js';
+import { loadHeatmap } from './heatmap.js';
+import { loadBubbleChart } from './bubble-chart.js';
 
 // ========== CONSTANTES ==========
 const WATCHLIST_STORAGE_KEY = 'sp500-watchlist';
@@ -222,13 +225,22 @@ function updateUI() {
       }
       break;
     case 'treemap':
-      if (treemapView) treemapView.style.display = 'block';
+      if (treemapView) {
+        treemapView.style.display = 'block';
+        loadTreemap();
+      }
       break;
     case 'heatmap':
-      if (heatmapView) heatmapView.style.display = 'block';
+      if (heatmapView) {
+        heatmapView.style.display = 'block';
+        loadHeatmap();
+      }
       break;
     case 'bubble':
-      if (bubbleChartView) bubbleChartView.style.display = 'block';
+      if (bubbleChartView) {
+        bubbleChartView.style.display = 'block';
+        loadBubbleChart();
+      }
       break;
     case 'watchlist':
       if (watchlistView) {
