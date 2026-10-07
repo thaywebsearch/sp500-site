@@ -1,7 +1,7 @@
 {
   "sector": "Consumer Staples",
-  "count": 34,
-  "generatedAt": "2026-09-15",
+  "count": 33,
+  "generatedAt": "2026-09-21",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -324,20 +324,6 @@
       "marketCap": 14886309888,
       "marketCapClassification": "Large",
       "dividendYield": 3.52,
-      "hasDividend": "Sim"
-    },
-    {
-      "symbol": "TAP",
-      "name": "Molson Coors Beverage Company",
-      "sector": "Consumer Staples",
-      "subIndustry": "Brewers",
-      "headquarters": "Chicago, Illinois",
-      "dateAdded": "1976-06-30",
-      "cik": 24545,
-      "founded": "2005 (Molson 1786, Coors 1873)",
-      "marketCap": 7730379776,
-      "marketCapClassification": "Mid",
-      "dividendYield": 4.56,
       "hasDividend": "Sim"
     },
     {

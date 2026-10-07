@@ -1,7 +1,7 @@
 {
   "sector": "Industrials",
   "count": 83,
-  "generatedAt": "2026-09-15",
+  "generatedAt": "2026-09-21",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -89,6 +89,16 @@
       "hasDividend": "Não"
     },
     {
+      "symbol": "BE",
+      "name": "Bloom Energy",
+      "sector": "Industrials",
+      "subIndustry": "Electrical Components & Equipment",
+      "headquarters": "San Jose, California",
+      "dateAdded": "2026-09-21",
+      "cik": 1664703,
+      "founded": "2001"
+    },
+    {
       "symbol": "BA",
       "name": "Boeing",
       "sector": "Industrials",
@@ -115,20 +125,6 @@
       "marketCapClassification": "Large",
       "dividendYield": 2.38,
       "hasDividend": "Sim"
-    },
-    {
-      "symbol": "BLDR",
-      "name": "Builders FirstSource",
-      "sector": "Industrials",
-      "subIndustry": "Building Products",
-      "headquarters": "Irving, Texas",
-      "dateAdded": "2023-12-18",
-      "cik": 1316835,
-      "founded": "1998",
-      "marketCap": 7213535744,
-      "marketCapClassification": "Mid",
-      "dividendYield": null,
-      "hasDividend": "Não"
     },
     {
       "symbol": "CHRW",

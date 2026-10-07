@@ -1,7 +1,7 @@
 {
   "sector": "Communication Services",
-  "count": 24,
-  "generatedAt": "2026-09-15",
+  "count": 23,
+  "generatedAt": "2026-09-21",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -283,20 +283,6 @@
       "marketCapClassification": "Large",
       "dividendYield": 1.69,
       "hasDividend": "Sim"
-    },
-    {
-      "symbol": "TTD",
-      "name": "Trade Desk (The)",
-      "sector": "Communication Services",
-      "subIndustry": "Advertising",
-      "headquarters": "Ventura, California",
-      "dateAdded": "2025-07-18",
-      "cik": 1671933,
-      "founded": "2009",
-      "marketCap": 6364527104,
-      "marketCapClassification": "Mid",
-      "dividendYield": null,
-      "hasDividend": "Não"
     },
     {
       "symbol": "VZ",

@@ -1,7 +1,7 @@
 {
   "sector": "Health Care",
-  "count": 59,
-  "generatedAt": "2026-09-15",
+  "count": 60,
+  "generatedAt": "2026-09-21",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -409,6 +409,16 @@
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
+    },
+    {
+      "symbol": "ILMN",
+      "name": "Illumina, Inc.",
+      "sector": "Health Care",
+      "subIndustry": "Life Sciences Tools & Services",
+      "headquarters": "San Diego, California",
+      "dateAdded": "2026-09-21",
+      "cik": 1110803,
+      "founded": "1998"
     },
     {
       "symbol": "INCY",
