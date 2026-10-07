@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consumer Staples - SP500 Setor</title>
+  <title>Consumer Discretionary - SP500 Setor</title>
   <style>
     * {
       margin: 0;
@@ -69,7 +69,7 @@
     .header-content h1 {
       font-size: 48px;
       margin-bottom: 12px;
-      background: linear-gradient(135deg, #00e676 0%, #00d4ff 100%);
+      background: linear-gradient(135deg, #ff9800 0%, #ffab00 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -89,8 +89,8 @@
     }
 
     .stat-card {
-      background: linear-gradient(135deg, rgba(0, 230, 118, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
-      border: 1px solid rgba(0, 230, 118, 0.2);
+      background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 171, 0, 0.05) 100%);
+      border: 1px solid rgba(255, 152, 0, 0.2);
       padding: 20px;
       border-radius: 12px;
       text-align: center;
@@ -99,7 +99,7 @@
     .stat-card .value {
       font-size: 28px;
       font-weight: 700;
-      color: var(--accent-green);
+      color: #ffab00;
       margin-bottom: 8px;
     }
 
@@ -143,8 +143,8 @@
     .filter-group input:focus,
     .filter-group select:focus {
       outline: none;
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 12px rgba(0, 212, 255, 0.2);
+      border-color: #ffab00;
+      box-shadow: 0 0 12px rgba(255, 171, 0, 0.2);
     }
 
     .view-toggle {
@@ -168,14 +168,14 @@
     }
 
     .view-btn:hover {
-      border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
+      border-color: #ffab00;
+      color: #ffab00;
     }
 
     .view-btn.active {
-      background: rgba(0, 212, 255, 0.2);
-      border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
+      background: rgba(255, 171, 0, 0.2);
+      border-color: #ffab00;
+      color: #ffab00;
     }
 
     .companies-grid {
@@ -186,7 +186,7 @@
     }
 
     .company-card {
-      background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 230, 118, 0.02) 100%);
+      background: linear-gradient(135deg, rgba(255, 171, 0, 0.05) 0%, rgba(255, 152, 0, 0.02) 100%);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 24px;
@@ -198,10 +198,10 @@
     }
 
     .company-card:hover {
-      border-color: var(--accent-cyan);
-      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 230, 118, 0.05) 100%);
+      border-color: #ffab00;
+      background: linear-gradient(135deg, rgba(255, 171, 0, 0.1) 0%, rgba(255, 152, 0, 0.05) 100%);
       transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(0, 212, 255, 0.15);
+      box-shadow: 0 12px 32px rgba(255, 171, 0, 0.15);
     }
 
     .company-header {
@@ -218,8 +218,8 @@
 
     .company-symbol {
       font-size: 12px;
-      background: rgba(0, 212, 255, 0.2);
-      color: var(--accent-cyan);
+      background: rgba(255, 171, 0, 0.2);
+      color: #ffab00;
       padding: 4px 8px;
       border-radius: 4px;
       font-weight: 600;
@@ -239,8 +239,8 @@
     }
 
     .metric {
-      background: rgba(0, 212, 255, 0.05);
-      border: 1px solid rgba(0, 212, 255, 0.1);
+      background: rgba(255, 171, 0, 0.05);
+      border: 1px solid rgba(255, 171, 0, 0.1);
       padding: 12px;
       border-radius: 8px;
       text-align: center;
@@ -249,7 +249,7 @@
     .metric-value {
       font-size: 16px;
       font-weight: 700;
-      color: var(--accent-green);
+      color: #ffab00;
       margin-bottom: 4px;
     }
 
@@ -275,8 +275,8 @@
     }
 
     .companies-table th {
-      background: rgba(0, 212, 255, 0.1);
-      color: var(--accent-cyan);
+      background: rgba(255, 171, 0, 0.1);
+      color: #ffab00;
       padding: 16px;
       text-align: left;
       font-weight: 600;
@@ -288,7 +288,7 @@
     }
 
     .companies-table th:hover {
-      background: rgba(0, 212, 255, 0.15);
+      background: rgba(255, 171, 0, 0.15);
     }
 
     .companies-table td {
@@ -297,7 +297,7 @@
     }
 
     .companies-table tr:hover {
-      background: rgba(0, 212, 255, 0.05);
+      background: rgba(255, 171, 0, 0.05);
     }
 
     .companies-table tr:last-child td {
@@ -311,8 +311,8 @@
     }
 
     .info-box {
-      background: rgba(0, 212, 255, 0.05);
-      border-left: 4px solid var(--accent-cyan);
+      background: rgba(255, 171, 0, 0.05);
+      border-left: 4px solid #ffab00;
       padding: 20px;
       border-radius: 8px;
       margin-top: 40px;
@@ -322,7 +322,7 @@
     }
 
     .info-box strong {
-      color: var(--accent-cyan);
+      color: #ffab00;
     }
 
     @media (max-width: 768px) {
@@ -346,8 +346,8 @@
 
     <div class="header">
       <div class="header-content">
-        <h1>Consumer Staples</h1>
-        <p>🛒 Produtos de Consumo Essenciais - Bens de primeira necessidade</p>
+        <h1>Consumer Discretionary</h1>
+        <p>🛍️ Bens de Consumo Discricionários - Varejo, Automóvel e Lazer</p>
       </div>
       <div class="header-stats">
         <div class="stat-card">
@@ -368,7 +368,7 @@
     <div class="filters">
       <div class="filter-group">
         <label for="search">Buscar por Nome ou Símbolo</label>
-        <input type="text" id="search" placeholder="Ex: Walmart, WMT...">
+        <input type="text" id="search" placeholder="Ex: Amazon, AMZN...">
       </div>
       <div class="filter-group">
         <label for="sort">Ordenar por</label>
@@ -386,11 +386,11 @@
     </div>
 
     <div class="view-toggle">
-      <button class="view-btn active" onclick="switchView('cards', event)">🃏 Cards</button>
-      <button class="view-btn" onclick="switchView('table', event)">📊 Tabela</button>
+      <button class="view-btn active" onclick="switchView('cards')">🃏 Cards</button>
+      <button class="view-btn" onclick="switchView('table')">📊 Tabela</button>
     </div>
 
-    <div id="loading" class="loading">Carregando empresas de Consumer Staples...</div>
+    <div id="loading" class="loading">Carregando empresas de Consumer Discretionary...</div>
 
     <div id="cards-view" class="companies-grid" style="display: none;"></div>
 
@@ -409,7 +409,7 @@
     </table>
 
     <div class="info-box">
-      <strong>💡 Sobre Consumer Staples:</strong> Este setor inclui empresas que produzem e distribuem produtos de consumo essenciais, como alimentos, bebidas, produtos de higiene e limpeza. Estas empresas tendem a ter receitas mais previsíveis e resistentes a crises económicas, sendo frequentemente escolhidas por investidores defensivos.
+      <strong>💡 Sobre Consumer Discretionary:</strong> Este setor inclui empresas que produzem e vendem bens e serviços discricionários - produtos que os consumidores compram quando têm renda disponível. Inclui varejo, automóvel, lazer e entretenimento. Estas empresas tendem a ser mais sensíveis aos ciclos económicos, aumentando em tempos de crescimento.
     </div>
   </div>
 
@@ -428,8 +428,8 @@
 
     async function loadSectorData() {
       try {
-        console.log('Carregando dados de consumer-staples...');
-        const response = await fetch(`${API_BASE_URL}/api/setor/consumer-staples`);
+        console.log('Carregando dados de consumer-discretionary...');
+        const response = await fetch(`${API_BASE_URL}/api/setor/consumer-discretionary`);
         const data = await response.json();
         
         console.log('Dados recebidos:', data);
@@ -450,7 +450,7 @@
         console.error('Erro ao carregar dados:', error);
         document.getElementById('loading').innerHTML = `
           <div style="color: var(--accent-red); font-size: 16px;">
-            ❌ Erro ao carregar empresas de Consumer Staples
+            ❌ Erro ao carregar empresas de Consumer Discretionary
             <div style="font-size: 12px; color: var(--text-secondary); margin-top: 10px;">
               ${error.message}
             </div>
@@ -529,7 +529,7 @@
             </div>
           </div>
 
-          <div style="font-size: 11px; color: var(--text-secondary); border-top: 1px solid rgba(0, 212, 255, 0.1); padding-top: 12px;">
+          <div style="font-size: 11px; color: var(--text-secondary); border-top: 1px solid rgba(255, 171, 0, 0.1); padding-top: 12px;">
             📍 ${company.headquarters || 'N/A'}
           </div>
         </div>
@@ -561,18 +561,13 @@
       document.getElementById('avg-dividend').textContent = avgDiv.toFixed(2) + '%';
     }
 
-    function switchView(view, evt) {
+    function switchView(view) {
       currentView = view;
       document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
-      if (evt && evt.target) evt.target.classList.add('active');
+      event.target.classList.add('active');
       
       document.getElementById('cards-view').style.display = view === 'cards' ? 'grid' : 'none';
-      const tableView = document.getElementById('table-view');
-      if (view === 'table') {
-        tableView.classList.add('active');
-      } else {
-        tableView.classList.remove('active');
-      }
+      document.getElementById('table-view').classList.toggle('active');
     }
 
     function sortTable(column) {
