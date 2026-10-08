@@ -34,24 +34,6 @@ export async function getDailySummary() {
 }
 
 /**
- * Obtém calendário de dividendos
- * @param {number} max - Número máximo de eventos (opcional)
- * @returns {Promise<Object>} Dados do calendário
- */
-export async function getDividendCalendar(max = null) {
-  try {
-    const url = max ? `/api/calendario-dividendos?max=${max}` : '/api/calendario-dividendos';
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Erro ao buscar calendário de dividendos');
-    const data = await response.json();
-    return data.dados || {};
-  } catch (erro) {
-    console.error('Erro ao buscar calendário de dividendos:', erro);
-    return {};
-  }
-}
-
-/**
  * Health check - verifica se servidor está rodando
  * @returns {Promise<boolean>} true se servidor está OK
  */

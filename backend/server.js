@@ -73,7 +73,6 @@ function listarArquivosDeSetores() {
       && file !== 'package-lock.json'
       && file !== 'daily-summary.json'
       && file !== 'curiosidades.json'
-      && file !== 'dividend-calendar.json'
     )
     .map(file => file.replace('.json', ''));
 }
@@ -194,7 +193,6 @@ app.get('/api/setores', (req, res) => {
         && file !== 'package-lock.json'
         && file !== 'daily-summary.json'
         && file !== 'curiosidades.json'
-        && file !== 'dividend-calendar.json'
       )
       .map(file => file.replace('.json', ''))
       .sort();
@@ -403,45 +401,6 @@ app.get('/api/resumo-dia', (req, res) => {
 });
 
 /**
- * Calendário de dividendos (próximos eventos estimados por empresa)
- * GET /api/calendario-dividendos
- */
-app.get('/api/calendario-dividendos', (req, res) => {
-  try {
-    const caminhoJson = path.join(__dirname, 'data', 'dividend-calendar.json');
-
-    if (!fs.existsSync(caminhoJson)) {
-      return res.status(404).json({
-        sucesso: false,
-        erro: 'Calendário de dividendos ainda não gerado'
-      });
-    }
-
-    const conteudo = fs.readFileSync(caminhoJson, 'utf-8');
-    const dados = JSON.parse(conteudo);
-    
-    // Opção de limitar resultados com ?max=10
-    const max = parseInt(req.query.max, 10);
-    const eventos = (Number.isFinite(max) && max > 0) 
-      ? dados.events.slice(0, max) 
-      : dados.events;
-
-    res.json({
-      sucesso: true,
-      dados: { ...dados, events: eventos },
-      total: dados.count,
-      retornou: eventos.length
-    });
-  } catch (erro) {
-    console.error('Erro ao carregar calendário de dividendos:', erro);
-    res.status(500).json({ 
-      sucesso: false, 
-      erro: erro.message 
-    });
-  }
-});
-
-/**
  * Health check - verifica se o servidor está rodando
  * GET /api/health
  */
@@ -491,11 +450,6 @@ app.get('/', (req, res) => {
         metodo: 'GET',
         rota: '/api/resumo-dia',
         descricao: 'Obtém resumo do dia com maiores altas e baixas'
-      },
-      {
-        metodo: 'GET',
-        rota: '/api/calendario-dividendos',
-        descricao: 'Obtém calendário de dividendos (use ?max=10 para limitar)'
       }
     ]
   });
@@ -539,7 +493,6 @@ const server = app.listen(PORT, () => {
   console.log(`  🌟 GET /api/curiosidades - Curiosidade do dia`);
   console.log(`  💰 GET /api/historico/:symbol - Histórico de preços`);
   console.log(`  📋 GET /api/resumo-dia - Resumo do dia`);
-  console.log(`  🎁 GET /api/calendario-dividendos - Calendário`);
   console.log(`  💚 GET /api/health - Health check`);
   console.log('='.repeat(60) + '\n');
 });

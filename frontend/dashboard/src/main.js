@@ -6,6 +6,7 @@ import { openCompanyDetails } from './company-details.js';
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
 import { renderBubbleChart } from './bubble-chart.js';
+import { loadDailySummary } from './daily-summary.js';
 
 // ========== CONSTANTES ==========
 const WATCHLIST_STORAGE_KEY = 'sp500-watchlist';
@@ -185,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateUI();
   updateTabButtons();
   loadDashboardData();
+  loadDailySummary();
   updateWatchlistCountBadge();
   startPriceAlertPolling();
   console.log('✅ Dashboard inicializado com sucesso!');

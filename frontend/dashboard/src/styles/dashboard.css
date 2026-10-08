@@ -143,6 +143,175 @@ button:disabled {
   color: var(--accent-red) !important;
 }
 
+/* ========== RESUMO DO DIA ========== */
+.daily-summary {
+  margin-bottom: 30px;
+  padding: 18px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.daily-summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.daily-summary-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--accent-cyan);
+}
+
+.daily-date {
+  color: var(--text-secondary);
+  font-size: 0.85em;
+}
+
+.daily-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.daily-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 16px;
+  background: var(--bg-tertiary, rgba(255, 255, 255, 0.03));
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.daily-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.daily-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.daily-card.positive .daily-value {
+  color: var(--accent-green);
+}
+
+.daily-card.negative .daily-value {
+  color: var(--accent-red);
+}
+
+.daily-lists {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.summary-list {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.summary-list-title {
+  margin: 0 0 8px;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+}
+
+.mini-symbol {
+  min-width: 62px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: bold;
+  color: var(--accent-cyan);
+}
+
+.mini-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mini-change {
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+}
+
+.daily-sectors {
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.daily-sectors h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  color: var(--accent-cyan);
+}
+
+.daily-sectors-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.daily-sector-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--bg-tertiary, rgba(255, 255, 255, 0.03));
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.85em;
+}
+
+.daily-sector-card .sector-name {
+  color: var(--text-primary);
+}
+
+.daily-sector-card .sector-change {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.daily-sector-card.positive .sector-change {
+  color: var(--accent-green);
+}
+
+.daily-sector-card.negative .sector-change {
+  color: var(--accent-red);
+}
+
+.summary-empty {
+  color: var(--text-secondary);
+  font-size: 0.9em;
+}
+
 /* ========== STATS BOX ========== */
 .stats-box {
   margin-bottom: 20px;
