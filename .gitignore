@@ -44,3 +44,6 @@ Desktop.ini
 
 # Artefatos de dados temporários
 sp500.json
+
+# Cópia derivada do dashboard (não versionada; gerada apenas quando necessário)
+frontend/dashboard/public/data/

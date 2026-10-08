@@ -29,8 +29,7 @@ CSV (GitHub datasets)
         ▼
 frontend/<setor>/<setor>.json   ← fonte única (canônica)
         │  sync automático no mesmo script
-        ├──▶ backend/data/              (API Railway)
-        └──▶ frontend/dashboard/public/data/  (dashboard)
+        └──▶ backend/data/              (API Railway)
 ```
 
 O README de cada setor e o consolidado `TOP50-MARKET-CAP.md` são gerados pelo mesmo pipeline, preservando o enriquecimento (marketCap, dividendYield) existente.

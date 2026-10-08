@@ -8,8 +8,7 @@ Fluxo:
      (endpoint /v8/finance/chart — stdlib, sem dependências)
   3. Calcula a variação percentual do último pregão por empresa
   4. Agrega top altas, top baixas e desempenho médio por setor (market mood)
-  5. Grava `daily-summary.json` nas cópias derivadas
-     (backend/data → API e dashboard/public/data → dashboard)
+  5. Grava `daily-summary.json` na cópia derivada usada pela API (backend/data)
 
 Execução: python scripts/update_daily_summary.py
 """
@@ -30,7 +29,6 @@ import update_sectors as us  # reutiliza paths, mapas de setores e cópias deriv
 TOP_N = 8
 WORKERS = 4
 BACKEND_TARGET = us.BACKEND_DATA_DIR
-DASHBOARD_TARGET = us.DASHBOARD_DATA_DIR
 CHART_URL = (
     "https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?"
     "range=5d&interval=1d"
@@ -235,11 +233,10 @@ def write_summary(summary, quote_time):
 
     content = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
 
-    for target in (BACKEND_TARGET, DASHBOARD_TARGET):
-        target.mkdir(parents=True, exist_ok=True)
-        out = target / "daily-summary.json"
-        out.write_text(content, encoding="utf-8")
-        print(f"[OK] {out}")
+    BACKEND_TARGET.mkdir(parents=True, exist_ok=True)
+    out = BACKEND_TARGET / "daily-summary.json"
+    out.write_text(content, encoding="utf-8")
+    print(f"[OK] {out}")
 
     return payload
 

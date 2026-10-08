@@ -44,15 +44,19 @@ dashboard/
 ├── vite.config.js      # Config Vite (base path para GitHub Pages)
 ├── package.json
 ├── public/
-│   └── data/           # JSONs dos 11 setores (copiados no build)
+│   └── sectors/        # Páginas estáticas por setor (copiadas para ../docs no build)
 └── src/
     ├── main.js         # Lógica da aplicação
-    └── style.css       # Estilos
+    ├── api.js          # Cliente da API REST
+    └── styles/         # CSS
 ```
 
 ## Dados
 
-Os dados vêm dos arquivos JSON em `../<setor>/<setor>.json` (fonte única), sincronizados para `public/data/` pelo script `scripts/update_sectors.py`.
+O dashboard consome os dados via API REST (`/api/setores`, `/api/setor/:setor`),
+alimentada pela cópia derivada `backend/data/`. A fonte única (canônica) é
+`../<setor>/<setor>.json`, sincronizada para `backend/data/` pelo script
+`scripts/update_sectors.py`. Não há cópia de dados dentro do dashboard.
 
 Campos disponíveis por empresa:
 

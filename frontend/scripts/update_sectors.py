@@ -7,7 +7,7 @@ Pipeline único:
   2. Gera o JSON canônico de cada setor (preservando o enriquecimento existente)
   3. Gera os READMEs de cada setor (ordenados por Market Cap)
   4. Gera o consolidado TOP50-MARKET-CAP.md
-  5. Sincroniza cópias derivadas (backend/data e dashboard/public/data)
+  5. Sincroniza a cópia derivada usada pela API (backend/data)
 
 Execução: python scripts/update_sectors.py
 """
@@ -24,7 +24,6 @@ SOURCE_URL = "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/m
 ROOT_DIR = Path(__file__).resolve().parent.parent
 SECTORS_DIR = ROOT_DIR
 BACKEND_DATA_DIR = ROOT_DIR.parent / "backend" / "data"
-DASHBOARD_DATA_DIR = ROOT_DIR / "dashboard" / "public" / "data"
 GENERATED_AT = datetime.now().strftime("%Y-%m-%d")
 
 SECTOR_ORDER = [
@@ -311,9 +310,9 @@ def write_root_readme(sectors):
 
 
 def sync_derived_copies():
-    """Copia os JSONs canônicos (fonte única) para as cópias derivadas
-    usadas pela API (backend/data) e pelo dashboard (public/data)."""
-    targets = [BACKEND_DATA_DIR, DASHBOARD_DATA_DIR]
+    """Copia os JSONs canônicos (fonte única) para a cópia derivada
+    usada pela API (backend/data)."""
+    targets = [BACKEND_DATA_DIR]
     copied = 0
     for folder in SECTOR_FOLDER_MAP.values():
         source = SECTORS_DIR / folder / f"{folder}.json"

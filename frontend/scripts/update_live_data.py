@@ -7,7 +7,7 @@ Fluxo:
   1. Lê os JSONs canônicos de cada setor (fonte única em frontend/<setor>/)
   2. Busca marketCap e dividendYield ao vivo via yfinance (Yahoo Finance)
   3. Regrava os JSONs canônicos preservando todos os demais campos
-  4. Sincroniza as cópias derivadas: backend/data (API) e dashboard/public/data
+  4. Sincroniza a cópia derivada: backend/data (API)
 
 Como a API Express lê os arquivos do backend/data a cada requisição, os dados
 novos ficam disponíveis no site imediatamente (sem reiniciar o servidor).
