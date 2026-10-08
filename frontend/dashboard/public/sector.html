@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Health Care - SP500 Setor</title>
+  <title>SP500 Setor</title>
   <style>
     * {
       margin: 0;
@@ -22,6 +22,8 @@
       --accent-green: #00e676;
       --accent-amber: #ffab00;
       --accent-red: #ff5252;
+      --sector-accent-rgb: 255, 82, 82;
+      --sector-accent-alt-rgb: 255, 107, 53;
     }
 
     body {
@@ -69,7 +71,7 @@
     .header-content h1 {
       font-size: 48px;
       margin-bottom: 12px;
-      background: linear-gradient(135deg, #29b6f6 0%, #26a69a 100%);
+      background: linear-gradient(135deg, rgb(var(--sector-accent-alt-rgb)) 0%, rgb(var(--sector-accent-rgb)) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -89,8 +91,8 @@
     }
 
     .stat-card {
-      background: linear-gradient(135deg, rgba(41, 182, 246, 0.1) 0%, rgba(38, 166, 154, 0.05) 100%);
-      border: 1px solid rgba(38, 166, 154, 0.2);
+      background: linear-gradient(135deg, rgba(var(--sector-accent-alt-rgb), 0.1) 0%, rgba(var(--sector-accent-rgb), 0.05) 100%);
+      border: 1px solid rgba(var(--sector-accent-rgb), 0.2);
       padding: 20px;
       border-radius: 12px;
       text-align: center;
@@ -99,7 +101,7 @@
     .stat-card .value {
       font-size: 28px;
       font-weight: 700;
-      color: #29b6f6;
+      color: rgb(var(--sector-accent-rgb));
       margin-bottom: 8px;
     }
 
@@ -143,8 +145,8 @@
     .filter-group input:focus,
     .filter-group select:focus {
       outline: none;
-      border-color: #29b6f6;
-      box-shadow: 0 0 12px rgba(41, 182, 246, 0.2);
+      border-color: rgb(var(--sector-accent-rgb));
+      box-shadow: 0 0 12px rgba(var(--sector-accent-rgb), 0.2);
     }
 
     .view-toggle {
@@ -168,14 +170,14 @@
     }
 
     .view-btn:hover {
-      border-color: #29b6f6;
-      color: #29b6f6;
+      border-color: rgb(var(--sector-accent-rgb));
+      color: rgb(var(--sector-accent-rgb));
     }
 
     .view-btn.active {
-      background: rgba(41, 182, 246, 0.2);
-      border-color: #29b6f6;
-      color: #29b6f6;
+      background: rgba(var(--sector-accent-rgb), 0.2);
+      border-color: rgb(var(--sector-accent-rgb));
+      color: rgb(var(--sector-accent-rgb));
     }
 
     .companies-grid {
@@ -186,7 +188,7 @@
     }
 
     .company-card {
-      background: linear-gradient(135deg, rgba(41, 182, 246, 0.05) 0%, rgba(38, 166, 154, 0.02) 100%);
+      background: linear-gradient(135deg, rgba(var(--sector-accent-rgb), 0.05) 0%, rgba(var(--sector-accent-alt-rgb), 0.02) 100%);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 24px;
@@ -198,10 +200,10 @@
     }
 
     .company-card:hover {
-      border-color: #29b6f6;
-      background: linear-gradient(135deg, rgba(41, 182, 246, 0.1) 0%, rgba(38, 166, 154, 0.05) 100%);
+      border-color: rgb(var(--sector-accent-rgb));
+      background: linear-gradient(135deg, rgba(var(--sector-accent-rgb), 0.1) 0%, rgba(var(--sector-accent-alt-rgb), 0.05) 100%);
       transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(41, 182, 246, 0.15);
+      box-shadow: 0 12px 32px rgba(var(--sector-accent-rgb), 0.15);
     }
 
     .company-header {
@@ -218,8 +220,8 @@
 
     .company-symbol {
       font-size: 12px;
-      background: rgba(41, 182, 246, 0.2);
-      color: #29b6f6;
+      background: rgba(var(--sector-accent-rgb), 0.2);
+      color: rgb(var(--sector-accent-rgb));
       padding: 4px 8px;
       border-radius: 4px;
       font-weight: 600;
@@ -239,8 +241,8 @@
     }
 
     .metric {
-      background: rgba(41, 182, 246, 0.05);
-      border: 1px solid rgba(41, 182, 246, 0.1);
+      background: rgba(var(--sector-accent-rgb), 0.05);
+      border: 1px solid rgba(var(--sector-accent-rgb), 0.1);
       padding: 12px;
       border-radius: 8px;
       text-align: center;
@@ -249,7 +251,7 @@
     .metric-value {
       font-size: 16px;
       font-weight: 700;
-      color: #29b6f6;
+      color: rgb(var(--sector-accent-rgb));
       margin-bottom: 4px;
     }
 
@@ -275,8 +277,8 @@
     }
 
     .companies-table th {
-      background: rgba(41, 182, 246, 0.1);
-      color: #29b6f6;
+      background: rgba(var(--sector-accent-rgb), 0.1);
+      color: rgb(var(--sector-accent-rgb));
       padding: 16px;
       text-align: left;
       font-weight: 600;
@@ -288,7 +290,7 @@
     }
 
     .companies-table th:hover {
-      background: rgba(41, 182, 246, 0.15);
+      background: rgba(var(--sector-accent-rgb), 0.15);
     }
 
     .companies-table td {
@@ -297,7 +299,7 @@
     }
 
     .companies-table tr:hover {
-      background: rgba(41, 182, 246, 0.05);
+      background: rgba(var(--sector-accent-rgb), 0.05);
     }
 
     .companies-table tr:last-child td {
@@ -311,8 +313,8 @@
     }
 
     .info-box {
-      background: rgba(41, 182, 246, 0.05);
-      border-left: 4px solid #29b6f6;
+      background: rgba(var(--sector-accent-rgb), 0.05);
+      border-left: 4px solid rgb(var(--sector-accent-rgb));
       padding: 20px;
       border-radius: 8px;
       margin-top: 40px;
@@ -322,7 +324,7 @@
     }
 
     .info-box strong {
-      color: #29b6f6;
+      color: rgb(var(--sector-accent-rgb));
     }
 
     @media (max-width: 768px) {
@@ -346,8 +348,8 @@
 
     <div class="header">
       <div class="header-content">
-        <h1>Health Care</h1>
-        <p>🏥 Saúde e Cuidados - Farmacêuticas, Dispositivos Médicos e Serviços</p>
+        <h1 id="sector-name">Setor</h1>
+        <p id="sector-subtitle"></p>
       </div>
       <div class="header-stats">
         <div class="stat-card">
@@ -368,7 +370,7 @@
     <div class="filters">
       <div class="filter-group">
         <label for="search">Buscar por Nome ou Símbolo</label>
-        <input type="text" id="search" placeholder="Ex: Johnson & Johnson, JNJ...">
+        <input type="text" id="search" placeholder="Buscar...">
       </div>
       <div class="filter-group">
         <label for="sort">Ordenar por</label>
@@ -390,7 +392,7 @@
       <button class="view-btn" onclick="switchView('table')">📊 Tabela</button>
     </div>
 
-    <div id="loading" class="loading">Carregando empresas de Health Care...</div>
+    <div id="loading" class="loading">Carregando empresas...</div>
 
     <div id="cards-view" class="companies-grid" style="display: none;"></div>
 
@@ -409,38 +411,162 @@
     </table>
 
     <div class="info-box">
-      <strong>💡 Sobre Health Care:</strong> Este setor abrange empresas farmacêuticas, fabricantes de dispositivos médicos, operadores de seguros de saúde e prestadores de cuidados de saúde. É um setor resistente a ciclos económicos, impulsionado pela procura constante de produtos e serviços de saúde. Oferece frequentemente crescimento e dividendos estáveis.
+      <strong id="info-title">💡 Sobre o setor:</strong> <span id="info-text"></span>
     </div>
   </div>
 
   <script>
-    const API_BASE_URL = window.location.hostname === 'localhost' 
+    const API_BASE_URL = window.location.hostname === 'localhost'
       ? 'http://localhost:5001'
       : 'https://sp500-site-production.up.railway.app';
+
+    const SECTORS_CONFIG = {
+      'communication-services': {
+        name: 'Communication Services',
+        subtitle: '📡 Serviços de Comunicação - Telecomunicações, Media e Internet',
+        placeholder: 'Ex: Google, GOOGL...',
+        info: 'Este setor inclui empresas de telecomunicações, serviços de internet, media e entretenimento. Inclui gigantes globais de tecnologia, operadoras de telecomunicações e plataformas de conteúdo. Estas empresas frequentemente apresentam dividendos estáveis e estão na vanguarda da transformação digital.',
+        accent: '#00e676',
+        accentLight: '#00d4ff',
+      },
+      'consumer-discretionary': {
+        name: 'Consumer Discretionary',
+        subtitle: '🛍️ Bens de Consumo Discricionários - Varejo, Automóvel e Lazer',
+        placeholder: 'Ex: Amazon, AMZN...',
+        info: 'Este setor inclui empresas que produzem e vendem bens e serviços discricionários - produtos que os consumidores compram quando têm renda disponível. Inclui varejo, automóvel, lazer e entretenimento. Estas empresas tendem a ser mais sensíveis aos ciclos económicos, aumentando em tempos de crescimento.',
+        accent: '#ffab00',
+        accentLight: '#ff9800',
+      },
+      'consumer-staples': {
+        name: 'Consumer Staples',
+        subtitle: '🛒 Produtos de Consumo Essenciais - Bens de primeira necessidade',
+        placeholder: 'Ex: Walmart, WMT...',
+        info: 'Este setor inclui empresas que produzem e distribuem produtos de consumo essenciais, como alimentos, bebidas, produtos de higiene e limpeza. Estas empresas tendem a ter receitas mais previsíveis e resistentes a crises económicas, sendo frequentemente escolhidas por investidores defensivos.',
+        accent: '#00d4ff',
+        accentLight: '#00e676',
+      },
+      energy: {
+        name: 'Energy',
+        subtitle: '⚡ Energia - Petróleo, Gás, Energia Renovável e Utilidades',
+        placeholder: 'Ex: ExxonMobil, XOM...',
+        info: 'Este setor inclui empresas envolvidas na produção, exploração e distribuição de energia. Compreende empresas de petróleo e gás, bem como produtores de energia renovável e utilities. Estas empresas são fundamentais para a economia global e historicamente oferecem rendimentos elevados através de dividendos.',
+        accent: '#ff5252',
+        accentLight: '#ff6b35',
+      },
+      financials: {
+        name: 'Financials',
+        subtitle: '💳 Setor Financeiro - Bancos, Seguradoras e Serviços Financeiros',
+        placeholder: 'Ex: JPMorgan, JPM...',
+        info: 'Este setor abrange instituições financeiras, incluindo bancos, seguradoras, corretoras e outros serviços financeiros. É um dos setores mais importantes da economia global, facilitando o fluxo de capital e gerindo riscos. Historicamente oferece dividendos substanciais e é cíclico, respondendo às taxas de juro e condições económicas.',
+        accent: '#ab47bc',
+        accentLight: '#ba68c8',
+      },
+      'health-care': {
+        name: 'Health Care',
+        subtitle: '🏥 Saúde e Cuidados - Farmacêuticas, Dispositivos Médicos e Serviços',
+        placeholder: 'Ex: Johnson & Johnson, JNJ...',
+        info: 'Este setor abrange empresas farmacêuticas, fabricantes de dispositivos médicos, operadores de seguros de saúde e prestadores de cuidados de saúde. É um setor resistente a ciclos económicos, impulsionado pela procura constante de produtos e serviços de saúde. Oferece frequentemente crescimento e dividendos estáveis.',
+        accent: '#26a69a',
+        accentLight: '#29b6f6',
+      },
+      industrials: {
+        name: 'Industrials',
+        subtitle: '🏭 Indústria - Manufatura, Construção, Defesa e Transportes',
+        placeholder: 'Ex: Boeing, BA...',
+        info: 'Este setor compreende empresas envolvidas em manufatura, construção, equipamentos agrícolas, defesa, aeroespacial e transportes. Inclui alguns dos maiores fabricantes e fornecedores de infraestrutura do mundo. Este setor é cíclico e responde a investimento em capital e crescimento económico.',
+        accent: '#fb8c00',
+        accentLight: '#ffa726',
+      },
+      'information-technology': {
+        name: 'Information Technology',
+        subtitle: '💻 Tecnologia - Software, Hardware, Semiconductores e Internet',
+        placeholder: 'Ex: Apple, AAPL...',
+        info: 'Este é o maior e mais dinâmico setor do S&P 500, incluindo gigantes da computação, software, semicondutores e serviços de internet. Abrange desde startups inovadoras até mega-corporations dominantes globalmente. O setor é impulsionado pela inovação contínua, transformação digital e crescimento exponencial em áreas como IA, cloud computing e cibersegurança.',
+        accent: '#00bcd4',
+        accentLight: '#00d4ff',
+      },
+      materials: {
+        name: 'Materials',
+        subtitle: '⛏️ Materiais - Mineração, Químicos e Produção de Matérias-Primas',
+        placeholder: 'Ex: DuPont, DD...',
+        info: 'Este setor compreende empresas envolvidas na extração, processamento e produção de matérias-primas essenciais para a economia global. Inclui mineração de metais preciosos e industriais, produção química e transformação de commodities. É um setor cíclico sensível aos preços das commodities e ao crescimento económico global.',
+        accent: '#43a047',
+        accentLight: '#66bb6a',
+      },
+      'real-estate': {
+        name: 'Real Estate',
+        subtitle: '🏢 Imobiliário - REITs, Desenvolvimento Imobiliário e Gestão de Propriedades',
+        placeholder: 'Ex: REIT Corp, REIT...',
+        info: 'Este setor compreende fundos de investimento imobiliário (REITs), empresas de desenvolvimento imobiliário e proprietários de propriedades comerciais. Os REITs são obrigados a distribuir 90% dos seus lucros aos investidores, oferecendo tipicamente rendimentos elevados. É um setor defensivo com fluxos de caixa previsíveis e exposição à inflação.',
+        accent: '#d81b60',
+        accentLight: '#ec407a',
+      },
+      utilities: {
+        name: 'Utilities',
+        subtitle: '⚡ Serviços Públicos Essenciais - Eletricidade, Gás e Água',
+        placeholder: 'Ex: NextEra, NEE...',
+        info: 'Este setor inclui empresas que fornecem serviços públicos essenciais como eletricidade, gás natural e água. Estas empresas operam frequentemente em regime de monopólio regulado, gerando receitas previsíveis e estáveis. É um setor defensivo, muito procurado por investidores focados em dividendos consistentes e baixa volatilidade.',
+        accent: '#00897b',
+        accentLight: '#26a69a',
+      },
+    };
+
+    const SECTOR_ID = new URLSearchParams(window.location.search).get('sector') || '';
+    const CONFIG = SECTORS_CONFIG[SECTOR_ID] || null;
 
     let allCompanies = [];
     let filteredCompanies = [];
     let currentView = 'cards';
     let sortBy = 'symbol';
 
-    // Inicializar ao carregar
-    window.addEventListener('load', loadSectorData);
+    function hexToRgb(hex) {
+      const value = hex.replace('#', '');
+      const r = parseInt(value.slice(0, 2), 16);
+      const g = parseInt(value.slice(2, 4), 16);
+      const b = parseInt(value.slice(4, 6), 16);
+      return `${r}, ${g}, ${b}`;
+    }
+
+    function applyConfig() {
+      if (!CONFIG) return;
+      const root = document.documentElement.style;
+      root.setProperty('--sector-accent-rgb', hexToRgb(CONFIG.accent));
+      root.setProperty('--sector-accent-alt-rgb', hexToRgb(CONFIG.accentLight));
+      document.title = `${CONFIG.name} - SP500 Setor`;
+      document.getElementById('sector-name').textContent = CONFIG.name;
+      document.getElementById('sector-subtitle').textContent = CONFIG.subtitle;
+      document.getElementById('search').placeholder = CONFIG.placeholder;
+      document.getElementById('loading').textContent = `Carregando empresas de ${CONFIG.name}...`;
+      document.getElementById('info-title').textContent = `💡 Sobre ${CONFIG.name}:`;
+      document.getElementById('info-text').textContent = CONFIG.info;
+    }
+
+    window.addEventListener('load', () => {
+      applyConfig();
+      if (!CONFIG) {
+        document.getElementById('loading').innerHTML = `
+          <div style="color: var(--accent-red); font-size: 16px;">
+            ❌ Setor não especificado ou desconhecido
+            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 10px;">
+              Volte ao mapa de setores e escolha um setor.
+            </div>
+          </div>
+        `;
+        return;
+      }
+      loadSectorData();
+    });
 
     async function loadSectorData() {
       try {
-        console.log('Carregando dados de health-care...');
-        const response = await fetch(`${API_BASE_URL}/api/setor/health-care`);
+        console.log(`Carregando dados de ${SECTOR_ID}...`);
+        const response = await fetch(`${API_BASE_URL}/api/setor/${SECTOR_ID}`);
         const data = await response.json();
-        
-        console.log('Dados recebidos:', data);
-        
+
         if (data.dados && data.dados.companies) {
           allCompanies = data.dados.companies;
-          console.log(`Carregadas ${allCompanies.length} empresas`);
-          
           document.getElementById('loading').style.display = 'none';
           document.getElementById('cards-view').style.display = 'grid';
-          
           filterAndRender();
           updateStats();
         } else {
@@ -450,7 +576,7 @@
         console.error('Erro ao carregar dados:', error);
         document.getElementById('loading').innerHTML = `
           <div style="color: var(--accent-red); font-size: 16px;">
-            ❌ Erro ao carregar empresas de Health Care
+            ❌ Erro ao carregar empresas de ${CONFIG.name}
             <div style="font-size: 12px; color: var(--text-secondary); margin-top: 10px;">
               ${error.message}
             </div>
@@ -464,12 +590,12 @@
       const minDividend = parseFloat(document.getElementById('min-dividend').value) || 0;
 
       filteredCompanies = allCompanies.filter(company => {
-        const matchesSearch = !search || 
-          company.symbol.toLowerCase().includes(search) || 
+        const matchesSearch = !search ||
+          company.symbol.toLowerCase().includes(search) ||
           company.name.toLowerCase().includes(search);
-        
+
         const matchesDividend = (company.dividendYield || 0) >= minDividend;
-        
+
         return matchesSearch && matchesDividend;
       });
 
@@ -517,7 +643,7 @@
             </div>
             <div class="company-symbol">${company.symbol}</div>
           </div>
-          
+
           <div class="company-metrics">
             <div class="metric">
               <div class="metric-value">$${(company.marketCap / 1e9).toFixed(1)}B</div>
@@ -529,7 +655,7 @@
             </div>
           </div>
 
-          <div style="font-size: 11px; color: var(--text-secondary); border-top: 1px solid rgba(41, 182, 246, 0.1); padding-top: 12px;">
+          <div style="font-size: 11px; color: var(--text-secondary); border-top: 1px solid rgba(var(--sector-accent-rgb), 0.1); padding-top: 12px;">
             📍 ${company.headquarters || 'N/A'}
           </div>
         </div>
@@ -552,7 +678,7 @@
 
     function updateStats() {
       const totalCap = allCompanies.reduce((sum, c) => sum + (c.marketCap || 0), 0);
-      const avgDiv = allCompanies.length > 0 
+      const avgDiv = allCompanies.length > 0
         ? allCompanies.reduce((sum, c) => sum + (c.dividendYield || 0), 0) / allCompanies.length
         : 0;
 
@@ -565,7 +691,7 @@
       currentView = view;
       document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
-      
+
       document.getElementById('cards-view').style.display = view === 'cards' ? 'grid' : 'none';
       document.getElementById('table-view').classList.toggle('active');
     }
@@ -577,7 +703,7 @@
     }
 
     function goBack() {
-      window.location.href = '/sp500-by-sector/dashboard/#treemap';
+      window.location.href = new URL('index.html#treemap', document.baseURI).href;
     }
 
     // Event Listeners
