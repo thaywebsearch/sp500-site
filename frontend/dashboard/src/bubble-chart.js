@@ -2,17 +2,17 @@
 
 // Cores para os setores (paleta harmônica)
 const SECTOR_COLORS = {
-  'Energy': '#FF6B6B',
-  'Materials': '#C92A2A',
-  'Industrials': '#FFA94D',
+  Energy: '#FF6B6B',
+  Materials: '#C92A2A',
+  Industrials: '#FFA94D',
   'Consumer Discretionary': '#FFD43B',
   'Consumer Staples': '#A9E34B',
   'Health Care': '#51CF66',
-  'Financials': '#40C057',
+  Financials: '#40C057',
   'Information Technology': '#339AF0',
   'Communication Services': '#748FFC',
-  'Utilities': '#9775FA',
-  'Real Estate': '#DA77F2'
+  Utilities: '#9775FA',
+  'Real Estate': '#DA77F2',
 };
 
 function getSectorColor(sector) {
@@ -68,18 +68,19 @@ export function renderBubbleChart(companies, containerId) {
   container.innerHTML = '';
 
   // Filtrar dados válidos
-  const validData = companies.filter(c => {
-    const marketCap = parseSectorValue(c.marketCap);
-    const dividendYield = parsePercentage(c.dividendYield);
-    return marketCap > 0 && c.sectorName;
-  }).map((c, idx) => ({
-    symbol: c.symbol,
-    name: c.name,
-    sector: c.sectorName,
-    marketCap: parseSectorValue(c.marketCap),
-    dividendYield: parsePercentage(c.dividendYield),
-    index: idx
-  }));
+  const validData = companies
+    .filter((c) => {
+      const marketCap = parseSectorValue(c.marketCap);
+      return marketCap > 0 && c.sectorName;
+    })
+    .map((c, idx) => ({
+      symbol: c.symbol,
+      name: c.name,
+      sector: c.sectorName,
+      marketCap: parseSectorValue(c.marketCap),
+      dividendYield: parsePercentage(c.dividendYield),
+      index: idx,
+    }));
 
   console.log(`✅ ${validData.length} empresas com dados válidos`);
 
@@ -94,10 +95,10 @@ export function renderBubbleChart(companies, containerId) {
   const height = 600 - margin.top - margin.bottom;
 
   // Escalas
-  const minYield = Math.min(...validData.map(d => d.dividendYield));
-  const maxYield = Math.max(...validData.map(d => d.dividendYield));
-  const minMarketCap = Math.min(...validData.map(d => d.marketCap));
-  const maxMarketCap = Math.max(...validData.map(d => d.marketCap));
+  const minYield = Math.min(...validData.map((d) => d.dividendYield));
+  const maxYield = Math.max(...validData.map((d) => d.dividendYield));
+  const minMarketCap = Math.min(...validData.map((d) => d.marketCap));
+  const maxMarketCap = Math.max(...validData.map((d) => d.marketCap));
 
   const yScale = (value) => {
     return height - ((value - minYield) / (maxYield - minYield || 1)) * height;
@@ -289,13 +290,14 @@ function addLegend(container, data) {
   sectorTitle.style.cssText = 'font-size: 13px; font-weight: 600; color: #333; margin-bottom: 8px;';
   legendContainer.appendChild(sectorTitle);
 
-  const sectorsSet = new Set(data.map(d => d.sector));
+  const sectorsSet = new Set(data.map((d) => d.sector));
   const colorLegend = document.createElement('div');
   colorLegend.style.cssText = 'display: flex; flex-wrap: wrap; gap: 12px;';
 
-  sectorsSet.forEach(sector => {
+  sectorsSet.forEach((sector) => {
     const item = document.createElement('div');
-    item.style.cssText = 'display: flex; align-items: center; gap: 6px; font-size: 12px; color: #333;';
+    item.style.cssText =
+      'display: flex; align-items: center; gap: 6px; font-size: 12px; color: #333;';
 
     const swatch = document.createElement('span');
     swatch.style.cssText = `display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: ${getSectorColor(sector)};`;
@@ -332,11 +334,12 @@ function showTooltip(event, d) {
     white-space: nowrap;
   `;
 
-  const marketCapStr = d.marketCap >= 1e12
-    ? (d.marketCap / 1e12).toFixed(2) + 'T'
-    : d.marketCap >= 1e9
-      ? (d.marketCap / 1e9).toFixed(2) + 'B'
-      : (d.marketCap / 1e6).toFixed(2) + 'M';
+  const marketCapStr =
+    d.marketCap >= 1e12
+      ? (d.marketCap / 1e12).toFixed(2) + 'T'
+      : d.marketCap >= 1e9
+        ? (d.marketCap / 1e9).toFixed(2) + 'B'
+        : (d.marketCap / 1e6).toFixed(2) + 'M';
 
   tooltip.innerHTML = `
     <strong>${d.symbol}</strong> — ${d.name}<br>
@@ -346,8 +349,8 @@ function showTooltip(event, d) {
   `;
 
   const rect = event.target.getBoundingClientRect();
-  tooltip.style.left = (rect.left + 10) + 'px';
-  tooltip.style.top = (rect.top - 10) + 'px';
+  tooltip.style.left = rect.left + 10 + 'px';
+  tooltip.style.top = rect.top - 10 + 'px';
 
   document.body.appendChild(tooltip);
   currentTooltip = tooltip;

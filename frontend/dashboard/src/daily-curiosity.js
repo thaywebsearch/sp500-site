@@ -14,7 +14,7 @@ let ordemRotacao = 'alfabética';
 export async function loadCuriosidades() {
   try {
     const view = document.getElementById('daily-curiosity-view');
-    
+
     if (!view) {
       console.error('Elemento daily-curiosity-view não encontrado');
       return;
@@ -25,7 +25,7 @@ export async function loadCuriosidades() {
 
     // Buscar curiosidades da API
     const response = await fetch(`${API_BASE_URL}/api/curiosidades`);
-    
+
     if (!response.ok) {
       console.error(`Erro ao buscar curiosidades: ${response.status}`);
       view.innerHTML = `<div class="curiosidade-erro">Erro ao carregar curiosidades (${response.status})</div>`;
@@ -33,7 +33,7 @@ export async function loadCuriosidades() {
     }
 
     const data = await response.json();
-    
+
     if (!data.sucesso || !data.dados || !data.dados.curiosidades) {
       console.error('Dados de curiosidades inválidos:', data);
       view.innerHTML = '<div class="curiosidade-erro">Formato de dados inválido</div>';
@@ -55,7 +55,6 @@ export async function loadCuriosidades() {
 
     // Renderizar
     renderCuriosidade();
-
   } catch (erro) {
     console.error('Erro ao carregar curiosidades:', erro);
     const view = document.getElementById('daily-curiosity-view');
@@ -82,7 +81,7 @@ function selecionarCuriosidadeDoDia() {
 // ========== RENDERIZAR CURIOSIDADE ==========
 function renderCuriosidade() {
   const view = document.getElementById('daily-curiosity-view');
-  
+
   if (!view || !curiosidadeDoDia) {
     console.error('View ou curiosidade não encontrada');
     return;
@@ -119,34 +118,52 @@ function renderCuriosidade() {
             <p>${curiosidadeDoDia.descricao}</p>
           </div>
 
-          ${curiosidadeDoDia.fatos && curiosidadeDoDia.fatos.length > 0 ? `
+          ${
+            curiosidadeDoDia.fatos && curiosidadeDoDia.fatos.length > 0
+              ? `
             <div class="curiosidade-fatos">
               <h4>📊 Fatos Interessantes:</h4>
               <ul>
-                ${curiosidadeDoDia.fatos.map(fato => `<li>${fato}</li>`).join('')}
+                ${curiosidadeDoDia.fatos.map((fato) => `<li>${fato}</li>`).join('')}
               </ul>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
 
-          ${curiosidadeDoDia.dividendYield ? `
+          ${
+            curiosidadeDoDia.dividendYield
+              ? `
             <div class="curiosidade-dados">
               <p><strong>Dividend Yield:</strong> ${curiosidadeDoDia.dividendYield}</p>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
 
-          ${curiosidadeDoDia.marketCap ? `
+          ${
+            curiosidadeDoDia.marketCap
+              ? `
             <div class="curiosidade-dados">
               <p><strong>Market Cap:</strong> ${curiosidadeDoDia.marketCap}</p>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
 
-          ${curiosidadeDoDia.insight ? `
+          ${
+            curiosidadeDoDia.insight
+              ? `
             <div class="curiosidade-insight">
               <p><em>💡 ${curiosidadeDoDia.insight}</em></p>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
 
-          ${totalEmpresas > 0 ? `
+          ${
+            totalEmpresas > 0
+              ? `
             <div class="curiosidade-progresso">
               <div class="progresso-texto">
                 <span>Rotatividade diária · ordem ${ordemRotacao}</span>
@@ -156,17 +173,23 @@ function renderCuriosidade() {
                 <div class="progresso-preenchido" style="width: ${(Number(curiosidadeDoDia.posicao) / totalEmpresas) * 100}%;"></div>
               </div>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
 
           <div class="curiosidade-acoes">
             <button class="btn-compartilhar" onclick="compartilharCuriosidade()">
               📤 Compartilhar
             </button>
-            ${curiosidadeDoDia.link ? `
+            ${
+              curiosidadeDoDia.link
+                ? `
               <a href="${curiosidadeDoDia.link}" target="_blank" class="btn-saibamais">
                 🔗 Saiba Mais
               </a>
-            ` : ''}
+            `
+                : ''
+            }
           </div>
         </div>
       </div>
@@ -454,22 +477,27 @@ function adicionarEstilosCuriosidade() {
 function compartilharCuriosidade() {
   if (!curiosidadeDoDia) return;
 
-  const fatos = (curiosidadeDoDia.fatos || []).map(f => `• ${f}`).join('\n');
+  const fatos = (curiosidadeDoDia.fatos || []).map((f) => `• ${f}`).join('\n');
   const texto = `🌟 Curiosidade do Dia: ${curiosidadeDoDia.empresa} (${curiosidadeDoDia.simbolo})\n\n${curiosidadeDoDia.descricao}\n\n${fatos}\n\n💡 ${curiosidadeDoDia.insight || ''}`;
 
   if (navigator.share) {
-    navigator.share({
-      title: `Curiosidade do Dia - ${curiosidadeDoDia.empresa}`,
-      text: texto,
-      url: window.location.href
-    }).catch(err => console.log('Erro ao compartilhar:', err));
+    navigator
+      .share({
+        title: `Curiosidade do Dia - ${curiosidadeDoDia.empresa}`,
+        text: texto,
+        url: window.location.href,
+      })
+      .catch((err) => console.log('Erro ao compartilhar:', err));
   } else {
     // Fallback: copiar para clipboard
-    navigator.clipboard.writeText(texto).then(() => {
-      alert('Curiosidade copiada para a área de transferência!');
-    }).catch(err => {
-      alert('Erro ao copiar: ' + err);
-    });
+    navigator.clipboard
+      .writeText(texto)
+      .then(() => {
+        alert('Curiosidade copiada para a área de transferência!');
+      })
+      .catch((err) => {
+        alert('Erro ao copiar: ' + err);
+      });
   }
 }
 

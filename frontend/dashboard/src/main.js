@@ -36,17 +36,17 @@ function loadPriceAlerts() {
   try {
     const stored = localStorage.getItem(PRICE_ALERTS_STORAGE_KEY);
     if (!stored) return [];
-    
+
     const parsed = JSON.parse(stored);
-    
+
     if (Array.isArray(parsed) && parsed.length > 0 && Array.isArray(parsed[0])) {
       return parsed;
     }
-    
+
     if (Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === 'object') {
-      return parsed.map(p => [p.symbol, p]);
+      return parsed.map((p) => [p.symbol, p]);
     }
-    
+
     return [];
   } catch (erro) {
     console.error('Erro ao carregar price alerts:', erro);
@@ -81,19 +81,28 @@ let filteredCompanies = [];
 let currentPage = 1;
 let currentTab = 'dashboard';
 let selectedRows = new Set();
-let rowCounter = 0;
 
 const watchlistSymbols = new Set(loadWatchlist() || []);
 const priceAlertsArray = loadPriceAlerts();
-const priceAlerts = new Map(priceAlertsArray && priceAlertsArray.length > 0 ? priceAlertsArray : []);
+const priceAlerts = new Map(
+  priceAlertsArray && priceAlertsArray.length > 0 ? priceAlertsArray : []
+);
 
 // ========== ELEMENTOS DO DOM ==========
-let sectorFilter, countryFilter, searchInput, dividendMinInput, sortSelect, tableBody, statsEl, paginationEl, headerCheckbox;
+let sectorFilter,
+  countryFilter,
+  searchInput,
+  dividendMinInput,
+  sortSelect,
+  tableBody,
+  statsEl,
+  paginationEl,
+  headerCheckbox;
 
 // ========== INICIALIZAÇÃO ==========
 document.addEventListener('DOMContentLoaded', () => {
   console.log('🚀 Inicializando dashboard...');
-  
+
   // Elementos do dashboard
   sectorFilter = document.getElementById('sector-filter');
   countryFilter = document.getElementById('country-filter');
@@ -109,14 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
     sectorFilter: !!sectorFilter,
     tableBody: !!tableBody,
     statsEl: !!statsEl,
-    paginationEl: !!paginationEl
+    paginationEl: !!paginationEl,
   });
 
   // Event listeners para navegação de abas
   const navTabs = document.querySelectorAll('.nav-tab');
   console.log(`📌 Encontradas ${navTabs.length} abas`);
-  
-  navTabs.forEach(btn => {
+
+  navTabs.forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       const tabName = btn.getAttribute('data-tab');
@@ -135,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (headerCheckbox) {
     headerCheckbox.addEventListener('change', () => {
       const visibleCheckboxes = tableBody.querySelectorAll('.row-checkbox');
-      visibleCheckboxes.forEach(cb => {
+      visibleCheckboxes.forEach((cb) => {
         cb.checked = headerCheckbox.checked;
         cb.dispatchEvent(new Event('change'));
       });
@@ -149,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (selectAllBtn) {
     selectAllBtn.addEventListener('click', () => {
-      filteredCompanies.forEach(c => selectedRows.add(c.symbol));
+      filteredCompanies.forEach((c) => selectedRows.add(c.symbol));
       renderTable();
       updateStats();
     });
@@ -192,7 +201,7 @@ function setActiveTab(tab) {
 // ========== ATUALIZAR INTERFACE ==========
 function updateUI() {
   console.log(`🎨 Atualizando UI para: ${currentTab}`);
-  
+
   const dashboardView = document.getElementById('dashboard-view');
   const treemapView = document.getElementById('treemap-view');
   const heatmapView = document.getElementById('heatmap-view');
@@ -202,13 +211,21 @@ function updateUI() {
   const dailyCuriosityView = document.getElementById('daily-curiosity-view');
 
   // Hide all views
-  const allViews = [dashboardView, treemapView, heatmapView, bubbleChartView, watchlistView, stockOfDayView, dailyCuriosityView];
-  allViews.forEach(view => {
+  const allViews = [
+    dashboardView,
+    treemapView,
+    heatmapView,
+    bubbleChartView,
+    watchlistView,
+    stockOfDayView,
+    dailyCuriosityView,
+  ];
+  allViews.forEach((view) => {
     if (view) view.style.display = 'none';
   });
 
   // Show active view
-  switch(currentTab) {
+  switch (currentTab) {
     case 'dashboard':
       if (dashboardView) dashboardView.style.display = 'block';
       break;
@@ -263,7 +280,8 @@ function loadBubbleChart() {
 
   console.log('📊 Carregando Bubble Chart...');
 
-  bubbleChartView.innerHTML = '<div style="text-align: center; padding: 40px;"><p>Carregando gráfico de bolhas...</p></div>';
+  bubbleChartView.innerHTML =
+    '<div style="text-align: center; padding: 40px;"><p>Carregando gráfico de bolhas...</p></div>';
 
   // Renderizar o bubble chart com os dados carregados
   renderBubbleChart(allCompanies, 'bubble-chart-view');
@@ -271,7 +289,7 @@ function loadBubbleChart() {
 
 function updateTabButtons() {
   const buttons = document.querySelectorAll('.nav-tab');
-  buttons.forEach(btn => {
+  buttons.forEach((btn) => {
     btn.classList.remove('active');
     if (btn.getAttribute('data-tab') === currentTab) {
       btn.classList.add('active');
@@ -299,14 +317,14 @@ async function loadDashboardData() {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
 
-        const sector = SECTORS.find(s => s.id === setorId);
+        const sector = SECTORS.find((s) => s.id === setorId);
         const sectorName = sector ? sector.name : setorId;
 
         if (data.dados && data.dados.companies && Array.isArray(data.dados.companies)) {
-          return data.dados.companies.map(c => ({
+          return data.dados.companies.map((c) => ({
             ...c,
             sector: setorId,
-            sectorName: sectorName
+            sectorName: sectorName,
           }));
         }
         return [];
@@ -323,19 +341,19 @@ async function loadDashboardData() {
 
     if (sectorFilter) {
       sectorFilter.innerHTML = '<option value="">Todos os Setores</option>';
-      const setorUnico = new Set(allCompanies.map(c => c.sector));
-      [...setorUnico].sort().forEach(sector => {
+      const setorUnico = new Set(allCompanies.map((c) => c.sector));
+      [...setorUnico].sort().forEach((sector) => {
         const option = document.createElement('option');
         option.value = sector;
-        option.textContent = SECTORS.find(s => s.id === sector)?.name || sector;
+        option.textContent = SECTORS.find((s) => s.id === sector)?.name || sector;
         sectorFilter.appendChild(option);
       });
     }
 
     if (countryFilter) {
       countryFilter.innerHTML = '<option value="">Todos os Países</option>';
-      const paisUnico = new Set(allCompanies.map(c => getCountry(c.headquarters)));
-      [...paisUnico].sort().forEach(pais => {
+      const paisUnico = new Set(allCompanies.map((c) => getCountry(c.headquarters)));
+      [...paisUnico].sort().forEach((pais) => {
         const option = document.createElement('option');
         option.value = pais;
         option.textContent = pais;
@@ -359,16 +377,17 @@ function applyFilters() {
   const dividendMin = dividendMinInput ? parseFloat(dividendMinInput.value) || 0 : 0;
   const sortBy = sortSelect ? sortSelect.value : 'symbol-asc';
 
-  filteredCompanies = allCompanies.filter(c => {
+  filteredCompanies = allCompanies.filter((c) => {
     const matchesSector = !sector || c.sector === sector;
     const matchesCountry = !country || getCountry(c.headquarters) === country;
-    const matchesSearch = !searchTerm ||
+    const matchesSearch =
+      !searchTerm ||
       c.symbol.toLowerCase().includes(searchTerm) ||
       c.name.toLowerCase().includes(searchTerm) ||
       (c.subIndustry && c.subIndustry.toLowerCase().includes(searchTerm)) ||
       (c.headquarters && c.headquarters.toLowerCase().includes(searchTerm));
     const matchesDividend = !dividendMin || (parseFloat(c.dividendYield) || 0) >= dividendMin;
-    
+
     return matchesSector && matchesCountry && matchesSearch && matchesDividend;
   });
 
@@ -382,14 +401,13 @@ function applyFilters() {
       const result = (valA || '').localeCompare(valB || '');
       return sortOrder === 'asc' ? result : -result;
     }
-    
+
     const numA = parseFloat(valA) || 0;
     const numB = parseFloat(valB) || 0;
     return sortOrder === 'asc' ? numA - numB : numB - numA;
   });
 
   currentPage = 1;
-  rowCounter = 0;
   renderTable();
   updateStats();
 }
@@ -409,7 +427,6 @@ function renderTable() {
   console.log(`📋 Renderizando ${pageCompanies.length} empresas (página ${currentPage})`);
 
   pageCompanies.forEach((company, index) => {
-    rowCounter++;
     const isSelected = selectedRows.has(company.symbol);
 
     const row = document.createElement('tr');
@@ -497,9 +514,13 @@ function updateStats() {
 
   const total = filteredCompanies.length;
   const selected = selectedRows.size;
-  const avgDividend = filteredCompanies.length > 0
-    ? (filteredCompanies.reduce((sum, c) => sum + (parseFloat(c.dividendYield) || 0), 0) / filteredCompanies.length).toFixed(2)
-    : 0;
+  const avgDividend =
+    filteredCompanies.length > 0
+      ? (
+          filteredCompanies.reduce((sum, c) => sum + (parseFloat(c.dividendYield) || 0), 0) /
+          filteredCompanies.length
+        ).toFixed(2)
+      : 0;
 
   statsEl.innerHTML = `Total: ${total} | Selecionadas: ${selected} | Dividend Yield Médio: ${avgDividend}%`;
 }
@@ -526,14 +547,15 @@ async function loadWatchlistData() {
   const watchlistView = document.getElementById('watchlist-view');
   if (!watchlistView) return;
 
-  const companies = allCompanies.filter(c => watchlistSymbols.has(c.symbol));
+  const companies = allCompanies.filter((c) => watchlistSymbols.has(c.symbol));
 
   if (companies.length === 0) {
     watchlistView.innerHTML = '<p>Nenhuma empresa na watchlist.</p>';
     return;
   }
 
-  let html = '<table class="watchlist-table"><thead><tr><th>#</th><th>Símbolo</th><th>Nome</th><th>Setor</th><th>Dividend Yield</th><th>Market Cap</th></tr></thead><tbody>';
+  let html =
+    '<table class="watchlist-table"><thead><tr><th>#</th><th>Símbolo</th><th>Nome</th><th>Setor</th><th>Dividend Yield</th><th>Market Cap</th></tr></thead><tbody>';
   companies.forEach((c, idx) => {
     html += `<tr>
       <td>${idx + 1}</td>
@@ -597,14 +619,14 @@ async function loadStockOfDay() {
 }
 
 function generateStockOfDay() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       const today = new Date().toISOString().slice(0, 10);
       const seed = dateToSeed(today);
 
       const ranked = allCompanies
-        .filter(d => d.marketCap && d.marketCap > 1e9)
-        .map(d => {
+        .filter((d) => d.marketCap && d.marketCap > 1e9)
+        .map((d) => {
           const technical = technicalScore(d);
           const sector = sectorScore(d.sector);
           const watchlist = watchlistSymbols.has(d.symbol) ? 15 : 0;
@@ -622,9 +644,9 @@ function generateStockOfDay() {
               watchlist,
               dividend,
               liquidity: Math.round(liquidity),
-              volatility: Math.round(volatility)
+              volatility: Math.round(volatility),
             },
-            rationale: buildRationale(d, technical, sector, watchlist, dividend)
+            rationale: buildRationale(d, technical, sector, watchlist, dividend),
           };
         })
         .sort((a, b) => b.score - a.score);
@@ -635,7 +657,7 @@ function generateStockOfDay() {
           primary: null,
           alternatives: [],
           marketContext: getMarketContext(),
-          generatedAt: new Date().toISOString()
+          generatedAt: new Date().toISOString(),
         });
         return;
       }
@@ -650,7 +672,7 @@ function generateStockOfDay() {
         primary,
         alternatives,
         marketContext: getMarketContext(),
-        generatedAt: new Date().toISOString()
+        generatedAt: new Date().toISOString(),
       });
     }, 100);
   });
@@ -679,14 +701,26 @@ function technicalScore(company) {
   else if (marketCap > 1e10) score += 3;
 
   const subIndustry = (company.subIndustry || '').toLowerCase();
-  if (['software', 'semiconductors', 'biotechnology', 'cloud', 'ai', 'cybersecurity', 'renewable']
-    .some(key => subIndustry.includes(key))) {
+  if (
+    [
+      'software',
+      'semiconductors',
+      'biotechnology',
+      'cloud',
+      'ai',
+      'cybersecurity',
+      'renewable',
+    ].some((key) => subIndustry.includes(key))
+  ) {
     score += 12;
   }
 
   const name = (company.name || '').toLowerCase();
-  if (['inc.', 'corporation', 'technologies', 'systems', 'solutions']
-    .some(key => name.includes(key))) {
+  if (
+    ['inc.', 'corporation', 'technologies', 'systems', 'solutions'].some((key) =>
+      name.includes(key)
+    )
+  ) {
     score += 3;
   }
 
@@ -705,7 +739,7 @@ function sectorScore(sector) {
     energy: 0,
     utilities: -2,
     'real-estate': -3,
-    'consumer-staples': 1
+    'consumer-staples': 1,
   };
   return scores[sector] || 0;
 }
@@ -723,7 +757,8 @@ function buildRationale(company, technical, sector, watchlist, dividend) {
   if (technical > 60) reasons.push('Fundamentos técnicos sólidos');
   if (sector > 10) reasons.push(`Setor em momento favorável (${company.sectorName})`);
   if (watchlist) reasons.push('Está na sua watchlist pessoal');
-  if (dividend) reasons.push(`Dividend yield atrativo (${(company.dividendYield || 0).toFixed(1)}%)`);
+  if (dividend)
+    reasons.push(`Dividend yield atrativo (${(company.dividendYield || 0).toFixed(1)}%)`);
   if (company.marketCap > 1e11) reasons.push('Grande capitalização — liquidez e estabilidade');
   if (reasons.length === 0) reasons.push('Equilíbrio entre risco e retorno');
   return reasons.join(' • ');
@@ -732,12 +767,24 @@ function buildRationale(company, technical, sector, watchlist, dividend) {
 function getMarketContext() {
   const value = Math.random() * 30 + 10;
   if (value < 15) {
-    return { level: 'Calmo', description: 'Baixa volatilidade - ambiente propício para acumulação', class: 'calm' };
+    return {
+      level: 'Calmo',
+      description: 'Baixa volatilidade - ambiente propício para acumulação',
+      class: 'calm',
+    };
   }
   if (value < 25) {
-    return { level: 'Moderado', description: 'Volatilidade normal - seleção seletiva recomendada', class: 'moderate' };
+    return {
+      level: 'Moderado',
+      description: 'Volatilidade normal - seleção seletiva recomendada',
+      class: 'moderate',
+    };
   }
-  return { level: 'Elevado', description: 'Alta volatilidade - foco em qualidade e liquidez', class: 'elevated' };
+  return {
+    level: 'Elevado',
+    description: 'Alta volatilidade - foco em qualidade e liquidez',
+    class: 'elevated',
+  };
 }
 
 function getCachedStockOfDay(date) {
@@ -798,13 +845,17 @@ function renderStockOfDay(viewEl, data) {
             <span class="score-label">/ 100</span>
           </div>
           <div class="score-breakdown">
-            ${Object.entries(primary.breakdown).map(([name, value]) => `
+            ${Object.entries(primary.breakdown)
+              .map(
+                ([name, value]) => `
               <div class="score-bar">
                 <span class="bar-label">${name}</span>
                 <div class="bar-track"><div class="bar-fill" style="width: ${Math.min(100, value * 2)}%"></div></div>
                 <span class="bar-value">${value}</span>
               </div>
-            `).join('')}
+            `
+              )
+              .join('')}
           </div>
         </div>
 
@@ -846,7 +897,9 @@ function renderStockOfDay(viewEl, data) {
       <section class="stock-alternatives">
         <h3>🥈 Menções Honrosas</h3>
         <div class="alternatives-grid">
-          ${alternatives.map((alt, index) => `
+          ${alternatives
+            .map(
+              (alt, index) => `
             <div class="alt-card">
               <span class="alt-rank">${index + 2}º</span>
               <div class="alt-info">
@@ -855,7 +908,9 @@ function renderStockOfDay(viewEl, data) {
               </div>
               <div class="alt-score">${alt.score}</div>
             </div>
-          `).join('')}
+          `
+            )
+            .join('')}
         </div>
       </section>
 
@@ -891,7 +946,9 @@ function setPriceAlertPrompt(symbol) {
     return;
   }
 
-  const direction = confirm(`Alertar quando o preço estiver ACIMA deste valor?\n(OK = acima, Cancelar = abaixo)`)
+  const direction = confirm(
+    `Alertar quando o preço estiver ACIMA deste valor?\n(OK = acima, Cancelar = abaixo)`
+  )
     ? 'above'
     : 'below';
 
@@ -899,7 +956,8 @@ function setPriceAlertPrompt(symbol) {
 }
 
 function setPriceAlert(symbol, target, direction) {
-  if (!symbol || typeof target !== 'number' || !['above', 'below'].includes(direction)) return false;
+  if (!symbol || typeof target !== 'number' || !['above', 'below'].includes(direction))
+    return false;
   priceAlerts.set(symbol.toUpperCase(), { target, direction, triggered: false });
   savePriceAlerts();
   return true;
@@ -935,7 +993,16 @@ async function startPriceAlertPolling() {
 
 // ========== EXPORTAÇÃO ==========
 function exportCSV() {
-  const headers = ['#', 'Símbolo', 'Empresa', 'Setor', 'Market Cap', 'Subindústria', 'Sede', 'Dividend Yield'];
+  const headers = [
+    '#',
+    'Símbolo',
+    'Empresa',
+    'Setor',
+    'Market Cap',
+    'Subindústria',
+    'Sede',
+    'Dividend Yield',
+  ];
   const rows = filteredCompanies.map((c, idx) => [
     idx + 1,
     c.symbol,
@@ -944,10 +1011,10 @@ function exportCSV() {
     formatMarketCap(c.marketCap),
     c.subIndustry || c.industry || 'N/A',
     c.headquarters || 'N/A',
-    c.dividendYield || 'N/A'
+    c.dividendYield || 'N/A',
   ]);
 
-  const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+  const csv = [headers, ...rows].map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n');
   downloadFile(csv, 'sp500-export.csv', 'text/csv');
 }
 

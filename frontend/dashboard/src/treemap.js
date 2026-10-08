@@ -1,7 +1,7 @@
 export async function loadTreemap() {
   const container = document.getElementById('treemap-view');
   if (!container) return;
-  
+
   container.style.display = 'flex';
   container.style.flexDirection = 'column';
   container.style.height = '100%';
@@ -9,34 +9,38 @@ export async function loadTreemap() {
   container.style.margin = '0';
   container.style.padding = '0';
   container.style.background = 'var(--bg-primary)';
-  
-  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando mapa de setores...</div>';
+
+  container.innerHTML =
+    '<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando mapa de setores...</div>';
 
   try {
     // Usar variáveis globais de config.js
     const res = await fetch(`${window.API_BASE_URL}/api/setores`);
     const data = await res.json();
     const setores = data.setores || [];
-    
-    const stats = await Promise.all(setores.map(async (id) => {
-      const r = await fetch(`${window.API_BASE_URL}/api/setor/${id}`);
-      const d = await r.json();
-      const s = window.SECTORS.find(x => x.id === id);
-      const cos = d.dados?.companies || [];
-      const totalCap = cos.reduce((a, c) => a + (c.marketCap || 0), 0);
-      const avgDiv = cos.length > 0 ? cos.reduce((a, c) => a + (c.dividendYield || 0), 0) / cos.length : 0;
-      const withDiv = cos.filter(c => c.hasDividend === 'Sim').length;
-      
-      return { 
-        id,
-        name: s?.name || id,
-        cap: (totalCap / 1e9).toFixed(1),
-        companies: cos.length,
-        avgDiv: parseFloat(avgDiv.toFixed(2)),
-        withDiv: withDiv,
-        topCompany: cos.length > 0 ? cos[0].symbol : 'N/A'
-      };
-    }));
+
+    const stats = await Promise.all(
+      setores.map(async (id) => {
+        const r = await fetch(`${window.API_BASE_URL}/api/setor/${id}`);
+        const d = await r.json();
+        const s = window.SECTORS.find((x) => x.id === id);
+        const cos = d.dados?.companies || [];
+        const totalCap = cos.reduce((a, c) => a + (c.marketCap || 0), 0);
+        const avgDiv =
+          cos.length > 0 ? cos.reduce((a, c) => a + (c.dividendYield || 0), 0) / cos.length : 0;
+        const withDiv = cos.filter((c) => c.hasDividend === 'Sim').length;
+
+        return {
+          id,
+          name: s?.name || id,
+          cap: (totalCap / 1e9).toFixed(1),
+          companies: cos.length,
+          avgDiv: parseFloat(avgDiv.toFixed(2)),
+          withDiv: withDiv,
+          topCompany: cos.length > 0 ? cos[0].symbol : 'N/A',
+        };
+      })
+    );
 
     function getColor(value, max) {
       const pct = (value / max) * 100;
@@ -47,7 +51,7 @@ export async function loadTreemap() {
       return '#4caf50';
     }
 
-    const maxCap = Math.max(...stats.map(s => parseFloat(s.cap)));
+    const maxCap = Math.max(...stats.map((s) => parseFloat(s.cap)));
 
     let html = `
       <div style="
@@ -86,12 +90,22 @@ export async function loadTreemap() {
 
     stats.forEach((s) => {
       const color = getColor(parseFloat(s.cap), maxCap);
-      const capPct = (parseFloat(s.cap) / maxCap * 100).toFixed(1);
+      const capPct = ((parseFloat(s.cap) / maxCap) * 100).toFixed(1);
 
-      const isAvailable = ['consumer-staples', 'communication-services', 'consumer-discretionary', 'energy', 'financials', 'health-care', 'industrials', 'information-technology', 'materials', 'real-estate', 'utilities'].includes(s.id);
-      const sectorPageUrl = isAvailable 
-        ? `/sectors/${s.id}.html` 
-        : '#';
+      const isAvailable = [
+        'consumer-staples',
+        'communication-services',
+        'consumer-discretionary',
+        'energy',
+        'financials',
+        'health-care',
+        'industrials',
+        'information-technology',
+        'materials',
+        'real-estate',
+        'utilities',
+      ].includes(s.id);
+      const sectorPageUrl = isAvailable ? `/sectors/${s.id}.html` : '#';
 
       html += `
         <div style="
@@ -106,9 +120,9 @@ export async function loadTreemap() {
           gap: 20px;
           opacity: ${isAvailable ? '1' : '0.7'};
         "
-        onmouseover="${isAvailable ? `this.style.borderColor='${color}';this.style.background='rgba(${parseInt(color.slice(1,3),16)},${parseInt(color.slice(3,5),16)},${parseInt(color.slice(5,7),16)},0.05)';this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px ${color}22'` : ''}"
+        onmouseover="${isAvailable ? `this.style.borderColor='${color}';this.style.background='rgba(${parseInt(color.slice(1, 3), 16)},${parseInt(color.slice(3, 5), 16)},${parseInt(color.slice(5, 7), 16)},0.05)';this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px ${color}22'` : ''}"
         onmouseout="${isAvailable ? `this.style.borderColor='var(--border)';this.style.background='var(--bg-secondary)';this.style.transform='translateY(0)';this.style.boxShadow='none'` : ''}"
-        onclick="${isAvailable ? `navigateToSector('${sectorPageUrl}', '${s.id}')` : `alert('🔒 O setor \\\"${s.name}\\\" ainda está em desenvolvimento.\\n\\nApenas Consumer Staples, Communication Services, Consumer Discretionary, Energy, Financials, Health Care, Industrials, Information Technology, Materials, Real Estate e Utilities estão disponíveis por enquanto!')`}"
+        onclick="${isAvailable ? `navigateToSector('${sectorPageUrl}', '${s.id}')` : `alert('🔒 O setor \\"${s.name}\\" ainda está em desenvolvimento.\\n\\nApenas Consumer Staples, Communication Services, Consumer Discretionary, Energy, Financials, Health Care, Industrials, Information Technology, Materials, Real Estate e Utilities estão disponíveis por enquanto!')`}"
         >
           <!-- Header com nome e percentual -->
           <div style="
@@ -183,7 +197,7 @@ export async function loadTreemap() {
                 font-size: 18px;
                 font-weight: 700;
                 color: ${color};
-              ">\$${s.cap}B</div>
+              ">$${s.cap}B</div>
             </div>
 
             <div style="
@@ -248,7 +262,9 @@ export async function loadTreemap() {
           </div>
 
           <!-- CTA Button -->
-          ${isAvailable ? `
+          ${
+            isAvailable
+              ? `
             <div style="
               padding: 12px;
               background: linear-gradient(90deg, var(--accent-green)44, var(--accent-cyan)44);
@@ -262,7 +278,8 @@ export async function loadTreemap() {
             ">
               🚀 Ver Empresas (Nova Aba) →
             </div>
-          ` : `
+          `
+              : `
             <div style="
               padding: 12px;
               background: rgba(42, 42, 62, 0.5);
@@ -276,7 +293,8 @@ export async function loadTreemap() {
             ">
               🔒 Em Desenvolvimento
             </div>
-          `}
+          `
+          }
         </div>
       `;
     });
@@ -330,17 +348,19 @@ export async function loadTreemap() {
     `;
 
     container.innerHTML = html;
-    
-  } catch (e) { 
+  } catch (e) {
     console.error('Erro ao carregar treemap:', e);
-    container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar mapa de setores</div>';
+    container.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar mapa de setores</div>';
   }
 }
 
 // Função de navegação para setores - ABRE EM NOVA ABA
 function navigateToSector(url, sectorId) {
   if (url === '#') {
-    alert(`🔒 O setor "${sectorId}" ainda está em desenvolvimento.\n\nApenas Consumer Staples, Communication Services, Consumer Discretionary, Energy, Financials, Health Care, Industrials, Information Technology, Materials, Real Estate e Utilities estão disponíveis por enquanto!`);
+    alert(
+      `🔒 O setor "${sectorId}" ainda está em desenvolvimento.\n\nApenas Consumer Staples, Communication Services, Consumer Discretionary, Energy, Financials, Health Care, Industrials, Information Technology, Materials, Real Estate e Utilities estão disponíveis por enquanto!`
+    );
     return;
   }
   // Abre em nova aba - mais eficaz e seguro

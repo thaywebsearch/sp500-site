@@ -2,9 +2,10 @@
 // Este arquivo deve carregar PRIMEIRO em index.html
 
 const hostname = window.location.hostname;
-export const API_BASE_URL = hostname === 'localhost' || hostname === '127.0.0.1'
-  ? 'http://localhost:5001'
-  : 'https://sp500-site-production.up.railway.app';
+export const API_BASE_URL =
+  hostname === 'localhost' || hostname === '127.0.0.1'
+    ? 'http://localhost:5001'
+    : 'https://sp500-site-production.up.railway.app';
 
 export const SECTORS = [
   { id: 'communication-services', name: 'Communication Services' },

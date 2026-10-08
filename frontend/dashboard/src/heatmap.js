@@ -11,7 +11,8 @@ export async function loadHeatmap() {
   container.style.background = 'var(--bg-primary)';
   container.style.overflowY = 'auto';
 
-  container.innerHTML = '<div style="text-align:center;color:var(--text-secondary)">Carregando heatmap...</div>';
+  container.innerHTML =
+    '<div style="text-align:center;color:var(--text-secondary)">Carregando heatmap...</div>';
 
   try {
     // Usar variáveis globais de config.js
@@ -41,15 +42,13 @@ export async function loadHeatmap() {
     for (const sectorId of setores) {
       const r = await fetch(`${window.API_BASE_URL}/api/setor/${sectorId}`);
       const d = await r.json();
-      const s = window.SECTORS.find(x => x.id === sectorId);
+      const s = window.SECTORS.find((x) => x.id === sectorId);
       const companies = d.dados?.companies || [];
 
       if (companies.length === 0) continue;
 
       // Top 4 por Market Cap
-      const top4 = companies
-        .sort((a, b) => (b.marketCap || 0) - (a.marketCap || 0))
-        .slice(0, 4);
+      const top4 = companies.sort((a, b) => (b.marketCap || 0) - (a.marketCap || 0)).slice(0, 4);
 
       html += `
         <div style="margin-bottom: 40px;">
@@ -70,7 +69,7 @@ export async function loadHeatmap() {
       top4.forEach((company, idx) => {
         const marketCap = (company.marketCap / 1e9).toFixed(2);
         const dividend = (company.dividendYield || 0).toFixed(2);
-        
+
         // Cor baseada em Market Cap
         let color = '#4caf50';
         if (marketCap > 500) color = '#ff5252';
@@ -205,7 +204,6 @@ export async function loadHeatmap() {
     `;
 
     container.innerHTML = html;
-
   } catch (error) {
     console.error('Erro ao carregar heatmap:', error);
     container.innerHTML = `
