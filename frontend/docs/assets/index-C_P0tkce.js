@@ -438,7 +438,7 @@ ${e}
           gap: 20px;
           flex: 1;
         ">
-    `;r.forEach(d=>{const l=s(parseFloat(d.cap),n),g=(parseFloat(d.cap)/n*100).toFixed(1),m=["consumer-staples","communication-services","consumer-discretionary","energy","financials","health-care","industrials","information-technology","materials","real-estate","utilities"].includes(d.id),h=m?new URL(`sectors/${d.id}.html`,document.baseURI).href:"#";c+=`
+    `;r.forEach(d=>{const l=s(parseFloat(d.cap),n),g=(parseFloat(d.cap)/n*100).toFixed(1),m=["consumer-staples","communication-services","consumer-discretionary","energy","financials","health-care","industrials","information-technology","materials","real-estate","utilities"].includes(d.id),h=m?new URL(`sector.html?sector=${d.id}`,document.baseURI).href:"#";c+=`
         <div style="
           background: var(--bg-secondary);
           border: 1px solid var(--border);
