@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07 00:56:46 UTC",
+  "generatedAt": "2026-10-08 01:13:02 UTC",
   "referenceDate": "2026-10-06",
   "topGainers": [
     {
@@ -10,18 +10,32 @@
       "changePct": 13.85
     },
     {
+      "symbol": "CTVA",
+      "name": "Corteva",
+      "sector": "Materials",
+      "lastPrice": 13.91,
+      "changePct": 12.27
+    },
+    {
+      "symbol": "CEG",
+      "name": "Constellation Energy",
+      "sector": "Utilities",
+      "lastPrice": 300.4,
+      "changePct": 12.25
+    },
+    {
+      "symbol": "VST",
+      "name": "Vistra Corp.",
+      "sector": "Utilities",
+      "lastPrice": 160.5,
+      "changePct": 10.77
+    },
+    {
       "symbol": "NRG",
       "name": "NRG Energy",
       "sector": "Utilities",
       "lastPrice": 103.6,
       "changePct": 7.02
-    },
-    {
-      "symbol": "MRNA",
-      "name": "Moderna",
-      "sector": "Health Care",
-      "lastPrice": 203.21,
-      "changePct": 6.95
     },
     {
       "symbol": "FIX",
@@ -43,20 +57,6 @@
       "sector": "Industrials",
       "lastPrice": 824.52,
       "changePct": 5.82
-    },
-    {
-      "symbol": "MRVL",
-      "name": "Marvell Technology",
-      "sector": "Information Technology",
-      "lastPrice": 287.01,
-      "changePct": 5.81
-    },
-    {
-      "symbol": "PWR",
-      "name": "Quanta Services",
-      "sector": "Industrials",
-      "lastPrice": 719.56,
-      "changePct": 5.29
     }
   ],
   "topLosers": [
@@ -96,13 +96,6 @@
       "changePct": -0.03
     },
     {
-      "symbol": "CFG",
-      "name": "Citizens Financial Group",
-      "sector": "Financials",
-      "lastPrice": 64.31,
-      "changePct": -0.03
-    },
-    {
       "symbol": "FDX",
       "name": "FedEx",
       "sector": "Industrials",
@@ -115,92 +108,99 @@
       "sector": "Industrials",
       "lastPrice": 93.11,
       "changePct": -0.03
+    },
+    {
+      "symbol": "EXPE",
+      "name": "Expedia Group",
+      "sector": "Consumer Discretionary",
+      "lastPrice": 260.07,
+      "changePct": -0.04
     }
   ],
   "sectorPerformance": [
     {
       "name": "Utilities",
-      "avgChangePct": 2.06,
+      "avgChangePct": 2.56,
       "gainers": 31,
       "losers": 0,
       "total": 31
     },
     {
       "name": "Consumer Discretionary",
-      "avgChangePct": 1.03,
-      "gainers": 33,
-      "losers": 14,
+      "avgChangePct": 1.15,
+      "gainers": 35,
+      "losers": 12,
       "total": 47
     },
     {
       "name": "Real Estate",
-      "avgChangePct": 0.89,
-      "gainers": 28,
-      "losers": 2,
+      "avgChangePct": 0.97,
+      "gainers": 29,
+      "losers": 1,
       "total": 30
     },
     {
-      "name": "Communication Services",
-      "avgChangePct": 0.83,
-      "gainers": 17,
-      "losers": 5,
-      "total": 23
+      "name": "Information Technology",
+      "avgChangePct": 0.93,
+      "gainers": 53,
+      "losers": 21,
+      "total": 74
     },
     {
       "name": "Consumer Staples",
-      "avgChangePct": 0.75,
-      "gainers": 25,
-      "losers": 8,
+      "avgChangePct": 0.82,
+      "gainers": 26,
+      "losers": 7,
       "total": 33
     },
     {
-      "name": "Information Technology",
-      "avgChangePct": 0.69,
-      "gainers": 50,
-      "losers": 24,
-      "total": 74
+      "name": "Materials",
+      "avgChangePct": 0.78,
+      "gainers": 15,
+      "losers": 9,
+      "total": 25
     },
     {
       "name": "Energy",
       "avgChangePct": 0.67,
-      "gainers": 14,
-      "losers": 7,
+      "gainers": 15,
+      "losers": 6,
       "total": 21
     },
     {
       "name": "Industrials",
-      "avgChangePct": 0.64,
-      "gainers": 55,
-      "losers": 28,
+      "avgChangePct": 0.67,
+      "gainers": 56,
+      "losers": 27,
       "total": 83
     },
     {
-      "name": "Materials",
-      "avgChangePct": 0.56,
-      "gainers": 16,
-      "losers": 8,
-      "total": 25
-    },
-    {
       "name": "Financials",
-      "avgChangePct": 0.31,
-      "gainers": 49,
-      "losers": 27,
+      "avgChangePct": 0.16,
+      "gainers": 48,
+      "losers": 28,
       "total": 76
     },
     {
+      "name": "Communication Services",
+      "avgChangePct": -0.23,
+      "gainers": 10,
+      "losers": 12,
+      "total": 22
+    },
+    {
       "name": "Health Care",
-      "avgChangePct": -0.17,
-      "gainers": 26,
-      "losers": 34,
+      "avgChangePct": -0.71,
+      "gainers": 21,
+      "losers": 39,
       "total": 60
     }
   ],
   "marketMood": "bullish",
   "stats": {
-    "gainers": 344,
-    "losers": 157,
-    "neutral": 2,
-    "total": 503
+    "gainers": 339,
+    "losers": 162,
+    "neutral": 1,
+    "total": 502
   }
 }
