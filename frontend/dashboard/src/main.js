@@ -547,6 +547,18 @@ async function loadStockOfDay() {
 
   try {
     if (allCompanies.length === 0) await loadDashboardData();
+
+    if (allCompanies.length === 0) {
+      stockOfDayView.innerHTML = `
+        <div class="stock-of-day-error">
+          <h3>⚠️ Dados indisponíveis</h3>
+          <p>Não foi possível carregar as empresas do S&P 500. Verifique a conexão com o servidor.</p>
+          <button class="retry-btn" onclick="loadStockOfDay()">Tentar novamente</button>
+        </div>
+      `;
+      return;
+    }
+
     const today = new Date().toISOString().slice(0, 10);
     const cached = getCachedStockOfDay(today);
     if (cached) {
@@ -554,7 +566,7 @@ async function loadStockOfDay() {
       return;
     }
     const generated = await generateStockOfDay();
-    cacheStockOfDay(today, generated);
+    if (generated.primary) cacheStockOfDay(today, generated);
     renderStockOfDay(stockOfDayView, generated);
   } catch (error) {
     console.error('Erro ao carregar Ação do Dia:', error);
@@ -600,6 +612,17 @@ function generateStockOfDay() {
           };
         })
         .sort((a, b) => b.score - a.score);
+
+      if (ranked.length === 0) {
+        resolve({
+          date: today,
+          primary: null,
+          alternatives: [],
+          marketContext: getMarketContext(),
+          generatedAt: new Date().toISOString()
+        });
+        return;
+      }
 
       const top = ranked.slice(0, Math.min(10, ranked.length));
       const index = seed % top.length;
@@ -706,7 +729,7 @@ function getCachedStockOfDay(date) {
     const raw = localStorage.getItem('sp500-stock-of-day');
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    return parsed.date === date ? parsed : null;
+    return parsed.date === date && parsed.primary ? parsed : null;
   } catch {
     return null;
   }
@@ -723,7 +746,13 @@ function cacheStockOfDay(date, data) {
 function renderStockOfDay(viewEl, data) {
   const { primary, alternatives, marketContext, generatedAt } = data;
   if (!primary) {
-    viewEl.innerHTML = '<div class="stock-of-day-error"><p>Sem dados suficientes</p></div>';
+    viewEl.innerHTML = `
+      <div class="stock-of-day-error">
+        <h3>⚠️ Sem dados suficientes</h3>
+        <p>Não foi possível selecionar uma ação com os dados disponíveis.</p>
+        <button class="retry-btn" onclick="loadStockOfDay()">Tentar novamente</button>
+      </div>
+    `;
     return;
   }
 
