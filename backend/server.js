@@ -11,6 +11,11 @@ const PORT = process.env.PORT || 5001;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Data de referência da "Curiosidade do Dia": neste dia a lista começa
+// pela 1ª empresa em ordem alfabética e avança 1 posição por dia.
+const DATA_INICIO_CURIOSIDADE = new Date('2026-10-08T00:00:00');
+const MS_POR_DIA = 24 * 60 * 60 * 1000;
+
 // ============ MIDDLEWARE ==========
 app.use(cors());
 app.use(express.json());
@@ -243,11 +248,11 @@ app.get('/api/curiosidades', (req, res) => {
     if (empresas.length > 0) {
       const ordenadas = empresas.sort((a, b) => a.name.localeCompare(b.name, 'en'));
 
-      // Índice determinístico: avança 1 posição por dia (independente do mês)
+      // Índice determinístico: avança 1 posição por dia a partir da data de referência
       const agora = new Date();
       const inicioDoDia = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
-      const indiceDoDia = Math.floor(inicioDoDia.getTime() / 86400000);
-      const indice = indiceDoDia % ordenadas.length;
+      const diasDesdeInicio = Math.round((inicioDoDia.getTime() - DATA_INICIO_CURIOSIDADE.getTime()) / MS_POR_DIA);
+      const indice = ((diasDesdeInicio % ordenadas.length) + ordenadas.length) % ordenadas.length;
 
       const empresa = ordenadas[indice];
       const proximaEmpresa = ordenadas[(indice + 1) % ordenadas.length];
