@@ -1,8 +1,8 @@
-(function(){const t=document.createElement("link").relList;if(t&&t.supports&&t.supports("modulepreload"))return;for(const s of document.querySelectorAll('link[rel="modulepreload"]'))a(s);new MutationObserver(s=>{for(const r of s)if(r.type==="childList")for(const i of r.addedNodes)i.tagName==="LINK"&&i.rel==="modulepreload"&&a(i)}).observe(document,{childList:!0,subtree:!0});function o(s){const r={};return s.integrity&&(r.integrity=s.integrity),s.referrerPolicy&&(r.referrerPolicy=s.referrerPolicy),s.crossOrigin==="use-credentials"?r.credentials="include":s.crossOrigin==="anonymous"?r.credentials="omit":r.credentials="same-origin",r}function a(s){if(s.ep)return;s.ep=!0;const r=o(s);fetch(s.href,r)}})();const ee=window.location.hostname,O=ee==="localhost"||ee==="127.0.0.1"?"http://localhost:5001":"https://sp500-site-production.up.railway.app",G=[{id:"communication-services",name:"Communication Services"},{id:"consumer-discretionary",name:"Consumer Discretionary"},{id:"consumer-staples",name:"Consumer Staples"},{id:"energy",name:"Energy"},{id:"financials",name:"Financials"},{id:"health-care",name:"Health Care"},{id:"industrials",name:"Industrials"},{id:"information-technology",name:"Information Technology"},{id:"materials",name:"Materials"},{id:"real-estate",name:"Real Estate"},{id:"utilities",name:"Utilities"}];window.API_BASE_URL=O;window.SECTORS=G;console.log("✅ Configuração global carregada:",O);let z=[],m=null,V=0,K="",oe="alfabética";async function ue(){try{const e=document.getElementById("daily-curiosity-view");if(!e){console.error("Elemento daily-curiosity-view não encontrado");return}e.innerHTML='<div class="curiosidade-loading">Carregando curiosidade...</div>';const t=await fetch(`${O}/api/curiosidades`);if(!t.ok){console.error(`Erro ao buscar curiosidades: ${t.status}`),e.innerHTML=`<div class="curiosidade-erro">Erro ao carregar curiosidades (${t.status})</div>`;return}const o=await t.json();if(!o.sucesso||!o.dados||!o.dados.curiosidades){console.error("Dados de curiosidades inválidos:",o),e.innerHTML='<div class="curiosidade-erro">Formato de dados inválido</div>';return}if(z=o.dados.curiosidades,V=o.dados.total||z.length,K=o.dados.proximaEmpresa||"",oe=o.dados.ordem||"alfabética",z.length===0){e.innerHTML='<div class="curiosidade-erro">Nenhuma curiosidade disponível</div>';return}me(),ge()}catch(e){console.error("Erro ao carregar curiosidades:",e);const t=document.getElementById("daily-curiosity-view");t&&(t.innerHTML=`<div class="curiosidade-erro">Erro ao carregar: ${e.message}</div>`)}}function me(){if(z.length===0)return;const e=new Date,t=new Date(e.getFullYear(),e.getMonth(),e.getDate()),a=Math.floor(t.getTime()/864e5)%z.length;m=z[a],console.log(`Curiosidade do dia: ${m==null?void 0:m.empresa}`)}function ge(){const e=document.getElementById("daily-curiosity-view");if(!e||!m){console.error("View ou curiosidade não encontrada");return}ve();const t=`
+(function(){const t=document.createElement("link").relList;if(t&&t.supports&&t.supports("modulepreload"))return;for(const s of document.querySelectorAll('link[rel="modulepreload"]'))o(s);new MutationObserver(s=>{for(const r of s)if(r.type==="childList")for(const i of r.addedNodes)i.tagName==="LINK"&&i.rel==="modulepreload"&&o(i)}).observe(document,{childList:!0,subtree:!0});function a(s){const r={};return s.integrity&&(r.integrity=s.integrity),s.referrerPolicy&&(r.referrerPolicy=s.referrerPolicy),s.crossOrigin==="use-credentials"?r.credentials="include":s.crossOrigin==="anonymous"?r.credentials="omit":r.credentials="same-origin",r}function o(s){if(s.ep)return;s.ep=!0;const r=a(s);fetch(s.href,r)}})();const te=window.location.hostname,Y=te==="localhost"||te==="127.0.0.1"?"http://localhost:5001":"https://sp500-site-production.up.railway.app",K=[{id:"communication-services",name:"Communication Services"},{id:"consumer-discretionary",name:"Consumer Discretionary"},{id:"consumer-staples",name:"Consumer Staples"},{id:"energy",name:"Energy"},{id:"financials",name:"Financials"},{id:"health-care",name:"Health Care"},{id:"industrials",name:"Industrials"},{id:"information-technology",name:"Information Technology"},{id:"materials",name:"Materials"},{id:"real-estate",name:"Real Estate"},{id:"utilities",name:"Utilities"}];window.API_BASE_URL=Y;window.SECTORS=K;console.log("✅ Configuração global carregada:",Y);let z=[],m=null,W=0,X="",oe="alfabética";async function ge(){try{const e=document.getElementById("daily-curiosity-view");if(!e){console.error("Elemento daily-curiosity-view não encontrado");return}e.innerHTML='<div class="curiosidade-loading">Carregando curiosidade...</div>';const t=await fetch(`${Y}/api/curiosidades`);if(!t.ok){console.error(`Erro ao buscar curiosidades: ${t.status}`),e.innerHTML=`<div class="curiosidade-erro">Erro ao carregar curiosidades (${t.status})</div>`;return}const a=await t.json();if(!a.sucesso||!a.dados||!a.dados.curiosidades){console.error("Dados de curiosidades inválidos:",a),e.innerHTML='<div class="curiosidade-erro">Formato de dados inválido</div>';return}if(z=a.dados.curiosidades,W=a.dados.total||z.length,X=a.dados.proximaEmpresa||"",oe=a.dados.ordem||"alfabética",z.length===0){e.innerHTML='<div class="curiosidade-erro">Nenhuma curiosidade disponível</div>';return}ve(),fe()}catch(e){console.error("Erro ao carregar curiosidades:",e);const t=document.getElementById("daily-curiosity-view");t&&(t.innerHTML=`<div class="curiosidade-erro">Erro ao carregar: ${e.message}</div>`)}}function ve(){if(z.length===0)return;const e=new Date,t=new Date(e.getFullYear(),e.getMonth(),e.getDate()),o=Math.floor(t.getTime()/864e5)%z.length;m=z[o],console.log(`Curiosidade do dia: ${m==null?void 0:m.empresa}`)}function fe(){const e=document.getElementById("daily-curiosity-view");if(!e||!m){console.error("View ou curiosidade não encontrada");return}he();const t=`
     <div class="curiosidade-container">
       <div class="curiosidade-header">
         <h1>🌟 Curiosidade do Dia</h1>
-        <p class="curiosidade-data">${he()}</p>
+        <p class="curiosidade-data">${xe()}</p>
       </div>
 
       <div class="curiosidade-card">
@@ -29,7 +29,7 @@
             <div class="curiosidade-fatos">
               <h4>📊 Fatos Interessantes:</h4>
               <ul>
-                ${m.fatos.map(o=>`<li>${o}</li>`).join("")}
+                ${m.fatos.map(a=>`<li>${a}</li>`).join("")}
               </ul>
             </div>
           `:""}
@@ -52,14 +52,14 @@
             </div>
           `:""}
 
-          ${V>0?`
+          ${W>0?`
             <div class="curiosidade-progresso">
               <div class="progresso-texto">
                 <span>Rotatividade diária · ordem ${oe}</span>
-                <span>Empresa ${m.posicao} de ${V}</span>
+                <span>Empresa ${m.posicao} de ${W}</span>
               </div>
               <div class="progresso-barra">
-                <div class="progresso-preenchido" style="width: ${Number(m.posicao)/V*100}%;"></div>
+                <div class="progresso-preenchido" style="width: ${Number(m.posicao)/W*100}%;"></div>
               </div>
             </div>
           `:""}
@@ -79,11 +79,11 @@
 
       <div class="curiosidade-footer">
         <p>Curiosidade de ${m.empresa} - Atualizado em ${m.dataAdicao||"N/A"}</p>
-        ${K?`<p class="curiosidade-proxima">⏭️ Amanhã: ${K}</p>`:""}
+        ${X?`<p class="curiosidade-proxima">⏭️ Amanhã: ${X}</p>`:""}
         <p class="curiosidade-dica">💡 Uma empresa diferente a cada dia, em ordem alfabética do S&P 500!</p>
       </div>
     </div>
-  `;e.innerHTML=t,window.compartilharCuriosidade=fe}function ve(){if(document.getElementById("curiosidade-styles"))return;const e=document.createElement("style");e.id="curiosidade-styles",e.textContent=`
+  `;e.innerHTML=t,window.compartilharCuriosidade=be}function he(){if(document.getElementById("curiosidade-styles"))return;const e=document.createElement("style");e.id="curiosidade-styles",e.textContent=`
     .curiosidade-container {
       padding: 20px;
       max-width: 900px;
@@ -336,14 +336,14 @@
         text-align: center;
       }
     }
-  `,document.head.appendChild(e)}function fe(){if(!m)return;const e=(m.fatos||[]).map(o=>`• ${o}`).join(`
+  `,document.head.appendChild(e)}function be(){if(!m)return;const e=(m.fatos||[]).map(a=>`• ${a}`).join(`
 `),t=`🌟 Curiosidade do Dia: ${m.empresa} (${m.simbolo})
 
 ${m.descricao}
 
 ${e}
 
-💡 ${m.insight||""}`;navigator.share?navigator.share({title:`Curiosidade do Dia - ${m.empresa}`,text:t,url:window.location.href}).catch(o=>console.log("Erro ao compartilhar:",o)):navigator.clipboard.writeText(t).then(()=>{alert("Curiosidade copiada para a área de transferência!")}).catch(o=>{alert("Erro ao copiar: "+o)})}function he(){const e=new Date,t={weekday:"long",year:"numeric",month:"long",day:"numeric"};return e.toLocaleDateString("pt-BR",t)}function be(e){return e?e>=1e12?`$${(e/1e12).toFixed(2)}T`:e>=1e9?`$${(e/1e9).toFixed(2)}B`:e>=1e6?`$${(e/1e6).toFixed(2)}M`:`$${e.toLocaleString("en-US")}`:"N/A"}function v(e){return e?String(e).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"):""}async function xe(e){try{const t=await fetch(`/api/historico/${e}`);if(!t.ok)throw new Error(`Erro ao buscar histórico de ${e}`);return(await t.json()).registros||[]}catch(t){return console.error(`Erro ao buscar histórico de ${e}:`,t),[]}}const U=760,W=320,y={top:28,right:28,bottom:44,left:68};function ye(e){if(!e)return"";const[t,o,a]=e.split("-");return`${a}/${o}/${t.slice(2)}`}function X(e){return Number.isFinite(e)?e>=100?`$${e.toFixed(0)}`:`$${e.toFixed(2)}`:"—"}function $e(e){const t=e.map(h=>h.close),o=Math.min(...t),a=Math.max(...t),s=a-o||1,r=o-s*.08,i=a+s*.08,d=e.length,l=h=>y.left+h/(d-1)*(U-y.left-y.right),n=h=>y.top+(1-(h-r)/(i-r))*(W-y.top-y.bottom);let p=`<svg viewBox="0 0 ${U} ${W}" style="width:100%;height:auto;display:block;background:var(--plot-bg);border-radius:8px">`;const c=5;for(let h=0;h<=c;h++){const x=r+(i-r)*h/c,D=n(x);p+=`<line x1="${y.left}" y1="${D.toFixed(1)}" x2="${U-y.right}" y2="${D.toFixed(1)}" stroke="var(--chart-axis)" stroke-width="1"/>`,p+=`<text x="${y.left-8}" y="${(D+4).toFixed(1)}" text-anchor="end" font-size="11" fill="var(--chart-label)">${X(x)}</text>`}const u=[];for(let h=0;h<=4;h++)u.push(Math.round((d-1)*h/4));u.forEach(h=>{const x=l(h);p+=`<text x="${x.toFixed(1)}" y="${W-y.bottom+18}" text-anchor="middle" font-size="11" fill="var(--chart-label)">${ye(e[h].data)}</text>`});const g=e.map((h,x)=>`${l(x).toFixed(1)},${n(h.close).toFixed(1)}`).join(" "),f=`${y.left},${n(r).toFixed(1)} `+g+` ${l(d-1).toFixed(1)},${n(r).toFixed(1)}`;p+=`<polygon points="${f}" fill="rgba(0, 212, 255, 0.08)"/>`,p+=`<polyline points="${g}" fill="none" stroke="var(--accent-cyan)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;const $=e[d-1],b=n($.close);return p+=`<circle cx="${l(d-1).toFixed(1)}" cy="${b.toFixed(1)}" r="4" fill="var(--accent-cyan)"/>`,p+=`<text x="${U-y.right}" y="${(b-10).toFixed(1)}" text-anchor="end" font-size="12" font-weight="700" fill="var(--chart-text)">${X($.close)}</text>`,p+="</svg>",p}async function we(e,t){var s;(s=document.querySelector(".modal-overlay"))==null||s.remove();const o=document.createElement("div");o.className="modal-overlay";const a=()=>o.remove();o.addEventListener("click",r=>{r.target===o&&a()}),document.addEventListener("keydown",r=>{r.key==="Escape"&&a()}),o.innerHTML=`
+💡 ${m.insight||""}`;navigator.share?navigator.share({title:`Curiosidade do Dia - ${m.empresa}`,text:t,url:window.location.href}).catch(a=>console.log("Erro ao compartilhar:",a)):navigator.clipboard.writeText(t).then(()=>{alert("Curiosidade copiada para a área de transferência!")}).catch(a=>{alert("Erro ao copiar: "+a)})}function xe(){const e=new Date,t={weekday:"long",year:"numeric",month:"long",day:"numeric"};return e.toLocaleDateString("pt-BR",t)}function U(e){const t=Number(e);return!t||Number.isNaN(t)?"N/A":t>=1e12?`$${(t/1e12).toFixed(3)}T`:t>=1e9?`$${(t/1e9).toFixed(2)}B`:t>=1e6?`$${(t/1e6).toFixed(2)}M`:`$${t.toLocaleString("en-US")}`}function v(e){return e?String(e).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"):""}const ye=new Set(["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming","D.C."]);function re(e){if(!e)return"Desconhecido";const t=String(e).split(",").map(o=>o.trim().replace(/\[\d+\]$/,"")),a=t[t.length-1];return!a||a.toLowerCase()==="none"?"Desconhecido":ye.has(a)?"United States":a}async function $e(e){try{const t=await fetch(`/api/historico/${e}`);if(!t.ok)throw new Error(`Erro ao buscar histórico de ${e}`);return(await t.json()).registros||[]}catch(t){return console.error(`Erro ao buscar histórico de ${e}:`,t),[]}}const V=760,J=320,y={top:28,right:28,bottom:44,left:68};function we(e){if(!e)return"";const[t,a,o]=e.split("-");return`${o}/${a}/${t.slice(2)}`}function Z(e){return Number.isFinite(e)?e>=100?`$${e.toFixed(0)}`:`$${e.toFixed(2)}`:"—"}function ke(e){const t=e.map(h=>h.close),a=Math.min(...t),o=Math.max(...t),s=o-a||1,r=a-s*.08,i=o+s*.08,n=e.length,l=h=>y.left+h/(n-1)*(V-y.left-y.right),d=h=>y.top+(1-(h-r)/(i-r))*(J-y.top-y.bottom);let p=`<svg viewBox="0 0 ${V} ${J}" style="width:100%;height:auto;display:block;background:var(--plot-bg);border-radius:8px">`;const c=5;for(let h=0;h<=c;h++){const x=r+(i-r)*h/c,D=d(x);p+=`<line x1="${y.left}" y1="${D.toFixed(1)}" x2="${V-y.right}" y2="${D.toFixed(1)}" stroke="var(--chart-axis)" stroke-width="1"/>`,p+=`<text x="${y.left-8}" y="${(D+4).toFixed(1)}" text-anchor="end" font-size="11" fill="var(--chart-label)">${Z(x)}</text>`}const u=[];for(let h=0;h<=4;h++)u.push(Math.round((n-1)*h/4));u.forEach(h=>{const x=l(h);p+=`<text x="${x.toFixed(1)}" y="${J-y.bottom+18}" text-anchor="middle" font-size="11" fill="var(--chart-label)">${we(e[h].data)}</text>`});const g=e.map((h,x)=>`${l(x).toFixed(1)},${d(h.close).toFixed(1)}`).join(" "),f=`${y.left},${d(r).toFixed(1)} `+g+` ${l(n-1).toFixed(1)},${d(r).toFixed(1)}`;p+=`<polygon points="${f}" fill="rgba(0, 212, 255, 0.08)"/>`,p+=`<polyline points="${g}" fill="none" stroke="var(--accent-cyan)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;const $=e[n-1],b=d($.close);return p+=`<circle cx="${l(n-1).toFixed(1)}" cy="${b.toFixed(1)}" r="4" fill="var(--accent-cyan)"/>`,p+=`<text x="${V-y.right}" y="${(b-10).toFixed(1)}" text-anchor="end" font-size="12" font-weight="700" fill="var(--chart-text)">${Z($.close)}</text>`,p+="</svg>",p}async function Ce(e,t){var s;(s=document.querySelector(".modal-overlay"))==null||s.remove();const a=document.createElement("div");a.className="modal-overlay";const o=()=>a.remove();a.addEventListener("click",r=>{r.target===a&&o()}),document.addEventListener("keydown",r=>{r.key==="Escape"&&o()}),a.innerHTML=`
     <div class="modal" role="dialog" aria-label="Histórico de ${v(e)}">
       <div class="modal-header">
         <h2 class="modal-title">
@@ -356,28 +356,28 @@ ${e}
         <p class="modal-loading">Carregando histórico...</p>
       </div>
     </div>
-  `,document.body.appendChild(o),o.querySelector(".modal-close").addEventListener("click",a);try{const r=await xe(e),i=o.querySelector("#price-chart-body");if(!r||r.length===0){i.innerHTML=`<p class="modal-error">Nenhum dado de preço disponível para ${v(e)}.</p>`;return}const d=r[0].close,l=r[r.length-1].close,n=(l-d)/d*100,p=n>=0,c=p?"positive":"negative";i.innerHTML=`
+  `,document.body.appendChild(a),a.querySelector(".modal-close").addEventListener("click",o);try{const r=await $e(e),i=a.querySelector("#price-chart-body");if(!r||r.length===0){i.innerHTML=`<p class="modal-error">Nenhum dado de preço disponível para ${v(e)}.</p>`;return}const n=r[0].close,l=r[r.length-1].close,d=(l-n)/n*100,p=d>=0,c=p?"positive":"negative";i.innerHTML=`
       <div class="price-stats">
         <div class="price-stat">
           <span class="price-stat-label">Último</span>
-          <strong>${X(l)}</strong>
+          <strong>${Z(l)}</strong>
         </div>
         <div class="price-stat">
           <span class="price-stat-label">Variação (2a)</span>
-          <strong class="${c}">${p?"+":""}${n.toFixed(2)}%</strong>
+          <strong class="${c}">${p?"+":""}${d.toFixed(2)}%</strong>
         </div>
         <div class="price-stat">
           <span class="price-stat-label">Período</span>
           <strong>${r.length} pregões</strong>
         </div>
       </div>
-      ${$e(r)}
-    `}catch(r){console.error(`Erro ao buscar histórico de ${e}:`,r);const i=o.querySelector("#price-chart-body");i.innerHTML=`<p class="modal-error">Erro ao carregar o histórico de ${v(e)}. Verifique se o backend está online.</p>`}}function w(e,t){return`
+      ${ke(r)}
+    `}catch(r){console.error(`Erro ao buscar histórico de ${e}:`,r);const i=a.querySelector("#price-chart-body");i.innerHTML=`<p class="modal-error">Erro ao carregar o histórico de ${v(e)}. Verifique se o backend está online.</p>`}}function w(e,t){return`
     <div class="company-detail">
       <span class="company-detail-label">${e}</span>
       <strong class="company-detail-value">${t}</strong>
     </div>
-  `}function ke(e){var r;(r=document.querySelector(".modal-overlay"))==null||r.remove();const t=document.createElement("div");t.className="modal-overlay";const o=()=>t.remove();t.addEventListener("click",i=>{i.target===t&&o()}),document.addEventListener("keydown",i=>{i.key==="Escape"&&o()});const a=e.dividendYield!==null&&e.dividendYield!==void 0?`${e.dividendYield.toFixed(2)}%`:"—",s=be(e.marketCap);t.innerHTML=`
+  `}function Ee(e){var r;(r=document.querySelector(".modal-overlay"))==null||r.remove();const t=document.createElement("div");t.className="modal-overlay";const a=()=>t.remove();t.addEventListener("click",i=>{i.target===t&&a()}),document.addEventListener("keydown",i=>{i.key==="Escape"&&a()});const o=e.dividendYield!==null&&e.dividendYield!==void 0?`${e.dividendYield.toFixed(2)}%`:"—",s=U(e.marketCap);t.innerHTML=`
     <div class="modal" role="dialog" aria-label="Detalhes de ${v(e.symbol)}">
       <div class="modal-header">
         <h2 class="modal-title">
@@ -394,7 +394,7 @@ ${e}
           ${w("Sede",v(e.headquarters||"N/A"))}
           ${w("Market Cap",s)}
           ${w("Classificação",v(e.marketCapClassification||"N/A"))}
-          ${w("Div. Yield",a)}
+          ${w("Div. Yield",o)}
           ${w("Paga dividendos",e.hasDividend?v(e.hasDividend):"—")}
           ${w("Data de inclusão",v(e.dateAdded||"N/A"))}
           ${w("CIK",e.cik?v(String(e.cik)):"N/A")}
@@ -405,7 +405,7 @@ ${e}
         </div>
       </div>
     </div>
-  `,document.body.appendChild(t),t.querySelector(".modal-close").addEventListener("click",o),t.querySelector("#details-chart-btn").addEventListener("click",()=>{we(e.symbol,e.name)})}async function Ce(){const e=document.getElementById("treemap-view");if(e){e.style.display="flex",e.style.flexDirection="column",e.style.height="100%",e.style.width="100%",e.style.margin="0",e.style.padding="0",e.style.background="var(--bg-primary)",e.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando mapa de setores...</div>';try{let i=function(n,p){const c=n/p*100;return c>=80?"#ff5252":c>=60?"#ff9800":c>=40?"#ffeb3b":c>=20?"#8bc34a":"#4caf50"};var t=i;const s=(await(await fetch(`${window.API_BASE_URL}/api/setores`)).json()).setores||[],r=await Promise.all(s.map(async n=>{var h;const c=await(await fetch(`${window.API_BASE_URL}/api/setor/${n}`)).json(),u=window.SECTORS.find(x=>x.id===n),g=((h=c.dados)==null?void 0:h.companies)||[],f=g.reduce((x,D)=>x+(D.marketCap||0),0),$=g.length>0?g.reduce((x,D)=>x+(D.dividendYield||0),0)/g.length:0,b=g.filter(x=>x.hasDividend==="Sim").length;return{id:n,name:(u==null?void 0:u.name)||n,cap:(f/1e9).toFixed(1),companies:g.length,avgDiv:parseFloat($.toFixed(2)),withDiv:b,topCompany:g.length>0?g[0].symbol:"N/A"}})),d=Math.max(...r.map(n=>parseFloat(n.cap)));let l=`
+  `,document.body.appendChild(t),t.querySelector(".modal-close").addEventListener("click",a),t.querySelector("#details-chart-btn").addEventListener("click",()=>{Ce(e.symbol,e.name)})}async function Se(){const e=document.getElementById("treemap-view");if(e){e.style.display="flex",e.style.flexDirection="column",e.style.height="100%",e.style.width="100%",e.style.margin="0",e.style.padding="0",e.style.background="var(--bg-primary)",e.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando mapa de setores...</div>';try{let i=function(d,p){const c=d/p*100;return c>=80?"#ff5252":c>=60?"#ff9800":c>=40?"#ffeb3b":c>=20?"#8bc34a":"#4caf50"};var t=i;const s=(await(await fetch(`${window.API_BASE_URL}/api/setores`)).json()).setores||[],r=await Promise.all(s.map(async d=>{var h;const c=await(await fetch(`${window.API_BASE_URL}/api/setor/${d}`)).json(),u=window.SECTORS.find(x=>x.id===d),g=((h=c.dados)==null?void 0:h.companies)||[],f=g.reduce((x,D)=>x+(D.marketCap||0),0),$=g.length>0?g.reduce((x,D)=>x+(D.dividendYield||0),0)/g.length:0,b=g.filter(x=>x.hasDividend==="Sim").length;return{id:d,name:(u==null?void 0:u.name)||d,cap:(f/1e9).toFixed(1),companies:g.length,avgDiv:parseFloat($.toFixed(2)),withDiv:b,topCompany:g.length>0?g[0].symbol:"N/A"}})),n=Math.max(...r.map(d=>parseFloat(d.cap)));let l=`
       <div style="
         display: flex;
         flex-direction: column;
@@ -438,7 +438,7 @@ ${e}
           gap: 20px;
           flex: 1;
         ">
-    `;r.forEach(n=>{const p=i(parseFloat(n.cap),d),c=(parseFloat(n.cap)/d*100).toFixed(1),u=["consumer-staples","communication-services","consumer-discretionary","energy","financials","health-care","industrials","information-technology","materials","real-estate","utilities"].includes(n.id),g=u?`/sectors/${n.id}.html`:"#";l+=`
+    `;r.forEach(d=>{const p=i(parseFloat(d.cap),n),c=(parseFloat(d.cap)/n*100).toFixed(1),u=["consumer-staples","communication-services","consumer-discretionary","energy","financials","health-care","industrials","information-technology","materials","real-estate","utilities"].includes(d.id),g=u?`/sectors/${d.id}.html`:"#";l+=`
         <div style="
           background: var(--bg-secondary);
           border: 1px solid var(--border);
@@ -453,7 +453,7 @@ ${e}
         "
         onmouseover="${u?`this.style.borderColor='${p}';this.style.background='rgba(${parseInt(p.slice(1,3),16)},${parseInt(p.slice(3,5),16)},${parseInt(p.slice(5,7),16)},0.05)';this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px ${p}22'`:""}"
         onmouseout="${u?"this.style.borderColor='var(--border)';this.style.background='var(--bg-secondary)';this.style.transform='translateY(0)';this.style.boxShadow='none'":""}"
-        onclick="${u?`navigateToSector('${g}', '${n.id}')`:`alert('🔒 O setor \\"${n.name}\\" ainda está em desenvolvimento.\\n\\nApenas Consumer Staples, Communication Services, Consumer Discretionary, Energy, Financials, Health Care, Industrials, Information Technology, Materials, Real Estate e Utilities estão disponíveis por enquanto!')`}"
+        onclick="${u?`navigateToSector('${g}', '${d.id}')`:`alert('🔒 O setor \\"${d.name}\\" ainda está em desenvolvimento.\\n\\nApenas Consumer Staples, Communication Services, Consumer Discretionary, Energy, Financials, Health Care, Industrials, Information Technology, Materials, Real Estate e Utilities estão disponíveis por enquanto!')`}"
         >
           <!-- Header com nome e percentual -->
           <div style="
@@ -467,11 +467,11 @@ ${e}
                 font-weight: 600;
                 color: var(--text-primary);
                 margin-bottom: 4px;
-              ">${n.name}</div>
+              ">${d.name}</div>
               <div style="
                 font-size: 12px;
                 color: var(--text-secondary);
-              ">${n.companies} empresas</div>
+              ">${d.companies} empresas</div>
             </div>
             <div style="
               background: ${p}22;
@@ -528,7 +528,7 @@ ${e}
                 font-size: 18px;
                 font-weight: 700;
                 color: ${p};
-              ">$${n.cap}B</div>
+              ">$${d.cap}B</div>
             </div>
 
             <div style="
@@ -548,7 +548,7 @@ ${e}
                 font-size: 18px;
                 font-weight: 700;
                 color: var(--text-primary);
-              ">${n.topCompany}</div>
+              ">${d.topCompany}</div>
             </div>
 
             <div style="
@@ -568,7 +568,7 @@ ${e}
                 font-size: 18px;
                 font-weight: 700;
                 color: var(--text-primary);
-              ">${n.avgDiv.toFixed(2)}%</div>
+              ">${d.avgDiv.toFixed(2)}%</div>
             </div>
 
             <div style="
@@ -588,7 +588,7 @@ ${e}
                 font-size: 18px;
                 font-weight: 700;
                 color: var(--text-primary);
-              ">${n.withDiv}/${n.companies}</div>
+              ">${d.withDiv}/${d.companies}</div>
             </div>
           </div>
 
@@ -669,9 +669,9 @@ ${e}
           </div>
         </div>
       </div>
-    `,e.innerHTML=l}catch(o){console.error("Erro ao carregar treemap:",o),e.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar mapa de setores</div>'}}}function Ee(e,t){if(e==="#"){alert(`🔒 O setor "${t}" ainda está em desenvolvimento.
+    `,e.innerHTML=l}catch(a){console.error("Erro ao carregar treemap:",a),e.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar mapa de setores</div>'}}}function Ae(e,t){if(e==="#"){alert(`🔒 O setor "${t}" ainda está em desenvolvimento.
 
-Apenas Consumer Staples, Communication Services, Consumer Discretionary, Energy, Financials, Health Care, Industrials, Information Technology, Materials, Real Estate e Utilities estão disponíveis por enquanto!`);return}window.open(e,"_blank")}window.navigateToSector=Ee;async function Se(){var t;const e=document.getElementById("heatmap-view");if(e){e.style.display="flex",e.style.flexDirection="column",e.style.height="100%",e.style.width="100%",e.style.padding="40px",e.style.boxSizing="border-box",e.style.background="var(--bg-primary)",e.style.overflowY="auto",e.innerHTML='<div style="text-align:center;color:var(--text-secondary)">Carregando heatmap...</div>';try{const s=(await(await fetch(`${window.API_BASE_URL}/api/setores`)).json()).setores||[];let r=`
+Apenas Consumer Staples, Communication Services, Consumer Discretionary, Energy, Financials, Health Care, Industrials, Information Technology, Materials, Real Estate e Utilities estão disponíveis por enquanto!`);return}window.open(e,"_blank")}window.navigateToSector=Ae;async function Me(){var t;const e=document.getElementById("heatmap-view");if(e){e.style.display="flex",e.style.flexDirection="column",e.style.height="100%",e.style.width="100%",e.style.padding="40px",e.style.boxSizing="border-box",e.style.background="var(--bg-primary)",e.style.overflowY="auto",e.innerHTML='<div style="text-align:center;color:var(--text-secondary)">Carregando heatmap...</div>';try{const s=(await(await fetch(`${window.API_BASE_URL}/api/setores`)).json()).setores||[];let r=`
       <div>
         <h2 style="
           margin: 0 0 8px 0;
@@ -687,14 +687,14 @@ Apenas Consumer Staples, Communication Services, Consumer Discretionary, Energy,
           letter-spacing: 1px;
         ">Market Cap e Dividend Yield dos líderes de cada setor</p>
       </div>
-    `;for(const i of s){const l=await(await fetch(`${window.API_BASE_URL}/api/setor/${i}`)).json(),n=window.SECTORS.find(u=>u.id===i),p=((t=l.dados)==null?void 0:t.companies)||[];if(p.length===0)continue;const c=p.sort((u,g)=>(g.marketCap||0)-(u.marketCap||0)).slice(0,4);r+=`
+    `;for(const i of s){const l=await(await fetch(`${window.API_BASE_URL}/api/setor/${i}`)).json(),d=window.SECTORS.find(u=>u.id===i),p=((t=l.dados)==null?void 0:t.companies)||[];if(p.length===0)continue;const c=p.sort((u,g)=>(g.marketCap||0)-(u.marketCap||0)).slice(0,4);r+=`
         <div style="margin-bottom: 40px;">
           <h3 style="
             font-size: 16px;
             margin: 0 0 20px 0;
             color: var(--text-primary);
             font-weight: 600;
-          ">${(n==null?void 0:n.name)||i}</h3>
+          ">${(d==null?void 0:d.name)||i}</h3>
 
           <div style="
             display: grid;
@@ -819,7 +819,7 @@ Apenas Consumer Staples, Communication Services, Consumer Discretionary, Energy,
           <strong style="color: #8bc34a;">Verde = Pequeno</strong>.
         </p>
       </div>
-    `,e.innerHTML=r}catch(o){console.error("Erro ao carregar heatmap:",o),e.innerHTML=`
+    `,e.innerHTML=r}catch(a){console.error("Erro ao carregar heatmap:",a),e.innerHTML=`
       <div style="
         text-align: center;
         color: var(--accent-red);
@@ -830,9 +830,9 @@ Apenas Consumer Staples, Communication Services, Consumer Discretionary, Energy,
           font-size: 12px;
           color: var(--text-secondary);
           margin-top: 10px;
-        ">${o.message}</div>
+        ">${a.message}</div>
       </div>
-    `}}}async function Ae(){var t;const e=document.getElementById("bubble-chart-view");if(e){e.style.display="flex",e.style.flexDirection="column",e.style.height="100%",e.style.width="100%",e.style.padding="40px",e.style.boxSizing="border-box",e.style.background="var(--bg-primary)",e.style.overflowY="auto",e.innerHTML='<div style="text-align:center;color:var(--text-secondary)">Carregando bubble chart...</div>';try{const s=(await(await fetch(`${window.API_BASE_URL}/api/setores`)).json()).setores||[];let r=[];for(const c of s){const g=await(await fetch(`${window.API_BASE_URL}/api/setor/${c}`)).json(),f=window.SECTORS.find(b=>b.id===c);(((t=g.dados)==null?void 0:t.companies)||[]).forEach(b=>{r.push({...b,sectorName:(f==null?void 0:f.name)||c,sectorId:c})})}const i=r.sort((c,u)=>(u.marketCap||0)-(c.marketCap||0)).slice(0,30);let d=`
+    `}}}async function Le(){var t;const e=document.getElementById("bubble-chart-view");if(e){e.style.display="flex",e.style.flexDirection="column",e.style.height="100%",e.style.width="100%",e.style.padding="40px",e.style.boxSizing="border-box",e.style.background="var(--bg-primary)",e.style.overflowY="auto",e.innerHTML='<div style="text-align:center;color:var(--text-secondary)">Carregando bubble chart...</div>';try{const s=(await(await fetch(`${window.API_BASE_URL}/api/setores`)).json()).setores||[];let r=[];for(const c of s){const g=await(await fetch(`${window.API_BASE_URL}/api/setor/${c}`)).json(),f=window.SECTORS.find(b=>b.id===c);(((t=g.dados)==null?void 0:t.companies)||[]).forEach(b=>{r.push({...b,sectorName:(f==null?void 0:f.name)||c,sectorId:c})})}const i=r.sort((c,u)=>(u.marketCap||0)-(c.marketCap||0)).slice(0,30);let n=`
       <div>
         <h2 style="
           margin: 0 0 8px 0;
@@ -863,7 +863,7 @@ Apenas Consumer Staples, Communication Services, Consumer Discretionary, Energy,
         margin-bottom: 40px;
       ">
         <svg style="width: 100%; height: 100%;">
-    `;const l={"communication-services":"#00d4ff","consumer-discretionary":"#00e676","consumer-staples":"#ffab00",energy:"#ff5252",financials:"#ba68c8","health-care":"#29b6f6",industrials:"#66bb6a","information-technology":"#ffa726",materials:"#ab47bc","real-estate":"#ec407a",utilities:"#26a69a"},n=Math.max(...i.map(c=>c.marketCap||0)),p=Math.max(...i.map(c=>c.dividendYield||0),5);i.forEach((c,u)=>{const g=(c.marketCap||0)/n*800+50,f=550-(c.dividendYield||0)/p*500,$=Math.sqrt((c.marketCap||0)/1e8)+10,b=l[c.sectorId]||"#00d4ff";d+=`
+    `;const l={"communication-services":"#00d4ff","consumer-discretionary":"#00e676","consumer-staples":"#ffab00",energy:"#ff5252",financials:"#ba68c8","health-care":"#29b6f6",industrials:"#66bb6a","information-technology":"#ffa726",materials:"#ab47bc","real-estate":"#ec407a",utilities:"#26a69a"},d=Math.max(...i.map(c=>c.marketCap||0)),p=Math.max(...i.map(c=>c.dividendYield||0),5);i.forEach((c,u)=>{const g=(c.marketCap||0)/d*800+50,f=550-(c.dividendYield||0)/p*500,$=Math.sqrt((c.marketCap||0)/1e8)+10,b=l[c.sectorId]||"#00d4ff";n+=`
         <circle
           cx="${g}"
           cy="${f}"
@@ -889,7 +889,7 @@ Setor: ${c.sectorName}"
           font-weight="700"
           pointer-events="none"
         >${c.symbol}</text>
-      `}),d+=`
+      `}),n+=`
           <!-- Eixo X (Market Cap) -->
           <line x1="50" y1="550" x2="850" y2="550" stroke="var(--border)" stroke-width="1"/>
           <text x="450" y="580" text-anchor="middle" font-size="12" fill="var(--text-secondary)">Market Cap →</text>
@@ -906,7 +906,7 @@ Setor: ${c.sectorName}"
         gap: 12px;
         margin-bottom: 40px;
       ">
-    `,window.SECTORS.forEach(c=>{const u=l[c.id]||"#00d4ff",g=i.filter(f=>f.sectorId===c.id).length;g>0&&(d+=`
+    `,window.SECTORS.forEach(c=>{const u=l[c.id]||"#00d4ff",g=i.filter(f=>f.sectorId===c.id).length;g>0&&(n+=`
           <div style="
             padding: 12px;
             background: rgba(26, 26, 46, 0.5);
@@ -932,7 +932,7 @@ Setor: ${c.sectorName}"
               </div>
             </div>
           </div>
-        `)}),d+=`
+        `)}),n+=`
       </div>
 
       <div style="
@@ -961,7 +961,7 @@ Setor: ${c.sectorName}"
           <li><strong>Cor:</strong> Representa o setor da empresa</li>
         </ul>
       </div>
-    `,e.innerHTML=d}catch(o){console.error("Erro ao carregar bubble chart:",o),e.innerHTML=`
+    `,e.innerHTML=n}catch(a){console.error("Erro ao carregar bubble chart:",a),e.innerHTML=`
       <div style="
         text-align: center;
         color: var(--accent-red);
@@ -972,45 +972,45 @@ Setor: ${c.sectorName}"
           font-size: 12px;
           color: var(--text-secondary);
           margin-top: 10px;
-        ">${o.message}</div>
+        ">${a.message}</div>
       </div>
-    `}}}const ae="sp500-watchlist",re="sp500-price-alerts",Z=50;function Me(){try{const e=localStorage.getItem(ae);return e?JSON.parse(e):[]}catch(e){return console.error("Erro ao carregar watchlist:",e),[]}}function Le(){try{localStorage.setItem(ae,JSON.stringify([...C]))}catch(e){console.error("Erro ao salvar watchlist:",e)}}function De(){try{const e=localStorage.getItem(re);if(!e)return[];const t=JSON.parse(e);return Array.isArray(t)&&t.length>0&&Array.isArray(t[0])?t:Array.isArray(t)&&t.length>0&&typeof t[0]=="object"?t.map(o=>[o.symbol,o]):[]}catch(e){return console.error("Erro ao carregar price alerts:",e),[]}}function Q(){try{const e=Array.from(N.entries());localStorage.setItem(re,JSON.stringify(e))}catch(e){console.error("Erro ao salvar price alerts:",e)}}function Te(e,t){let o;return function(...s){const r=()=>{clearTimeout(o),e(...s)};clearTimeout(o),o=setTimeout(r,t)}}let S=[],k=[],E=1,j="dashboard",B=new Set;const C=new Set(Me()||[]),J=De(),N=new Map(J&&J.length>0?J:[]);let A,L,P,H,Y,F,M,T,_;document.addEventListener("DOMContentLoaded",()=>{console.log("🚀 Inicializando dashboard..."),A=document.getElementById("sector-filter"),L=document.getElementById("country-filter"),P=document.getElementById("search-input"),H=document.getElementById("dividend-min"),Y=document.getElementById("sort-select"),F=document.getElementById("table-body"),M=document.getElementById("stats"),T=document.getElementById("pagination"),_=document.getElementById("header-checkbox"),console.log("📍 Elementos encontrados:",{sectorFilter:!!A,tableBody:!!F,statsEl:!!M,paginationEl:!!T});const e=document.querySelectorAll(".nav-tab");console.log(`📌 Encontradas ${e.length} abas`),e.forEach(r=>{r.addEventListener("click",i=>{i.preventDefault();const d=r.getAttribute("data-tab");console.log(`🔀 Navegando para: ${d}`),Ie(d)})}),A&&A.addEventListener("change",I),L&&L.addEventListener("change",I),P&&P.addEventListener("input",Te(I,300)),H&&H.addEventListener("change",I),Y&&Y.addEventListener("change",I),_&&_.addEventListener("change",()=>{F.querySelectorAll(".row-checkbox").forEach(i=>{i.checked=_.checked,i.dispatchEvent(new Event("change"))})});const t=document.getElementById("select-all"),o=document.getElementById("deselect-all"),a=document.getElementById("export-csv"),s=document.getElementById("export-json");t&&t.addEventListener("click",()=>{k.forEach(r=>B.add(r.symbol)),R(),q()}),o&&o.addEventListener("click",()=>{B.clear(),R(),q()}),a&&a.addEventListener("click",Je),s&&s.addEventListener("click",Ge),console.log("✅ Event listeners registrados"),ie(),se(),ne(),ce(),We(),console.log("✅ Dashboard inicializado com sucesso!")});function Ie(e){console.log(`📍 Mudando aba para: ${e}`),j=e,ie(),se()}function ie(){console.log(`🎨 Atualizando UI para: ${j}`);const e=document.getElementById("dashboard-view"),t=document.getElementById("treemap-view"),o=document.getElementById("heatmap-view"),a=document.getElementById("bubble-chart-view"),s=document.getElementById("watchlist-view"),r=document.getElementById("stock-of-day-view"),i=document.getElementById("daily-curiosity-view");switch([e,t,o,a,s,r,i].forEach(l=>{l&&(l.style.display="none")}),j){case"dashboard":e&&(e.style.display="block");break;case"stock-of-day":r&&(r.style.display="block",le());break;case"daily-curiosity":i&&(i.style.display="block",ue());break;case"treemap":t&&(t.style.display="block",Ce());break;case"heatmap":o&&(o.style.display="block",Se());break;case"bubble":a&&(a.style.display="block",Ae());break;case"watchlist":s&&(s.style.display="block",Be());break;default:e&&(e.style.display="block")}}function se(){document.querySelectorAll(".nav-tab").forEach(t=>{t.classList.remove("active"),t.getAttribute("data-tab")===j&&(t.classList.add("active"),console.log(`✅ Aba ativa: ${j}`))})}async function ne(){console.log("📊 Carregando dados do dashboard..."),M&&(M.textContent="Carregando dados...");try{const e=await fetch(`${O}/api/setores`);if(!e.ok)throw new Error("Erro ao buscar setores");const o=(await e.json()).setores||[];console.log(`🔄 Carregando ${o.length} setores...`);const a=o.map(async r=>{try{const i=await fetch(`${O}/api/setor/${r}`);if(!i.ok)throw new Error(`HTTP ${i.status}`);const d=await i.json(),l=G.find(p=>p.id===r),n=l?l.name:r;return d.dados&&d.dados.companies&&Array.isArray(d.dados.companies)?d.dados.companies.map(p=>({...p,sector:r,sectorName:n})):[]}catch(i){return console.error(`❌ Erro ao carregar ${r}:`,i),[]}});S=(await Promise.all(a)).flat(),console.log(`✅ ${S.length} empresas carregadas`),A&&(A.innerHTML='<option value="">Todos os Setores</option>',[...new Set(S.map(i=>i.sector))].sort().forEach(i=>{var l;const d=document.createElement("option");d.value=i,d.textContent=((l=G.find(n=>n.id===i))==null?void 0:l.name)||i,A.appendChild(d)})),L&&(L.innerHTML='<option value="">Todos os Países</option>',[...new Set(S.map(i=>i.location||i.country||"N/A"))].sort().forEach(i=>{const d=document.createElement("option");d.value=i,d.textContent=i,L.appendChild(d)})),I(),q()}catch(e){console.error("❌ Erro ao carregar dados:",e),M&&(M.textContent="Erro ao carregar dados. Tente novamente.")}}function I(){const e=A?A.value:"",t=L?L.value:"",o=P?P.value.toLowerCase():"",a=H&&parseFloat(H.value)||0,s=Y?Y.value:"symbol-asc";k=S.filter(d=>{const l=!e||d.sector===e,n=!t||(d.location||d.country||"N/A")===t,p=!o||d.symbol.toLowerCase().includes(o)||d.name.toLowerCase().includes(o),c=!a||(parseFloat(d.dividendYield)||0)>=a;return l&&n&&p&&c});const[r,i]=s.split("-");k.sort((d,l)=>{let n=d[r],p=l[r];if(typeof n=="string"){const g=(n||"").localeCompare(p||"");return i==="asc"?g:-g}const c=parseFloat(n)||0,u=parseFloat(p)||0;return i==="asc"?c-u:u-c}),E=1,R(),q()}function R(){if(!F){console.error("❌ tableBody não encontrado!");return}F.innerHTML="";const e=(E-1)*Z,t=e+Z,o=k.slice(e,t);console.log(`📋 Renderizando ${o.length} empresas (página ${E})`),o.forEach((a,s)=>{const r=B.has(a.symbol),i=document.createElement("tr");i.innerHTML=`
+    `}}}const ie="sp500-watchlist",se="sp500-price-alerts",Q=50;function De(){try{const e=localStorage.getItem(ie);return e?JSON.parse(e):[]}catch(e){return console.error("Erro ao carregar watchlist:",e),[]}}function Ie(){try{localStorage.setItem(ie,JSON.stringify([...C]))}catch(e){console.error("Erro ao salvar watchlist:",e)}}function Te(){try{const e=localStorage.getItem(se);if(!e)return[];const t=JSON.parse(e);return Array.isArray(t)&&t.length>0&&Array.isArray(t[0])?t:Array.isArray(t)&&t.length>0&&typeof t[0]=="object"?t.map(a=>[a.symbol,a]):[]}catch(e){return console.error("Erro ao carregar price alerts:",e),[]}}function ee(){try{const e=Array.from(F.entries());localStorage.setItem(se,JSON.stringify(e))}catch(e){console.error("Erro ao salvar price alerts:",e)}}function ze(e,t){let a;return function(...s){const r=()=>{clearTimeout(a),e(...s)};clearTimeout(a),a=setTimeout(r,t)}}let S=[],k=[],E=1,R="dashboard",B=new Set;const C=new Set(De()||[]),G=Te(),F=new Map(G&&G.length>0?G:[]);let A,L,P,H,O,N,M,I,_;document.addEventListener("DOMContentLoaded",()=>{console.log("🚀 Inicializando dashboard..."),A=document.getElementById("sector-filter"),L=document.getElementById("country-filter"),P=document.getElementById("search-input"),H=document.getElementById("dividend-min"),O=document.getElementById("sort-select"),N=document.getElementById("table-body"),M=document.getElementById("stats"),I=document.getElementById("pagination"),_=document.getElementById("header-checkbox"),console.log("📍 Elementos encontrados:",{sectorFilter:!!A,tableBody:!!N,statsEl:!!M,paginationEl:!!I});const e=document.querySelectorAll(".nav-tab");console.log(`📌 Encontradas ${e.length} abas`),e.forEach(r=>{r.addEventListener("click",i=>{i.preventDefault();const n=r.getAttribute("data-tab");console.log(`🔀 Navegando para: ${n}`),Be(n)})}),A&&A.addEventListener("change",T),L&&L.addEventListener("change",T),P&&P.addEventListener("input",ze(T,300)),H&&H.addEventListener("change",T),O&&O.addEventListener("change",T),_&&_.addEventListener("change",()=>{N.querySelectorAll(".row-checkbox").forEach(i=>{i.checked=_.checked,i.dispatchEvent(new Event("change"))})});const t=document.getElementById("select-all"),a=document.getElementById("deselect-all"),o=document.getElementById("export-csv"),s=document.getElementById("export-json");t&&t.addEventListener("click",()=>{k.forEach(r=>B.add(r.symbol)),j(),q()}),a&&a.addEventListener("click",()=>{B.clear(),j(),q()}),o&&o.addEventListener("click",Ke),s&&s.addEventListener("click",Xe),console.log("✅ Event listeners registrados"),ne(),de(),ce(),pe(),Ge(),console.log("✅ Dashboard inicializado com sucesso!")});function Be(e){console.log(`📍 Mudando aba para: ${e}`),R=e,ne(),de()}function ne(){console.log(`🎨 Atualizando UI para: ${R}`);const e=document.getElementById("dashboard-view"),t=document.getElementById("treemap-view"),a=document.getElementById("heatmap-view"),o=document.getElementById("bubble-chart-view"),s=document.getElementById("watchlist-view"),r=document.getElementById("stock-of-day-view"),i=document.getElementById("daily-curiosity-view");switch([e,t,a,o,s,r,i].forEach(l=>{l&&(l.style.display="none")}),R){case"dashboard":e&&(e.style.display="block");break;case"stock-of-day":r&&(r.style.display="block",ue());break;case"daily-curiosity":i&&(i.style.display="block",ge());break;case"treemap":t&&(t.style.display="block",Se());break;case"heatmap":a&&(a.style.display="block",Me());break;case"bubble":o&&(o.style.display="block",Le());break;case"watchlist":s&&(s.style.display="block",Fe());break;default:e&&(e.style.display="block")}}function de(){document.querySelectorAll(".nav-tab").forEach(t=>{t.classList.remove("active"),t.getAttribute("data-tab")===R&&(t.classList.add("active"),console.log(`✅ Aba ativa: ${R}`))})}async function ce(){console.log("📊 Carregando dados do dashboard..."),M&&(M.textContent="Carregando dados...");try{const e=await fetch(`${Y}/api/setores`);if(!e.ok)throw new Error("Erro ao buscar setores");const a=(await e.json()).setores||[];console.log(`🔄 Carregando ${a.length} setores...`);const o=a.map(async r=>{try{const i=await fetch(`${Y}/api/setor/${r}`);if(!i.ok)throw new Error(`HTTP ${i.status}`);const n=await i.json(),l=K.find(p=>p.id===r),d=l?l.name:r;return n.dados&&n.dados.companies&&Array.isArray(n.dados.companies)?n.dados.companies.map(p=>({...p,sector:r,sectorName:d})):[]}catch(i){return console.error(`❌ Erro ao carregar ${r}:`,i),[]}});S=(await Promise.all(o)).flat(),console.log(`✅ ${S.length} empresas carregadas`),A&&(A.innerHTML='<option value="">Todos os Setores</option>',[...new Set(S.map(i=>i.sector))].sort().forEach(i=>{var l;const n=document.createElement("option");n.value=i,n.textContent=((l=K.find(d=>d.id===i))==null?void 0:l.name)||i,A.appendChild(n)})),L&&(L.innerHTML='<option value="">Todos os Países</option>',[...new Set(S.map(i=>re(i.headquarters)))].sort().forEach(i=>{const n=document.createElement("option");n.value=i,n.textContent=i,L.appendChild(n)})),T(),q()}catch(e){console.error("❌ Erro ao carregar dados:",e),M&&(M.textContent="Erro ao carregar dados. Tente novamente.")}}function T(){const e=A?A.value:"",t=L?L.value:"",a=P?P.value.toLowerCase():"",o=H&&parseFloat(H.value)||0,s=O?O.value:"symbol-asc";k=S.filter(n=>{const l=!e||n.sector===e,d=!t||re(n.headquarters)===t,p=!a||n.symbol.toLowerCase().includes(a)||n.name.toLowerCase().includes(a)||n.subIndustry&&n.subIndustry.toLowerCase().includes(a)||n.headquarters&&n.headquarters.toLowerCase().includes(a),c=!o||(parseFloat(n.dividendYield)||0)>=o;return l&&d&&p&&c});const[r,i]=s.split("-");k.sort((n,l)=>{let d=n[r],p=l[r];if(typeof d=="string"){const g=(d||"").localeCompare(p||"");return i==="asc"?g:-g}const c=parseFloat(d)||0,u=parseFloat(p)||0;return i==="asc"?c-u:u-c}),E=1,j(),q()}function j(){if(!N){console.error("❌ tableBody não encontrado!");return}N.innerHTML="";const e=(E-1)*Q,t=e+Q,a=k.slice(e,t);console.log(`📋 Renderizando ${a.length} empresas (página ${E})`),a.forEach((o,s)=>{const r=B.has(o.symbol),i=document.createElement("tr");i.innerHTML=`
       <td>
-        <input type="checkbox" class="row-checkbox" data-symbol="${a.symbol}" 
+        <input type="checkbox" class="row-checkbox" data-symbol="${o.symbol}" 
           ${r?"checked":""}>
       </td>
       <td class="col-index">${e+s+1}</td>
-      <td><strong>${a.symbol}</strong></td>
-      <td>${a.name||"N/A"}</td>
-      <td>${a.sectorName||a.sector||"N/A"}</td>
-      <td>${a.marketCap?a.marketCap:"N/A"}</td>
-      <td>${a.subindustry||a.industry||"N/A"}</td>
-      <td>${a.location||a.country||"N/A"}</td>
-      <td>${a.dividendYield?parseFloat(a.dividendYield).toFixed(2)+"%":"N/A"}</td>
+      <td><strong>${o.symbol}</strong></td>
+      <td>${o.name||"N/A"}</td>
+      <td>${o.sectorName||o.sector||"N/A"}</td>
+      <td>${U(o.marketCap)}</td>
+      <td>${o.subIndustry||o.industry||"N/A"}</td>
+      <td>${o.headquarters||"N/A"}</td>
+      <td>${o.dividendYield?parseFloat(o.dividendYield).toFixed(2)+"%":"N/A"}</td>
       <td>
-        <button class="btn-watchlist" data-symbol="${a.symbol}" title="Adicionar à watchlist">
-          ${C.has(a.symbol)?"★":"☆"}
+        <button class="btn-watchlist" data-symbol="${o.symbol}" title="Adicionar à watchlist">
+          ${C.has(o.symbol)?"★":"☆"}
         </button>
       </td>
-    `;const d=i.querySelector(".row-checkbox");d.addEventListener("change",()=>{d.checked?B.add(a.symbol):B.delete(a.symbol),q()});const l=i.querySelector(".btn-watchlist");l.addEventListener("click",()=>{de(a.symbol),l.textContent=C.has(a.symbol)?"★":"☆",ce()}),F.appendChild(i)}),console.log(`✅ ${o.length} linhas renderizadas`),ze()}function ze(){if(!T)return;T.innerHTML="";const e=Math.ceil(k.length/Z),t=document.createElement("button");t.textContent="Anterior",t.disabled=E===1,t.addEventListener("click",()=>{E>1&&(E--,R())}),T.appendChild(t);const o=document.createElement("span");o.textContent=`Página ${E} de ${e}`,T.appendChild(o);const a=document.createElement("button");a.textContent="Próxima",a.disabled=E===e,a.addEventListener("click",()=>{E<e&&(E++,R())}),T.appendChild(a)}function q(){if(!M)return;const e=k.length,t=B.size,o=k.length>0?(k.reduce((a,s)=>a+(parseFloat(s.dividendYield)||0),0)/k.length).toFixed(2):0;M.innerHTML=`Total: ${e} | Selecionadas: ${t} | Dividend Yield Médio: ${o}%`}function de(e){C.has(e)?C.delete(e):C.add(e),Le()}function ce(){const e=document.querySelector("[data-watchlist-count]");e&&(e.textContent=C.size,console.log(`🌟 Watchlist atualizada: ${C.size} empresas`))}async function Be(){const e=document.getElementById("watchlist-view");if(!e)return;const t=S.filter(a=>C.has(a.symbol));if(t.length===0){e.innerHTML="<p>Nenhuma empresa na watchlist.</p>";return}let o='<table class="watchlist-table"><thead><tr><th>#</th><th>Símbolo</th><th>Nome</th><th>Setor</th><th>Dividend Yield</th><th>Market Cap</th></tr></thead><tbody>';t.forEach((a,s)=>{o+=`<tr>
+    `;const n=i.querySelector(".row-checkbox");n.addEventListener("change",()=>{n.checked?B.add(o.symbol):B.delete(o.symbol),q()});const l=i.querySelector(".btn-watchlist");l.addEventListener("click",()=>{le(o.symbol),l.textContent=C.has(o.symbol)?"★":"☆",pe()}),N.appendChild(i)}),console.log(`✅ ${a.length} linhas renderizadas`),Ne()}function Ne(){if(!I)return;I.innerHTML="";const e=Math.ceil(k.length/Q),t=document.createElement("button");t.textContent="Anterior",t.disabled=E===1,t.addEventListener("click",()=>{E>1&&(E--,j())}),I.appendChild(t);const a=document.createElement("span");a.textContent=`Página ${E} de ${e}`,I.appendChild(a);const o=document.createElement("button");o.textContent="Próxima",o.disabled=E===e,o.addEventListener("click",()=>{E<e&&(E++,j())}),I.appendChild(o)}function q(){if(!M)return;const e=k.length,t=B.size,a=k.length>0?(k.reduce((o,s)=>o+(parseFloat(s.dividendYield)||0),0)/k.length).toFixed(2):0;M.innerHTML=`Total: ${e} | Selecionadas: ${t} | Dividend Yield Médio: ${a}%`}function le(e){C.has(e)?C.delete(e):C.add(e),Ie()}function pe(){const e=document.querySelector("[data-watchlist-count]");e&&(e.textContent=C.size,console.log(`🌟 Watchlist atualizada: ${C.size} empresas`))}async function Fe(){const e=document.getElementById("watchlist-view");if(!e)return;const t=S.filter(o=>C.has(o.symbol));if(t.length===0){e.innerHTML="<p>Nenhuma empresa na watchlist.</p>";return}let a='<table class="watchlist-table"><thead><tr><th>#</th><th>Símbolo</th><th>Nome</th><th>Setor</th><th>Dividend Yield</th><th>Market Cap</th></tr></thead><tbody>';t.forEach((o,s)=>{a+=`<tr>
       <td>${s+1}</td>
-      <td><strong>${a.symbol}</strong></td>
-      <td>${a.name}</td>
-      <td>${a.sectorName||"N/A"}</td>
-      <td>${a.dividendYield||"N/A"}</td>
-      <td>${a.marketCap||"N/A"}</td>
-    </tr>`}),o+="</tbody></table>",e.innerHTML=o}async function le(){const e=document.getElementById("stock-of-day-view");if(e){e.innerHTML=`
+      <td><strong>${o.symbol}</strong></td>
+      <td>${o.name}</td>
+      <td>${o.sectorName||"N/A"}</td>
+      <td>${o.dividendYield?parseFloat(o.dividendYield).toFixed(2)+"%":"N/A"}</td>
+      <td>${U(o.marketCap)}</td>
+    </tr>`}),a+="</tbody></table>",e.innerHTML=a}async function ue(){const e=document.getElementById("stock-of-day-view");if(e){e.innerHTML=`
     <div class="stock-of-day-loading">
       <div class="loading-spinner"></div>
       <p>Analisando o mercado... selecionando a melhor oportunidade de hoje</p>
     </div>
-  `;try{S.length===0&&await ne();const t=new Date().toISOString().slice(0,10),o=Re(t);if(o){te(e,o);return}const a=await Fe();qe(t,a),te(e,a)}catch(t){console.error("Erro ao carregar Ação do Dia:",t),e.innerHTML=`
+  `;try{S.length===0&&await ce();const t=new Date().toISOString().slice(0,10),a=Ue(t);if(a){ae(e,a);return}const o=await Pe();Ve(t,o),ae(e,o)}catch(t){console.error("Erro ao carregar Ação do Dia:",t),e.innerHTML=`
       <div class="stock-of-day-error">
         <h3>⚠️ Indisponível no momento</h3>
         <p>Não foi possível gerar a análise. Tente novamente mais tarde.</p>
         <button class="retry-btn" onclick="loadStockOfDay()">Tentar novamente</button>
       </div>
-    `}}}function Fe(){return new Promise(e=>{setTimeout(()=>{const t=new Date().toISOString().slice(0,10),o=Ne(t),a=S.filter(l=>l.marketCap&&l.marketCap>1e9).map(l=>{const n=Pe(l),p=He(l.sector),c=C.has(l.symbol)?15:0,u=(l.dividendYield||0)>2?10:0,g=Math.min(20,Math.log10(l.marketCap/1e9)*5),f=Ye(l),$=n+p+c+u+g+f;return{...l,score:Math.round($*100)/100,breakdown:{technical:n,sector:p,watchlist:c,dividend:u,liquidity:Math.round(g),volatility:Math.round(f)},rationale:Oe(l,n,p,c,u)}}).sort((l,n)=>n.score-l.score),s=a.slice(0,Math.min(10,a.length)),r=o%s.length,i=s[r],d=s.filter((l,n)=>n!==r).slice(0,3);e({date:t,primary:i,alternatives:d,marketContext:je(),generatedAt:new Date().toISOString()})},100)})}function Ne(e){let t=0;for(let o=0;o<e.length;o++)t=(t<<5)-t+e.charCodeAt(o),t|=0;return Math.abs(t)}function Pe(e){let t=50;const o=e.dividendYield||0;o>4?t+=15:o>2?t+=8:o>0&&(t+=3);const a=e.marketCap||0;a>5e11?t+=10:a>1e11?t+=7:a>5e10?t+=5:a>1e10&&(t+=3);const s=(e.subIndustry||"").toLowerCase();["software","semiconductors","biotechnology","cloud","ai","cybersecurity","renewable"].some(i=>s.includes(i))&&(t+=12);const r=(e.name||"").toLowerCase();return["inc.","corporation","technologies","systems","solutions"].some(i=>r.includes(i))&&(t+=3),Math.min(90,t)}function He(e){return{"information-technology":15,"health-care":8,"consumer-discretionary":5,"communication-services":7,industrials:5,financials:3,materials:2,energy:0,utilities:-2,"real-estate":-3,"consumer-staples":1}[e]||0}function Ye(e){const t=e.marketCap||0;return t>2e11?8:t>5e10?12:t>1e10?15:18}function Oe(e,t,o,a,s){const r=[];return t>60&&r.push("Fundamentos técnicos sólidos"),o>10&&r.push(`Setor em momento favorável (${e.sectorName})`),a&&r.push("Está na sua watchlist pessoal"),s&&r.push(`Dividend yield atrativo (${(e.dividendYield||0).toFixed(1)}%)`),e.marketCap>1e11&&r.push("Grande capitalização — liquidez e estabilidade"),r.length===0&&r.push("Equilíbrio entre risco e retorno"),r.join(" • ")}function je(){const e=Math.random()*30+10;return e<15?{level:"Calmo",description:"Baixa volatilidade - ambiente propício para acumulação",class:"calm"}:e<25?{level:"Moderado",description:"Volatilidade normal - seleção seletiva recomendada",class:"moderate"}:{level:"Elevado",description:"Alta volatilidade - foco em qualidade e liquidez",class:"elevated"}}function Re(e){try{const t=localStorage.getItem("sp500-stock-of-day");if(!t)return null;const o=JSON.parse(t);return o.date===e?o:null}catch{return null}}function qe(e,t){try{localStorage.setItem("sp500-stock-of-day",JSON.stringify(t))}catch{}}function te(e,t){const{primary:o,alternatives:a,marketContext:s,generatedAt:r}=t;if(!o){e.innerHTML='<div class="stock-of-day-error"><p>Sem dados suficientes</p></div>';return}e.innerHTML=`
+    `}}}function Pe(){return new Promise(e=>{setTimeout(()=>{const t=new Date().toISOString().slice(0,10),a=He(t),o=S.filter(l=>l.marketCap&&l.marketCap>1e9).map(l=>{const d=Oe(l),p=Ye(l.sector),c=C.has(l.symbol)?15:0,u=(l.dividendYield||0)>2?10:0,g=Math.min(20,Math.log10(l.marketCap/1e9)*5),f=Re(l),$=d+p+c+u+g+f;return{...l,score:Math.round($*100)/100,breakdown:{technical:d,sector:p,watchlist:c,dividend:u,liquidity:Math.round(g),volatility:Math.round(f)},rationale:je(l,d,p,c,u)}}).sort((l,d)=>d.score-l.score),s=o.slice(0,Math.min(10,o.length)),r=a%s.length,i=s[r],n=s.filter((l,d)=>d!==r).slice(0,3);e({date:t,primary:i,alternatives:n,marketContext:qe(),generatedAt:new Date().toISOString()})},100)})}function He(e){let t=0;for(let a=0;a<e.length;a++)t=(t<<5)-t+e.charCodeAt(a),t|=0;return Math.abs(t)}function Oe(e){let t=50;const a=e.dividendYield||0;a>4?t+=15:a>2?t+=8:a>0&&(t+=3);const o=e.marketCap||0;o>5e11?t+=10:o>1e11?t+=7:o>5e10?t+=5:o>1e10&&(t+=3);const s=(e.subIndustry||"").toLowerCase();["software","semiconductors","biotechnology","cloud","ai","cybersecurity","renewable"].some(i=>s.includes(i))&&(t+=12);const r=(e.name||"").toLowerCase();return["inc.","corporation","technologies","systems","solutions"].some(i=>r.includes(i))&&(t+=3),Math.min(90,t)}function Ye(e){return{"information-technology":15,"health-care":8,"consumer-discretionary":5,"communication-services":7,industrials:5,financials:3,materials:2,energy:0,utilities:-2,"real-estate":-3,"consumer-staples":1}[e]||0}function Re(e){const t=e.marketCap||0;return t>2e11?8:t>5e10?12:t>1e10?15:18}function je(e,t,a,o,s){const r=[];return t>60&&r.push("Fundamentos técnicos sólidos"),a>10&&r.push(`Setor em momento favorável (${e.sectorName})`),o&&r.push("Está na sua watchlist pessoal"),s&&r.push(`Dividend yield atrativo (${(e.dividendYield||0).toFixed(1)}%)`),e.marketCap>1e11&&r.push("Grande capitalização — liquidez e estabilidade"),r.length===0&&r.push("Equilíbrio entre risco e retorno"),r.join(" • ")}function qe(){const e=Math.random()*30+10;return e<15?{level:"Calmo",description:"Baixa volatilidade - ambiente propício para acumulação",class:"calm"}:e<25?{level:"Moderado",description:"Volatilidade normal - seleção seletiva recomendada",class:"moderate"}:{level:"Elevado",description:"Alta volatilidade - foco em qualidade e liquidez",class:"elevated"}}function Ue(e){try{const t=localStorage.getItem("sp500-stock-of-day");if(!t)return null;const a=JSON.parse(t);return a.date===e?a:null}catch{return null}}function Ve(e,t){try{localStorage.setItem("sp500-stock-of-day",JSON.stringify(t))}catch{}}function ae(e,t){const{primary:a,alternatives:o,marketContext:s,generatedAt:r}=t;if(!a){e.innerHTML='<div class="stock-of-day-error"><p>Sem dados suficientes</p></div>';return}e.innerHTML=`
     <div class="stock-of-day-container">
       <header class="stock-of-day-header">
         <div class="stock-badge">
@@ -1025,22 +1025,22 @@ Setor: ${c.sectorName}"
 
       <div class="stock-main-card">
         <div class="stock-identity">
-          <div class="stock-symbol">${v(o.symbol)}</div>
-          <div class="stock-name">${v(o.name)}</div>
-          <div class="stock-sector">${v(o.sectorName||o.sector)}</div>
+          <div class="stock-symbol">${v(a.symbol)}</div>
+          <div class="stock-name">${v(a.name)}</div>
+          <div class="stock-sector">${v(a.sectorName||a.sector)}</div>
         </div>
 
         <div class="stock-score">
-          <div class="score-circle" style="--score: ${o.score}">
-            <span class="score-value">${o.score}</span>
+          <div class="score-circle" style="--score: ${a.score}">
+            <span class="score-value">${a.score}</span>
             <span class="score-label">/ 100</span>
           </div>
           <div class="score-breakdown">
-            ${Object.entries(o.breakdown).map(([i,d])=>`
+            ${Object.entries(a.breakdown).map(([i,n])=>`
               <div class="score-bar">
                 <span class="bar-label">${i}</span>
-                <div class="bar-track"><div class="bar-fill" style="width: ${Math.min(100,d*2)}%"></div></div>
-                <span class="bar-value">${d}</span>
+                <div class="bar-track"><div class="bar-fill" style="width: ${Math.min(100,n*2)}%"></div></div>
+                <span class="bar-value">${n}</span>
               </div>
             `).join("")}
           </div>
@@ -1048,45 +1048,45 @@ Setor: ${c.sectorName}"
 
         <div class="stock-rationale">
           <h4>🎯 Por que esta ação?</h4>
-          <p>${o.rationale}</p>
+          <p>${a.rationale}</p>
         </div>
 
         <div class="stock-metrics">
           <div class="metric">
             <span class="metric-label">Market Cap</span>
-            <span class="metric-value">$${(o.marketCap/1e9).toFixed(1)}B</span>
+            <span class="metric-value">${U(a.marketCap)}</span>
           </div>
           <div class="metric">
             <span class="metric-label">Div. Yield</span>
-            <span class="metric-value">${(o.dividendYield||0).toFixed(2)}%</span>
+            <span class="metric-value">${(a.dividendYield||0).toFixed(2)}%</span>
           </div>
           <div class="metric">
             <span class="metric-label">Setor</span>
-            <span class="metric-value">${v(o.sectorName||o.sector)}</span>
+            <span class="metric-value">${v(a.sectorName||a.sector)}</span>
           </div>
           <div class="metric">
             <span class="metric-label">Sub-setor</span>
-            <span class="metric-value">${v(o.subIndustry||"N/A")}</span>
+            <span class="metric-value">${v(a.subIndustry||"N/A")}</span>
           </div>
         </div>
 
         <div class="stock-actions">
-          <button class="action-btn primary" onclick="toggleWatchlist('${o.symbol}'); loadStockOfDay();">
-            ${C.has(o.symbol)?"★ Remover da Watchlist":"☆ Adicionar à Watchlist"}
+          <button class="action-btn primary" onclick="toggleWatchlist('${a.symbol}'); loadStockOfDay();">
+            ${C.has(a.symbol)?"★ Remover da Watchlist":"☆ Adicionar à Watchlist"}
           </button>
-          <button class="action-btn secondary" onclick="openCompanyDetails({symbol:'${o.symbol}',name:'${v(o.name).replace(/'/g,"\\'")}'})">
+          <button class="action-btn secondary" onclick="openCompanyDetails({symbol:'${a.symbol}',name:'${v(a.name).replace(/'/g,"\\'")}'})">
             📈 Ver Detalhes
           </button>
-          <button class="action-btn ghost" onclick="setPriceAlertPrompt('${o.symbol}')">🔔 Criar Alerta</button>
+          <button class="action-btn ghost" onclick="setPriceAlertPrompt('${a.symbol}')">🔔 Criar Alerta</button>
         </div>
       </div>
 
       <section class="stock-alternatives">
         <h3>🥈 Menções Honrosas</h3>
         <div class="alternatives-grid">
-          ${a.map((i,d)=>`
+          ${o.map((i,n)=>`
             <div class="alt-card">
-              <span class="alt-rank">${d+2}º</span>
+              <span class="alt-rank">${n+2}º</span>
               <div class="alt-info">
                 <div class="alt-symbol">${v(i.symbol)}</div>
                 <div class="alt-name">${v(i.name)}</div>
@@ -1102,7 +1102,7 @@ Setor: ${c.sectorName}"
         <p class="generated-at">Gerado em ${new Date(r).toLocaleTimeString("pt-BR")} • Baseado em ${S.length} empresas do S&P 500</p>
       </footer>
     </div>
-  `}function Ue(e){const t=e.toUpperCase(),o=N.get(t);if(o&&o.triggered){confirm(`${e}: alerta já disparado. Remover?`)&&Ve(t);return}const a=prompt(`Alerta de preço para ${e}:
-Digite o preço alvo (ex: 150.25):`,o?o.target.toFixed(2):"");if(!a)return;const s=parseFloat(a);if(isNaN(s)||s<=0){alert("Preço inválido");return}const r=confirm(`Alertar quando o preço estiver ACIMA deste valor?
-(OK = acima, Cancelar = abaixo)`)?"above":"below";_e(t,s,r)}function _e(e,t,o){return!e||typeof t!="number"||!["above","below"].includes(o)?!1:(N.set(e.toUpperCase(),{target:t,direction:o,triggered:!1}),Q(),!0)}function Ve(e){N.delete(e.toUpperCase()),Q()}window.loadStockOfDay=le;window.toggleWatchlist=de;window.openCompanyDetails=ke;window.setPriceAlertPrompt=Ue;async function We(){N.size!==0&&setInterval(async()=>{for(const[e,t]of N)t.triggered;Q()},6e4)}function Je(){const e=["#","Símbolo","Empresa","Setor","Market Cap","Subindústria","Sede","Dividend Yield"],t=k.map((a,s)=>[s+1,a.symbol,a.name,a.sectorName,a.marketCap,a.subindustry||a.industry||"N/A",a.location||a.country||"N/A",a.dividendYield||"N/A"]),o=[e,...t].map(a=>a.map(s=>`"${s}"`).join(",")).join(`
-`);pe(o,"sp500-export.csv","text/csv")}function Ge(){const e=JSON.stringify(k,null,2);pe(e,"sp500-export.json","application/json")}function pe(e,t,o){const a=new Blob([e],{type:o}),s=URL.createObjectURL(a),r=document.createElement("a");r.href=s,r.download=t,document.body.appendChild(r),r.click(),document.body.removeChild(r),URL.revokeObjectURL(s)}console.log("✅ main.js (10 colunas) carregado com sucesso!");
+  `}function _e(e){const t=e.toUpperCase(),a=F.get(t);if(a&&a.triggered){confirm(`${e}: alerta já disparado. Remover?`)&&Je(t);return}const o=prompt(`Alerta de preço para ${e}:
+Digite o preço alvo (ex: 150.25):`,a?a.target.toFixed(2):"");if(!o)return;const s=parseFloat(o);if(isNaN(s)||s<=0){alert("Preço inválido");return}const r=confirm(`Alertar quando o preço estiver ACIMA deste valor?
+(OK = acima, Cancelar = abaixo)`)?"above":"below";We(t,s,r)}function We(e,t,a){return!e||typeof t!="number"||!["above","below"].includes(a)?!1:(F.set(e.toUpperCase(),{target:t,direction:a,triggered:!1}),ee(),!0)}function Je(e){F.delete(e.toUpperCase()),ee()}window.loadStockOfDay=ue;window.toggleWatchlist=le;window.openCompanyDetails=Ee;window.setPriceAlertPrompt=_e;async function Ge(){F.size!==0&&setInterval(async()=>{for(const[e,t]of F)t.triggered;ee()},6e4)}function Ke(){const e=["#","Símbolo","Empresa","Setor","Market Cap","Subindústria","Sede","Dividend Yield"],t=k.map((o,s)=>[s+1,o.symbol,o.name,o.sectorName,U(o.marketCap),o.subIndustry||o.industry||"N/A",o.headquarters||"N/A",o.dividendYield||"N/A"]),a=[e,...t].map(o=>o.map(s=>`"${s}"`).join(",")).join(`
+`);me(a,"sp500-export.csv","text/csv")}function Xe(){const e=JSON.stringify(k,null,2);me(e,"sp500-export.json","application/json")}function me(e,t,a){const o=new Blob([e],{type:a}),s=URL.createObjectURL(o),r=document.createElement("a");r.href=s,r.download=t,document.body.appendChild(r),r.click(),document.body.removeChild(r),URL.revokeObjectURL(s)}console.log("✅ main.js (10 colunas) carregado com sucesso!");
