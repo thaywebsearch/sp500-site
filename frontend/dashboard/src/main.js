@@ -321,21 +321,26 @@ async function loadDashboardData() {
         const sectorName = sector ? sector.name : setorId;
 
         if (data.dados && data.dados.companies && Array.isArray(data.dados.companies)) {
-          return data.dados.companies.map((c) => ({
-            ...c,
-            sector: setorId,
-            sectorName: sectorName,
-          }));
+          return {
+            generatedAt: data.dados.generatedAt || null,
+            companies: data.dados.companies.map((c) => ({
+              ...c,
+              sector: setorId,
+              sectorName: sectorName,
+            })),
+          };
         }
-        return [];
+        return { generatedAt: null, companies: [] };
       } catch (e) {
         console.error(`❌ Erro ao carregar ${setorId}:`, e);
-        return [];
+        return { generatedAt: null, companies: [] };
       }
     });
 
     const results = await Promise.all(promises);
-    allCompanies = results.flat();
+    allCompanies = results.flatMap((r) => r.companies);
+
+    updateFreshnessBadge(results.map((r) => r.generatedAt).filter(Boolean));
 
     console.log(`✅ ${allCompanies.length} empresas carregadas`);
 
@@ -366,7 +371,42 @@ async function loadDashboardData() {
   } catch (erro) {
     console.error('❌ Erro ao carregar dados:', erro);
     if (statsEl) statsEl.textContent = 'Erro ao carregar dados. Tente novamente.';
+    updateFreshnessBadge([]);
   }
+}
+
+// ========== FRESHNESS BADGE ==========
+function updateFreshnessBadge(dates) {
+  const badge = document.getElementById('freshness-badge');
+  const text = document.getElementById('freshness-text');
+  if (!text) return;
+
+  const valid = (dates || []).map((d) => new Date(d)).filter((d) => !Number.isNaN(d.getTime()));
+
+  if (valid.length === 0) {
+    if (badge) {
+      badge.classList.remove('fd-fresh', 'fd-aging', 'fd-stale');
+      badge.classList.add('fd-unknown');
+    }
+    text.textContent = 'Data indisponível';
+    return;
+  }
+
+  const latest = new Date(Math.max(...valid.map((d) => d.getTime())));
+  const ageInDays = Math.floor((Date.now() - latest.getTime()) / 86400000);
+
+  let freshnessClass = 'fd-fresh';
+  if (ageInDays > 30) freshnessClass = 'fd-stale';
+  else if (ageInDays > 7) freshnessClass = 'fd-aging';
+
+  if (badge) {
+    badge.classList.remove('fd-fresh', 'fd-aging', 'fd-stale', 'fd-unknown');
+    badge.classList.add(freshnessClass);
+  }
+
+  const formatted = latest.toLocaleDateString('pt-BR');
+  text.textContent = `Dados de ${formatted}`;
+  if (badge) badge.title = `Última atualização dos dados: ${formatted}`;
 }
 
 // ========== FILTROS E ORDENAÇÃO ==========

@@ -105,7 +105,9 @@ export async function loadTreemap() {
         'real-estate',
         'utilities',
       ].includes(s.id);
-      const sectorPageUrl = isAvailable ? `/sectors/${s.id}.html` : '#';
+      const sectorPageUrl = isAvailable
+        ? new URL(`sectors/${s.id}.html`, document.baseURI).href
+        : '#';
 
       html += `
         <div style="
