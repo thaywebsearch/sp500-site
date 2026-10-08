@@ -6,6 +6,9 @@ import { API_BASE_URL } from './config.js';
 // Variáveis globais
 let todasAsCuriosidades = [];
 let curiosidadeDoDia = null;
+let totalEmpresas = 0;
+let proximaEmpresa = '';
+let ordemRotacao = 'alfabética';
 
 // ========== FUNÇÃO PRINCIPAL ==========
 export async function loadCuriosidades() {
@@ -38,6 +41,9 @@ export async function loadCuriosidades() {
     }
 
     todasAsCuriosidades = data.dados.curiosidades;
+    totalEmpresas = data.dados.total || todasAsCuriosidades.length;
+    proximaEmpresa = data.dados.proximaEmpresa || '';
+    ordemRotacao = data.dados.ordem || 'alfabética';
 
     if (todasAsCuriosidades.length === 0) {
       view.innerHTML = '<div class="curiosidade-erro">Nenhuma curiosidade disponível</div>';
@@ -63,13 +69,14 @@ export async function loadCuriosidades() {
 function selecionarCuriosidadeDoDia() {
   if (todasAsCuriosidades.length === 0) return;
 
-  // Usar dia do mês (1-31) para rotacionar entre curiosidades
+  // Índice determinístico por dia (avança 1 posição diariamente)
   const hoje = new Date();
-  const diaDoMes = hoje.getDate(); // 1-31
-  const indice = (diaDoMes - 1) % todasAsCuriosidades.length;
+  const inicioDoDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+  const indiceDoDia = Math.floor(inicioDoDia.getTime() / 86400000);
+  const indice = indiceDoDia % todasAsCuriosidades.length;
 
   curiosidadeDoDia = todasAsCuriosidades[indice];
-  console.log(`Curiosidade do dia ${diaDoMes}: ${curiosidadeDoDia?.empresa}`);
+  console.log(`Curiosidade do dia: ${curiosidadeDoDia?.empresa}`);
 }
 
 // ========== RENDERIZAR CURIOSIDADE ==========
@@ -139,6 +146,18 @@ function renderCuriosidade() {
             </div>
           ` : ''}
 
+          ${totalEmpresas > 0 ? `
+            <div class="curiosidade-progresso">
+              <div class="progresso-texto">
+                <span>Rotatividade diária · ordem ${ordemRotacao}</span>
+                <span>Empresa ${curiosidadeDoDia.posicao} de ${totalEmpresas}</span>
+              </div>
+              <div class="progresso-barra">
+                <div class="progresso-preenchido" style="width: ${(Number(curiosidadeDoDia.posicao) / totalEmpresas) * 100}%;"></div>
+              </div>
+            </div>
+          ` : ''}
+
           <div class="curiosidade-acoes">
             <button class="btn-compartilhar" onclick="compartilharCuriosidade()">
               📤 Compartilhar
@@ -154,7 +173,8 @@ function renderCuriosidade() {
 
       <div class="curiosidade-footer">
         <p>Curiosidade de ${curiosidadeDoDia.empresa} - Atualizado em ${curiosidadeDoDia.dataAdicao || 'N/A'}</p>
-        <p class="curiosidade-dica">💡 Uma curiosidade diferente a cada dia do mês!</p>
+        ${proximaEmpresa ? `<p class="curiosidade-proxima">⏭️ Amanhã: ${proximaEmpresa}</p>` : ''}
+        <p class="curiosidade-dica">💡 Uma empresa diferente a cada dia, em ordem alfabética do S&P 500!</p>
       </div>
     </div>
   `;
@@ -348,6 +368,41 @@ function adicionarEstilosCuriosidade() {
       border-top: 1px solid #444;
     }
 
+    .curiosidade-proxima {
+      color: #ffd700;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    .curiosidade-progresso {
+      margin: 20px 0 0 0;
+    }
+
+    .progresso-texto {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85em;
+      color: #bbb;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .progresso-barra {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 215, 0, 0.15);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progresso-preenchido {
+      height: 100%;
+      background: linear-gradient(90deg, #ffd700 0%, #ffa000 100%);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
     .curiosidade-loading {
       text-align: center;
       color: #ffd700;
@@ -399,7 +454,8 @@ function adicionarEstilosCuriosidade() {
 function compartilharCuriosidade() {
   if (!curiosidadeDoDia) return;
 
-  const texto = `🌟 Curiosidade do Dia: ${curiosidadeDoDia.empresa}\n\n${curiosidadeDoDia.descricao}\n\nSímbolo: ${curiosidadeDoDia.simbolo}`;
+  const fatos = (curiosidadeDoDia.fatos || []).map(f => `• ${f}`).join('\n');
+  const texto = `🌟 Curiosidade do Dia: ${curiosidadeDoDia.empresa} (${curiosidadeDoDia.simbolo})\n\n${curiosidadeDoDia.descricao}\n\n${fatos}\n\n💡 ${curiosidadeDoDia.insight || ''}`;
 
   if (navigator.share) {
     navigator.share({

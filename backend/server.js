@@ -55,7 +55,125 @@ function encontrarCuriosidades() {
   return null;
 }
 
-// ============ ROTAS DA API ==========
+/**
+ * Lista os IDs dos arquivos de setor no diretório data/
+ * @returns {string[]} IDs de setores disponíveis
+ */
+function listarArquivosDeSetores() {
+  const dataDir = path.join(__dirname, 'data');
+  return fs.readdirSync(dataDir)
+    .filter(file => 
+      file.endsWith('.json')
+      && file !== 'package.json'
+      && file !== 'package-lock.json'
+      && file !== 'daily-summary.json'
+      && file !== 'curiosidades.json'
+      && file !== 'dividend-calendar.json'
+    )
+    .map(file => file.replace('.json', ''));
+}
+
+/**
+ * Carrega todas as empresas do S&P 500 a partir dos arquivos de setor
+ * @returns {Array} Lista com todas as empresas, cada uma com setorId
+ */
+function carregarTodasEmpresas() {
+  const setores = listarArquivosDeSetores();
+  const empresas = [];
+
+  for (const setorId of setores) {
+    const caminhoJson = path.join(__dirname, 'data', `${setorId}.json`);
+    if (!fs.existsSync(caminhoJson)) continue;
+
+    const dados = JSON.parse(fs.readFileSync(caminhoJson, 'utf-8'));
+    const lista = dados.companies || [];
+
+    lista.forEach(empresa => {
+      empresas.push({
+        ...empresa,
+        setorId,
+        setor: empresa.sector || setorId
+      });
+    });
+  }
+
+  return empresas;
+}
+
+/**
+ * Formata um valor numérico de market cap em $XB / $XT
+ * @param {number|string} valor - Market cap em dólares
+ * @returns {string} Valor formatado
+ */
+function formatarMarketCap(valor) {
+  if (valor === undefined || valor === null || valor === '') return 'N/D';
+  const num = Number(valor);
+  if (Number.isNaN(num) || num <= 0) return 'N/D';
+  if (num >= 1e12) return `$${(num / 1e12).toFixed(2)}T`;
+  if (num >= 1e9) return `$${(num / 1e9).toFixed(2)}B`;
+  if (num >= 1e6) return `$${(num / 1e6).toFixed(1)}M`;
+  return `$${Math.round(num).toLocaleString('en-US')}`;
+}
+
+/**
+ * Gera a curiosidade completa de uma empresa com contexto ampliado
+ * (o que faz, segmento, sede, fundação e dados financeiros)
+ * @param {object} empresa - Registro da empresa
+ * @param {number} posicao - Posição alfabética (1-based)
+ * @param {number} total - Total de empresas do índice
+ * @returns {object} Curiosidade formatada
+ */
+function montarCuriosidade(empresa, posicao, total) {
+  const setor = empresa.setor || 'N/D';
+  const segmento = empresa.subIndustry || 'N/D';
+  const sede = empresa.headquarters || 'N/D';
+  const fundacao = empresa.founded || 'N/D';
+  const marketCap = formatarMarketCap(empresa.marketCap);
+  const dividendYield = empresa.dividendYield !== undefined && empresa.dividendYield !== null
+    ? `${Number(empresa.dividendYield).toFixed(2)}%`
+    : 'N/D';
+  const pagaDividendos = String(empresa.hasDividend).toLowerCase() === 'sim';
+
+  const nome = empresa.name || empresa.symbol || 'Empresa';
+  const dataAdicao = new Date().toISOString().slice(0, 10);
+
+  const descricao = `${nome} é uma empresa listada no S&P 500, índice que reúne as maiores companhias dos Estados Unidos, pertencente ao setor de ${setor}. A companhia desenvolve, produz e comercializa produtos e serviços voltados ao segmento de ${segmento}. Com sede em ${sede} e fundada em ${fundacao}, a empresa se destaca no mercado de capitais, somando hoje um valor de mercado de ${marketCap}${pagaDividendos ? ` e distribuindo um dividend yield de ${dividendYield}` : ''}.`;
+
+  const fatos = [
+    `Setor: ${setor}`,
+    `Segmento de atuação: ${segmento}`,
+    `Sede: ${sede}`,
+    `Fundação: ${fundacao}`,
+    `Market Cap: ${marketCap}`,
+    pagaDividendos ? `Dividend Yield: ${dividendYield}` : 'Dividendos: empresa atualmente não paga dividendos',
+    `Posição no ranking alfabético do S&P 500: ${posicao}ª de ${total}`
+  ];
+
+  const insight = pagaDividendos
+    ? `${nome} distribui dividendos aos acionistas, o que tende a atrair investidores em busca de renda periódica e estabilidade no longo prazo.`
+    : `${nome} tende a reinvestir seus lucros no negócio em vez de distribuir dividendos, podendo interessar a quem busca valorização de capital no longo prazo.`;
+
+  const simboloCodificado = encodeURIComponent(nome);
+
+  return {
+    id: posicao,
+    posicao: String(posicao),
+    simbolo: empresa.symbol || 'N/D',
+    empresa: nome,
+    setor,
+    dataAdicao,
+    titulo: 'Perfil da Empresa no S&P 500',
+    descricao,
+    fatos,
+    dividendYield: pagaDividendos ? dividendYield : 'N/D',
+    marketCap,
+    insight,
+    link: `https://www.google.com/search?q=${simboloCodificado}+stock+SP500`,
+    imagem: null
+  };
+}
+
+// ============ ROTAS DA API ===========
 
 /**
  * Listar todos os setores disponíveis
@@ -119,12 +237,43 @@ app.get('/api/setor/:setor', (req, res) => {
  */
 app.get('/api/curiosidades', (req, res) => {
   try {
+    // Rotação diária em ordem alfabética pela lista completa do S&P 500
+    const empresas = carregarTodasEmpresas();
+
+    if (empresas.length > 0) {
+      const ordenadas = empresas.sort((a, b) => a.name.localeCompare(b.name, 'en'));
+
+      // Índice determinístico: avança 1 posição por dia (independente do mês)
+      const agora = new Date();
+      const inicioDoDia = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+      const indiceDoDia = Math.floor(inicioDoDia.getTime() / 86400000);
+      const indice = indiceDoDia % ordenadas.length;
+
+      const empresa = ordenadas[indice];
+      const proximaEmpresa = ordenadas[(indice + 1) % ordenadas.length];
+
+      const curiosidade = montarCuriosidade(empresa, indice + 1, ordenadas.length);
+
+      return res.json({
+        sucesso: true,
+        dados: {
+          curiosidades: [curiosidade],
+          total: ordenadas.length,
+          indice,
+          ordem: 'alfabética',
+          proximaEmpresa: proximaEmpresa.name || proximaEmpresa.symbol,
+          dataGeracao: agora.toISOString()
+        }
+      });
+    }
+
+    // Fallback: usuário ainda não tem dados de setores → serve arquivo estático
     const caminhoJson = encontrarCuriosidades();
     
     if (!caminhoJson) {
       return res.status(404).json({
         sucesso: false,
-        erro: 'Arquivo de curiosidades não encontrado. Procurei em: frontend/src/data/, src/data/, data/'
+        erro: 'Nenhum dado de empresas encontrado e arquivo de curiosidades não disponível'
       });
     }
     
