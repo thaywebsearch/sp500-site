@@ -1,4 +1,5 @@
 // ========== API HELPER FUNCTIONS ==========
+import { API_BASE_URL } from './config.js';
 
 /**
  * Obtém histórico de preços de uma ação
@@ -7,7 +8,7 @@
  */
 export async function getPriceHistory(symbol) {
   try {
-    const response = await fetch(`/api/historico/${symbol}`);
+    const response = await fetch(`${API_BASE_URL}/api/historico/${symbol}`);
     if (!response.ok) throw new Error(`Erro ao buscar histórico de ${symbol}`);
     const data = await response.json();
     return data.registros || [];
@@ -23,7 +24,7 @@ export async function getPriceHistory(symbol) {
  */
 export async function getDailySummary() {
   try {
-    const response = await fetch('/api/resumo-dia');
+    const response = await fetch(`${API_BASE_URL}/api/resumo-dia`);
     if (!response.ok) throw new Error('Erro ao buscar resumo do dia');
     const data = await response.json();
     return data.dados || {};
@@ -39,7 +40,7 @@ export async function getDailySummary() {
  */
 export async function healthCheck() {
   try {
-    const response = await fetch('/api/health');
+    const response = await fetch(`${API_BASE_URL}/api/health`);
     return response.ok;
   } catch (erro) {
     console.error('Erro ao fazer health check:', erro);
