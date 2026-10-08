@@ -32,6 +32,10 @@ frontend/<setor>/<setor>.json   ← fonte única (canônica)
         └──▶ backend/data/              (API Railway)
 ```
 
+A cópia `backend/data/` é regerada antes do boot da API (`npm start` → hook
+`prestart` → `backend/scripts/sync-data.mjs`) a partir da fonte canônica quando
+ela está disponível, evitando divergência entre as cópias.
+
 O README de cada setor e o consolidado `TOP50-MARKET-CAP.md` são gerados pelo mesmo pipeline, preservando o enriquecimento (marketCap, dividendYield) existente.
 
 ## Pipelines (GitHub Actions)
