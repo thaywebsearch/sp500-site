@@ -16,7 +16,8 @@ describe('formatMarketCap', () => {
   });
 
   it('formata trilhões', () => {
-    expect(formatMarketCap(2_500_000_000_000)).toBe('$2.50T');
+    expect(formatMarketCap(2_500_000_000_000)).toBe('$2.500T');
+    expect(formatMarketCap(5_765_000_000_000)).toBe('$5.765T');
   });
 
   it('formata bilhões', () => {

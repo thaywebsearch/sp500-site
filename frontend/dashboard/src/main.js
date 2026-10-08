@@ -1,7 +1,7 @@
 // ========== IMPORTS ==========
 import { API_BASE_URL, SECTORS } from './config.js';
 import { loadCuriosidades } from './daily-curiosity.js';
-import { escapeHtml } from './utils.js';
+import { escapeHtml, formatMarketCap, getCountry } from './utils.js';
 import { openCompanyDetails } from './company-details.js';
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
@@ -318,7 +318,7 @@ async function loadDashboardData() {
 
     if (countryFilter) {
       countryFilter.innerHTML = '<option value="">Todos os Países</option>';
-      const paisUnico = new Set(allCompanies.map(c => c.location || c.country || 'N/A'));
+      const paisUnico = new Set(allCompanies.map(c => getCountry(c.headquarters)));
       [...paisUnico].sort().forEach(pais => {
         const option = document.createElement('option');
         option.value = pais;
@@ -345,10 +345,12 @@ function applyFilters() {
 
   filteredCompanies = allCompanies.filter(c => {
     const matchesSector = !sector || c.sector === sector;
-    const matchesCountry = !country || (c.location || c.country || 'N/A') === country;
+    const matchesCountry = !country || getCountry(c.headquarters) === country;
     const matchesSearch = !searchTerm ||
       c.symbol.toLowerCase().includes(searchTerm) ||
-      c.name.toLowerCase().includes(searchTerm);
+      c.name.toLowerCase().includes(searchTerm) ||
+      (c.subIndustry && c.subIndustry.toLowerCase().includes(searchTerm)) ||
+      (c.headquarters && c.headquarters.toLowerCase().includes(searchTerm));
     const matchesDividend = !dividendMin || (parseFloat(c.dividendYield) || 0) >= dividendMin;
     
     return matchesSector && matchesCountry && matchesSearch && matchesDividend;
@@ -404,9 +406,9 @@ function renderTable() {
       <td><strong>${company.symbol}</strong></td>
       <td>${company.name || 'N/A'}</td>
       <td>${company.sectorName || company.sector || 'N/A'}</td>
-      <td>${company.marketCap ? company.marketCap : 'N/A'}</td>
-      <td>${company.subindustry || company.industry || 'N/A'}</td>
-      <td>${company.location || company.country || 'N/A'}</td>
+      <td>${formatMarketCap(company.marketCap)}</td>
+      <td>${company.subIndustry || company.industry || 'N/A'}</td>
+      <td>${company.headquarters || 'N/A'}</td>
       <td>${company.dividendYield ? parseFloat(company.dividendYield).toFixed(2) + '%' : 'N/A'}</td>
       <td>
         <button class="btn-watchlist" data-symbol="${company.symbol}" title="Adicionar à watchlist">
@@ -522,8 +524,8 @@ async function loadWatchlistData() {
       <td><strong>${c.symbol}</strong></td>
       <td>${c.name}</td>
       <td>${c.sectorName || 'N/A'}</td>
-      <td>${c.dividendYield || 'N/A'}</td>
-      <td>${c.marketCap || 'N/A'}</td>
+      <td>${c.dividendYield ? parseFloat(c.dividendYield).toFixed(2) + '%' : 'N/A'}</td>
+      <td>${formatMarketCap(c.marketCap)}</td>
     </tr>`;
   });
   html += '</tbody></table>';
@@ -769,7 +771,7 @@ function renderStockOfDay(viewEl, data) {
         <div class="stock-metrics">
           <div class="metric">
             <span class="metric-label">Market Cap</span>
-            <span class="metric-value">$${(primary.marketCap / 1e9).toFixed(1)}B</span>
+            <span class="metric-value">${formatMarketCap(primary.marketCap)}</span>
           </div>
           <div class="metric">
             <span class="metric-label">Div. Yield</span>
@@ -894,9 +896,9 @@ function exportCSV() {
     c.symbol,
     c.name,
     c.sectorName,
-    c.marketCap,
-    c.subindustry || c.industry || 'N/A',
-    c.location || c.country || 'N/A',
+    formatMarketCap(c.marketCap),
+    c.subIndustry || c.industry || 'N/A',
+    c.headquarters || 'N/A',
     c.dividendYield || 'N/A'
   ]);
 
