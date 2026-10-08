@@ -51,12 +51,13 @@ As workflows ficam em `.github/workflows/` (raiz do repositório):
 ## API (Railway)
 
 ```
-GET /api/health        → status
+GET /api/health        → status + versão
 GET /api/setores       → lista dos 11 setores
 GET /api/setor/:setor  → empresas do setor
 ```
 
-Rota raiz `/` documenta os endpoints.
+Rota raiz `/` documenta os endpoints. A versão é lida de `backend/VERSION`
+e exposta em `/` e em `/api/health`.
 
 ## Desenvolvimento Local
 

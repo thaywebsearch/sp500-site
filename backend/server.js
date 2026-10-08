@@ -11,6 +11,16 @@ const PORT = process.env.PORT || 5001;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Versão da API, lida do arquivo VERSION (fallback se ausente)
+function lerVersao() {
+  try {
+    return fs.readFileSync(path.join(__dirname, 'VERSION'), 'utf-8').trim();
+  } catch {
+    return 'desconhecida';
+  }
+}
+const VERSION = lerVersao();
+
 // Data de referência da "Curiosidade do Dia": neste dia a lista começa
 // pela 1ª empresa em ordem alfabética e avança 1 posição por dia.
 const DATA_INICIO_CURIOSIDADE = new Date('2026-10-08T00:00:00');
@@ -407,6 +417,7 @@ app.get('/api/resumo-dia', (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: '✅ Backend rodando!',
+    versao: VERSION,
     timestamp: new Date().toISOString(),
     uptime: process.uptime()
   });
@@ -419,7 +430,7 @@ app.get('/api/health', (req, res) => {
 app.get('/', (req, res) => {
   res.json({ 
     mensagem: 'API SP500 Dashboard',
-    versao: '1.0.0',
+    versao: VERSION,
     endpoints: [
       {
         metodo: 'GET',
