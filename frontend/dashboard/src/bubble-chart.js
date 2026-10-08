@@ -1,236 +1,363 @@
-export async function loadBubbleChart() {
-  const container = document.getElementById('bubble-chart-view');
-  if (!container) return;
+// ========== BUBBLE CHART MODULE ==========
 
-  container.style.display = 'flex';
-  container.style.flexDirection = 'column';
-  container.style.height = '100%';
-  container.style.width = '100%';
-  container.style.padding = '40px';
-  container.style.boxSizing = 'border-box';
-  container.style.background = 'var(--bg-primary)';
-  container.style.overflowY = 'auto';
+// Cores para os setores (paleta harmônica)
+const SECTOR_COLORS = {
+  'Energy': '#FF6B6B',
+  'Materials': '#C92A2A',
+  'Industrials': '#FFA94D',
+  'Consumer Discretionary': '#FFD43B',
+  'Consumer Staples': '#A9E34B',
+  'Health Care': '#51CF66',
+  'Financials': '#40C057',
+  'Information Technology': '#339AF0',
+  'Communication Services': '#748FFC',
+  'Utilities': '#9775FA',
+  'Real Estate': '#DA77F2'
+};
 
-  container.innerHTML = '<div style="text-align:center;color:var(--text-secondary)">Carregando bubble chart...</div>';
+function getSectorColor(sector) {
+  return SECTOR_COLORS[sector] || '#808080';
+}
 
-  try {
-    // Usar variáveis globais de config.js
-    const res = await fetch(`${window.API_BASE_URL}/api/setores`);
-    const data = await res.json();
-    const setores = data.setores || [];
+function parseSectorValue(value) {
+  if (!value) return 0;
 
-    let allCompanies = [];
+  if (typeof value === 'number') return value;
 
-    // Carregar todas as empresas
-    for (const sectorId of setores) {
-      const r = await fetch(`${window.API_BASE_URL}/api/setor/${sectorId}`);
-      const d = await r.json();
-      const s = window.SECTORS.find(x => x.id === sectorId);
-      const companies = d.dados?.companies || [];
+  const str = String(value).toUpperCase().trim();
 
-      companies.forEach(c => {
-        allCompanies.push({
-          ...c,
-          sectorName: s?.name || sectorId,
-          sectorId
-        });
-      });
-    }
+  // Remover símbolos de moeda
+  const cleanStr = str.replace(/[$€¥₹]/g, '').trim();
 
-    // Top 30 por Market Cap
-    const top30 = allCompanies
-      .sort((a, b) => (b.marketCap || 0) - (a.marketCap || 0))
-      .slice(0, 30);
+  // Processar trilhões
+  if (cleanStr.includes('T')) {
+    return parseFloat(cleanStr.replace('T', '')) * 1000000000000;
+  }
 
-    let html = `
-      <div>
-        <h2 style="
-          margin: 0 0 8px 0;
-          font-size: 24px;
-          color: var(--text-primary);
-          font-weight: 600;
-        ">🫧 Bubble Chart - Top 30 Empresas</h2>
-        <p style="
-          margin: 0 0 40px 0;
-          font-size: 13px;
-          color: var(--text-secondary);
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        ">Tamanho da bolha = Market Cap | Cor = Setor | Posição Y = Dividend Yield</p>
-      </div>
+  // Processar bilhões
+  if (cleanStr.includes('B')) {
+    return parseFloat(cleanStr.replace('B', '')) * 1000000000;
+  }
 
-      <div style="
-        width: 100%;
-        height: 600px;
-        background: rgba(26, 26, 46, 0.5);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        margin-bottom: 40px;
-      ">
-        <svg style="width: 100%; height: 100%;">
-    `;
+  // Processar milhões
+  if (cleanStr.includes('M')) {
+    return parseFloat(cleanStr.replace('M', '')) * 1000000;
+  }
 
-    // Cores por setor
-    const sectorColors = {
-      'communication-services': '#00d4ff',
-      'consumer-discretionary': '#00e676',
-      'consumer-staples': '#ffab00',
-      'energy': '#ff5252',
-      'financials': '#ba68c8',
-      'health-care': '#29b6f6',
-      'industrials': '#66bb6a',
-      'information-technology': '#ffa726',
-      'materials': '#ab47bc',
-      'real-estate': '#ec407a',
-      'utilities': '#26a69a'
+  return parseFloat(cleanStr) || 0;
+}
+
+function parsePercentage(value) {
+  if (!value) return 0;
+  if (typeof value === 'number') return value;
+
+  const str = String(value).trim();
+  return parseFloat(str.replace('%', '')) || 0;
+}
+
+export function renderBubbleChart(companies, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) {
+    console.error(`❌ Contentor ${containerId} não encontrado!`);
+    return;
+  }
+
+  console.log(`📊 Renderizando Bubble Chart com ${companies.length} empresas...`);
+
+  // Limpar container
+  container.innerHTML = '';
+
+  // Filtrar dados válidos
+  const validData = companies.filter(c => {
+    const marketCap = parseSectorValue(c.marketCap);
+    const dividendYield = parsePercentage(c.dividendYield);
+    return marketCap > 0 && c.sectorName;
+  }).map((c, idx) => ({
+    symbol: c.symbol,
+    name: c.name,
+    sector: c.sectorName,
+    marketCap: parseSectorValue(c.marketCap),
+    dividendYield: parsePercentage(c.dividendYield),
+    index: idx
+  }));
+
+  console.log(`✅ ${validData.length} empresas com dados válidos`);
+
+  if (validData.length === 0) {
+    container.innerHTML = '<p>Sem dados disponíveis para o gráfico de bolhas.</p>';
+    return;
+  }
+
+  // Dimensões
+  const margin = { top: 40, right: 40, bottom: 60, left: 60 };
+  const width = Math.max(window.innerWidth - 100, 800) - margin.left - margin.right;
+  const height = 600 - margin.top - margin.bottom;
+
+  // Escalas
+  const minYield = Math.min(...validData.map(d => d.dividendYield));
+  const maxYield = Math.max(...validData.map(d => d.dividendYield));
+  const minMarketCap = Math.min(...validData.map(d => d.marketCap));
+  const maxMarketCap = Math.max(...validData.map(d => d.marketCap));
+
+  const yScale = (value) => {
+    return height - ((value - minYield) / (maxYield - minYield || 1)) * height;
+  };
+
+  const sizeScale = (value) => {
+    const normalized = (value - minMarketCap) / (maxMarketCap - minMarketCap || 1);
+    return 5 + normalized * 50; // Raio: 5 a 55
+  };
+
+  // Distribuir X aleatoriamente (com seed para repetibilidade)
+  const seededRandom = (() => {
+    let seed = 42;
+    return () => {
+      seed = (seed * 9301 + 49297) % 233280;
+      return seed / 233280;
     };
+  })();
 
-    const maxMarketCap = Math.max(...top30.map(c => c.marketCap || 0));
-    const maxDividend = Math.max(...top30.map(c => c.dividendYield || 0), 5);
+  const xPositions = validData.map(() => seededRandom() * width);
 
-    top30.forEach((company, idx) => {
-      const x = ((company.marketCap || 0) / maxMarketCap) * 800 + 50;
-      const y = 550 - ((company.dividendYield || 0) / maxDividend) * 500;
-      const radius = Math.sqrt((company.marketCap || 0) / 1e8) + 10;
-      const color = sectorColors[company.sectorId] || '#00d4ff';
+  // Criar SVG
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('width', width + margin.left + margin.right);
+  svg.setAttribute('height', height + margin.top + margin.bottom);
+  svg.style.cssText = 'display: block; margin: 20px auto; background: #fff;';
 
-      html += `
-        <circle
-          cx="${x}"
-          cy="${y}"
-          r="${radius}"
-          fill="${color}"
-          opacity="0.6"
-          stroke="var(--border)"
-          stroke-width="1"
-          style="cursor: pointer; transition: all 0.3s ease;"
-          onmouseover="this.setAttribute('opacity', '0.9'); this.setAttribute('stroke-width', '2');"
-          onmouseout="this.setAttribute('opacity', '0.6'); this.setAttribute('stroke-width', '1');"
-          title="${company.symbol} - ${company.name}
-Market Cap: $${(company.marketCap / 1e9).toFixed(2)}B
-Dividend: ${(company.dividendYield || 0).toFixed(2)}%
-Setor: ${company.sectorName}"
-        />
-        <text
-          x="${x}"
-          y="${y + 4}"
-          text-anchor="middle"
-          font-size="11"
-          fill="var(--text-primary)"
-          font-weight="700"
-          pointer-events="none"
-        >${company.symbol}</text>
-      `;
+  // Grupo principal
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  g.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+
+  // Grid Y (Dividend Yield)
+  for (let i = 0; i <= 10; i++) {
+    const y = (i / 10) * height;
+    const yieldValue = minYield + (i / 10) * (maxYield - minYield);
+
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', 0);
+    line.setAttribute('y1', y);
+    line.setAttribute('x2', width);
+    line.setAttribute('y2', y);
+    line.setAttribute('stroke', '#e0e0e0');
+    line.setAttribute('stroke-width', '1');
+    line.setAttribute('stroke-dasharray', '4');
+    g.appendChild(line);
+
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', -10);
+    text.setAttribute('y', y + 5);
+    text.setAttribute('text-anchor', 'end');
+    text.setAttribute('font-size', '12');
+    text.setAttribute('fill', '#666');
+    text.textContent = yieldValue.toFixed(1) + '%';
+    g.appendChild(text);
+  }
+
+  // Eixo Y (Dividend Yield)
+  const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  yAxis.setAttribute('x1', 0);
+  yAxis.setAttribute('y1', 0);
+  yAxis.setAttribute('x2', 0);
+  yAxis.setAttribute('y2', height);
+  yAxis.setAttribute('stroke', '#333');
+  yAxis.setAttribute('stroke-width', '2');
+  g.appendChild(yAxis);
+
+  // Label Y
+  const yLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  yLabel.setAttribute('transform', `rotate(-90)`);
+  yLabel.setAttribute('y', -margin.left + 20);
+  yLabel.setAttribute('x', -height / 2);
+  yLabel.setAttribute('text-anchor', 'middle');
+  yLabel.setAttribute('font-size', '14');
+  yLabel.setAttribute('font-weight', 'bold');
+  yLabel.setAttribute('fill', '#333');
+  yLabel.textContent = '💵 Dividend Yield (%)';
+  g.appendChild(yLabel);
+
+  // Eixo X (posições aleatórias)
+  const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  xAxis.setAttribute('x1', 0);
+  xAxis.setAttribute('y1', height);
+  xAxis.setAttribute('x2', width);
+  xAxis.setAttribute('y2', height);
+  xAxis.setAttribute('stroke', '#333');
+  xAxis.setAttribute('stroke-width', '2');
+  g.appendChild(xAxis);
+
+  // Label X
+  const xLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  xLabel.setAttribute('x', width / 2);
+  xLabel.setAttribute('y', height + 45);
+  xLabel.setAttribute('text-anchor', 'middle');
+  xLabel.setAttribute('font-size', '14');
+  xLabel.setAttribute('font-weight', 'bold');
+  xLabel.setAttribute('fill', '#333');
+  xLabel.textContent = '📊 Distribuição Aleatória (cada bolha = empresa)';
+  g.appendChild(xLabel);
+
+  // Renderizar bolhas
+  validData.forEach((d, idx) => {
+    const x = xPositions[idx];
+    const y = yScale(d.dividendYield);
+    const radius = sizeScale(d.marketCap);
+    const color = getSectorColor(d.sector);
+
+    // Círculo
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', x);
+    circle.setAttribute('cy', y);
+    circle.setAttribute('r', radius);
+    circle.setAttribute('fill', color);
+    circle.setAttribute('opacity', '0.7');
+    circle.setAttribute('stroke', '#fff');
+    circle.setAttribute('stroke-width', '2');
+    circle.style.cursor = 'pointer';
+    circle.style.transition = 'all 0.3s ease';
+
+    // Hover
+    circle.addEventListener('mouseover', (e) => {
+      circle.setAttribute('opacity', '1');
+      circle.setAttribute('stroke-width', '3');
+      showTooltip(e, d, radius);
     });
 
-    html += `
-          <!-- Eixo X (Market Cap) -->
-          <line x1="50" y1="550" x2="850" y2="550" stroke="var(--border)" stroke-width="1"/>
-          <text x="450" y="580" text-anchor="middle" font-size="12" fill="var(--text-secondary)">Market Cap →</text>
-
-          <!-- Eixo Y (Dividend) -->
-          <line x1="50" y1="50" x2="50" y2="550" stroke="var(--border)" stroke-width="1"/>
-          <text x="20" y="300" text-anchor="middle" font-size="12" fill="var(--text-secondary)" transform="rotate(-90 20 300)">Dividend Yield →</text>
-        </svg>
-      </div>
-
-      <div style="
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 12px;
-        margin-bottom: 40px;
-      ">
-    `;
-
-    // Legenda de cores por setor
-    window.SECTORS.forEach(sector => {
-      const color = sectorColors[sector.id] || '#00d4ff';
-      const count = top30.filter(c => c.sectorId === sector.id).length;
-      
-      if (count > 0) {
-        html += `
-          <div style="
-            padding: 12px;
-            background: rgba(26, 26, 46, 0.5);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-          ">
-            <div style="
-              width: 16px;
-              height: 16px;
-              background: ${color};
-              border-radius: 50%;
-              flex-shrink: 0;
-            "></div>
-            <div>
-              <div style="font-size: 12px; color: var(--text-primary); font-weight: 600;">
-                ${sector.name}
-              </div>
-              <div style="font-size: 10px; color: var(--text-secondary);">
-                ${count} empresa${count > 1 ? 's' : ''}
-              </div>
-            </div>
-          </div>
-        `;
-      }
+    circle.addEventListener('mouseout', () => {
+      circle.setAttribute('opacity', '0.7');
+      circle.setAttribute('stroke-width', '2');
+      hideTooltip();
     });
 
-    html += `
-      </div>
+    g.appendChild(circle);
 
-      <div style="
-        padding: 20px;
-        background: rgba(26, 26, 46, 0.5);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-      ">
-        <h3 style="
-          margin: 0 0 12px 0;
-          font-size: 13px;
-          color: var(--text-primary);
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        ">💡 Como Ler o Bubble Chart:</h3>
-        <ul style="
-          margin: 0;
-          padding-left: 20px;
-          font-size: 12px;
-          color: var(--text-secondary);
-          line-height: 1.8;
-        ">
-          <li><strong>Tamanho da Bolha:</strong> Market Cap (maior = mais valioso)</li>
-          <li><strong>Posição Horizontal:</strong> Market Cap (à direita = maior)</li>
-          <li><strong>Posição Vertical:</strong> Dividend Yield (acima = maior dividendo)</li>
-          <li><strong>Cor:</strong> Representa o setor da empresa</li>
-        </ul>
-      </div>
-    `;
+    // Símbolo (texto pequeno)
+    if (radius > 15) {
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', x);
+      text.setAttribute('y', y + 5);
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('font-size', Math.max(10, radius / 2));
+      text.setAttribute('font-weight', 'bold');
+      text.setAttribute('fill', '#fff');
+      text.setAttribute('pointer-events', 'none');
+      text.textContent = d.symbol.substring(0, 3);
+      g.appendChild(text);
+    }
+  });
 
-    container.innerHTML = html;
+  svg.appendChild(g);
+  container.appendChild(svg);
 
-  } catch (error) {
-    console.error('Erro ao carregar bubble chart:', error);
-    container.innerHTML = `
-      <div style="
-        text-align: center;
-        color: var(--accent-red);
-        padding: 40px;
-      ">
-        ❌ Erro ao carregar bubble chart
-        <div style="
-          font-size: 12px;
-          color: var(--text-secondary);
-          margin-top: 10px;
-        ">${error.message}</div>
-      </div>
-    `;
+  // Legenda
+  addLegend(container, validData);
+
+  console.log('✅ Bubble Chart renderizado com sucesso!');
+}
+
+function addLegend(container, data) {
+  const legendContainer = document.createElement('div');
+  legendContainer.style.cssText = `
+    margin: 30px auto;
+    max-width: 800px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  `;
+
+  // Título
+  const title = document.createElement('h3');
+  title.textContent = '🫧 Como ler o gráfico';
+  title.style.cssText = 'margin: 0 0 12px 0; color: #333;';
+  legendContainer.appendChild(title);
+
+  // Explicação
+  const info = document.createElement('div');
+  info.style.cssText = 'margin-bottom: 16px; font-size: 13px; color: #666; line-height: 1.8;';
+  info.innerHTML = `
+    <div><strong>Tamanho da bolha:</strong> Market Cap da empresa (quanto maior, mais valiosa)</div>
+    <div><strong>Eixo Y (vertical):</strong> Dividend Yield (mais acima = maior dividendo)</div>
+    <div><strong>Eixo X (horizontal):</strong> posição aleatória, apenas para facilitar a visualização</div>
+    <div><strong>Cor:</strong> setor da empresa</div>
+  `;
+  legendContainer.appendChild(info);
+
+  // Cores por setor
+  const sectorTitle = document.createElement('div');
+  sectorTitle.textContent = 'Setores';
+  sectorTitle.style.cssText = 'font-size: 13px; font-weight: 600; color: #333; margin-bottom: 8px;';
+  legendContainer.appendChild(sectorTitle);
+
+  const sectorsSet = new Set(data.map(d => d.sector));
+  const colorLegend = document.createElement('div');
+  colorLegend.style.cssText = 'display: flex; flex-wrap: wrap; gap: 12px;';
+
+  sectorsSet.forEach(sector => {
+    const item = document.createElement('div');
+    item.style.cssText = 'display: flex; align-items: center; gap: 6px; font-size: 12px; color: #333;';
+
+    const swatch = document.createElement('span');
+    swatch.style.cssText = `display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: ${getSectorColor(sector)};`;
+
+    const label = document.createElement('span');
+    label.textContent = sector;
+
+    item.appendChild(swatch);
+    item.appendChild(label);
+    colorLegend.appendChild(item);
+  });
+
+  legendContainer.appendChild(colorLegend);
+  container.appendChild(legendContainer);
+}
+
+let currentTooltip = null;
+
+function showTooltip(event, d) {
+  hideTooltip();
+
+  const tooltip = document.createElement('div');
+  tooltip.style.cssText = `
+    position: fixed;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    line-height: 1.5;
+    pointer-events: none;
+    z-index: 10000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+  `;
+
+  const marketCapStr = d.marketCap >= 1e12
+    ? (d.marketCap / 1e12).toFixed(2) + 'T'
+    : d.marketCap >= 1e9
+      ? (d.marketCap / 1e9).toFixed(2) + 'B'
+      : (d.marketCap / 1e6).toFixed(2) + 'M';
+
+  tooltip.innerHTML = `
+    <strong>${d.symbol}</strong> — ${d.name}<br>
+    <strong>Setor:</strong> ${d.sector}<br>
+    <strong>Market Cap:</strong> $${marketCapStr}<br>
+    <strong>Dividend Yield:</strong> ${d.dividendYield.toFixed(2)}%
+  `;
+
+  const rect = event.target.getBoundingClientRect();
+  tooltip.style.left = (rect.left + 10) + 'px';
+  tooltip.style.top = (rect.top - 10) + 'px';
+
+  document.body.appendChild(tooltip);
+  currentTooltip = tooltip;
+}
+
+function hideTooltip() {
+  if (currentTooltip) {
+    currentTooltip.remove();
+    currentTooltip = null;
   }
 }
+
+console.log('✅ bubble-chart.js carregado!');

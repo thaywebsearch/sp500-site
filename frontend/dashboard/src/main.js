@@ -5,7 +5,7 @@ import { escapeHtml, formatMarketCap, getCountry } from './utils.js';
 import { openCompanyDetails } from './company-details.js';
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
-import { loadBubbleChart } from './bubble-chart.js';
+import { renderBubbleChart } from './bubble-chart.js';
 
 // ========== CONSTANTES ==========
 const WATCHLIST_STORAGE_KEY = 'sp500-watchlist';
@@ -251,6 +251,22 @@ function updateUI() {
     default:
       if (dashboardView) dashboardView.style.display = 'block';
   }
+}
+
+// ========== BUBBLE CHART ==========
+function loadBubbleChart() {
+  const bubbleChartView = document.getElementById('bubble-chart-view');
+  if (!bubbleChartView) {
+    console.error('❌ bubble-chart-view não encontrado!');
+    return;
+  }
+
+  console.log('📊 Carregando Bubble Chart...');
+
+  bubbleChartView.innerHTML = '<div style="text-align: center; padding: 40px;"><p>Carregando gráfico de bolhas...</p></div>';
+
+  // Renderizar o bubble chart com os dados carregados
+  renderBubbleChart(allCompanies, 'bubble-chart-view');
 }
 
 function updateTabButtons() {
