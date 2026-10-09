@@ -163,6 +163,15 @@ describe('filterCompanies', () => {
     expect(dataset).toEqual(original);
     expect(result).not.toBe(dataset);
   });
+
+  it('procura em subIndustry e headquarters tolerando campos ausentes', () => {
+    const rows = [
+      { symbol: 'AAA', name: 'A', subIndustry: 'Software', headquarters: null },
+      { symbol: 'BBB', name: 'B' },
+    ];
+    expect(filterCompanies(rows, { search: 'software' }).map((c) => c.symbol)).toEqual(['AAA']);
+    expect(filterCompanies(rows, { search: 'zzz' })).toEqual([]);
+  });
 });
 
 describe('sortCompanies', () => {
@@ -186,6 +195,39 @@ describe('sortCompanies', () => {
       'AAPL',
       'SHOP',
     ]);
+  });
+
+  it('ordena por marketCap asc', () => {
+    expect(sortCompanies(dataset, 'marketCap-asc').map((c) => c.symbol)).toEqual([
+      'SHOP',
+      'XOM',
+      'MSFT',
+      'AAPL',
+    ]);
+  });
+
+  it('ordena por nome asc', () => {
+    expect(sortCompanies(dataset, 'name-asc').map((c) => c.symbol)).toEqual([
+      'AAPL',
+      'XOM',
+      'MSFT',
+      'SHOP',
+    ]);
+  });
+
+  it('mantém a ordem original para chave desconhecida', () => {
+    expect(sortCompanies(dataset, 'inexistente').map((c) => c.symbol)).toEqual([
+      'AAPL',
+      'MSFT',
+      'XOM',
+      'SHOP',
+    ]);
+  });
+
+  it('trata marketCap ausente como 0', () => {
+    const rows = [{ symbol: 'A' }, { symbol: 'B', marketCap: 10 }];
+    expect(sortCompanies(rows, 'marketCap-asc').map((c) => c.symbol)).toEqual(['A', 'B']);
+    expect(sortCompanies(rows, 'marketCap-desc').map((c) => c.symbol)).toEqual(['B', 'A']);
   });
 
   it('não muta o array original', () => {

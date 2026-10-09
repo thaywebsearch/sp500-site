@@ -19,6 +19,11 @@ describe('getPriceHistory', () => {
     globalThis.fetch = vi.fn(() => Promise.reject(new Error('rede')));
     expect(await getPriceHistory('AAPL')).toEqual([]);
   });
+
+  it('devolve [] quando registros está ausente', async () => {
+    globalThis.fetch = vi.fn(async () => ({ ok: true, json: async () => ({}) }));
+    expect(await getPriceHistory('AAPL')).toEqual([]);
+  });
 });
 
 describe('getDailySummary', () => {
@@ -29,6 +34,11 @@ describe('getDailySummary', () => {
 
   it('devolve {} em erro', async () => {
     globalThis.fetch = vi.fn(async () => ({ ok: false, status: 500 }));
+    expect(await getDailySummary()).toEqual({});
+  });
+
+  it('devolve {} quando dados está ausente', async () => {
+    globalThis.fetch = vi.fn(async () => ({ ok: true, json: async () => ({}) }));
     expect(await getDailySummary()).toEqual({});
   });
 });
