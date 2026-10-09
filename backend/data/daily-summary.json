@@ -1,206 +1,206 @@
 {
-  "generatedAt": "2026-10-08 01:13:02 UTC",
-  "referenceDate": "2026-10-06",
+  "generatedAt": "2026-10-09 01:20:37 UTC",
+  "referenceDate": "2026-10-07",
   "topGainers": [
     {
-      "symbol": "CIEN",
-      "name": "Ciena",
+      "symbol": "NRG",
+      "name": "NRG Energy",
+      "sector": "Utilities",
+      "lastPrice": 108.61,
+      "changePct": 4.84
+    },
+    {
+      "symbol": "MRNA",
+      "name": "Moderna",
+      "sector": "Health Care",
+      "lastPrice": 196.48,
+      "changePct": 4.81
+    },
+    {
+      "symbol": "MU",
+      "name": "Micron Technology",
       "sector": "Information Technology",
-      "lastPrice": 443.65,
-      "changePct": 13.85
+      "lastPrice": 1088.0,
+      "changePct": 4.06
     },
     {
       "symbol": "CTVA",
       "name": "Corteva",
       "sector": "Materials",
-      "lastPrice": 13.91,
-      "changePct": 12.27
-    },
-    {
-      "symbol": "CEG",
-      "name": "Constellation Energy",
-      "sector": "Utilities",
-      "lastPrice": 300.4,
-      "changePct": 12.25
+      "lastPrice": 14.45,
+      "changePct": 3.88
     },
     {
       "symbol": "VST",
       "name": "Vistra Corp.",
       "sector": "Utilities",
-      "lastPrice": 160.5,
-      "changePct": 10.77
+      "lastPrice": 166.72,
+      "changePct": 3.88
     },
     {
-      "symbol": "NRG",
-      "name": "NRG Energy",
-      "sector": "Utilities",
-      "lastPrice": 103.6,
-      "changePct": 7.02
-    },
-    {
-      "symbol": "FIX",
-      "name": "Comfort Systems USA",
-      "sector": "Industrials",
-      "lastPrice": 1817.96,
-      "changePct": 6.12
-    },
-    {
-      "symbol": "GLW",
-      "name": "Corning Inc.",
+      "symbol": "P",
+      "name": "Everpure",
       "sector": "Information Technology",
-      "lastPrice": 168.97,
-      "changePct": 6.02
+      "lastPrice": 152.66,
+      "changePct": 3.71
     },
     {
-      "symbol": "EME",
-      "name": "Emcor",
-      "sector": "Industrials",
-      "lastPrice": 824.52,
-      "changePct": 5.82
+      "symbol": "SMCI",
+      "name": "Supermicro",
+      "sector": "Information Technology",
+      "lastPrice": 44.94,
+      "changePct": 3.41
+    },
+    {
+      "symbol": "NTAP",
+      "name": "NetApp",
+      "sector": "Information Technology",
+      "lastPrice": 235.77,
+      "changePct": 3.2
     }
   ],
   "topLosers": [
     {
-      "symbol": "AIG",
-      "name": "American International Group",
-      "sector": "Financials",
-      "lastPrice": 75.11,
-      "changePct": -0.01
-    },
-    {
-      "symbol": "BNY",
-      "name": "BNY Mellon",
-      "sector": "Financials",
-      "lastPrice": 143.73,
-      "changePct": -0.01
-    },
-    {
-      "symbol": "C",
-      "name": "Citigroup",
-      "sector": "Financials",
-      "lastPrice": 128.52,
-      "changePct": -0.02
-    },
-    {
       "symbol": "TRV",
       "name": "Travelers Companies (The)",
       "sector": "Financials",
-      "lastPrice": 360.64,
-      "changePct": -0.02
+      "lastPrice": 360.61,
+      "changePct": -0.01
     },
     {
-      "symbol": "VLO",
-      "name": "Valero Energy",
-      "sector": "Energy",
-      "lastPrice": 419.22,
+      "symbol": "WEC",
+      "name": "WEC Energy Group",
+      "sector": "Utilities",
+      "lastPrice": 103.18,
+      "changePct": -0.01
+    },
+    {
+      "symbol": "ES",
+      "name": "Eversource Energy",
+      "sector": "Utilities",
+      "lastPrice": 65.24,
       "changePct": -0.03
     },
     {
-      "symbol": "FDX",
-      "name": "FedEx",
+      "symbol": "EFX",
+      "name": "Equifax",
       "sector": "Industrials",
-      "lastPrice": 289.03,
-      "changePct": -0.03
-    },
-    {
-      "symbol": "UPS",
-      "name": "United Parcel Service",
-      "sector": "Industrials",
-      "lastPrice": 93.11,
-      "changePct": -0.03
-    },
-    {
-      "symbol": "EXPE",
-      "name": "Expedia Group",
-      "sector": "Consumer Discretionary",
-      "lastPrice": 260.07,
+      "lastPrice": 142.43,
       "changePct": -0.04
+    },
+    {
+      "symbol": "CL",
+      "name": "Colgate-Palmolive",
+      "sector": "Consumer Staples",
+      "lastPrice": 87.21,
+      "changePct": -0.05
+    },
+    {
+      "symbol": "EOG",
+      "name": "EOG Resources",
+      "sector": "Energy",
+      "lastPrice": 144.21,
+      "changePct": -0.05
+    },
+    {
+      "symbol": "EVRG",
+      "name": "Evergy",
+      "sector": "Utilities",
+      "lastPrice": 80.3,
+      "changePct": -0.06
+    },
+    {
+      "symbol": "NOW",
+      "name": "ServiceNow",
+      "sector": "Information Technology",
+      "lastPrice": 137.87,
+      "changePct": -0.07
     }
   ],
   "sectorPerformance": [
     {
       "name": "Utilities",
-      "avgChangePct": 2.56,
-      "gainers": 31,
-      "losers": 0,
+      "avgChangePct": 0.17,
+      "gainers": 8,
+      "losers": 20,
       "total": 31
     },
     {
+      "name": "Health Care",
+      "avgChangePct": 0.07,
+      "gainers": 30,
+      "losers": 30,
+      "total": 60
+    },
+    {
+      "name": "Communication Services",
+      "avgChangePct": -0.21,
+      "gainers": 13,
+      "losers": 8,
+      "total": 23
+    },
+    {
+      "name": "Consumer Staples",
+      "avgChangePct": -0.3,
+      "gainers": 10,
+      "losers": 23,
+      "total": 33
+    },
+    {
+      "name": "Financials",
+      "avgChangePct": -0.66,
+      "gainers": 21,
+      "losers": 55,
+      "total": 76
+    },
+    {
+      "name": "Information Technology",
+      "avgChangePct": -0.73,
+      "gainers": 27,
+      "losers": 47,
+      "total": 74
+    },
+    {
+      "name": "Energy",
+      "avgChangePct": -0.75,
+      "gainers": 4,
+      "losers": 17,
+      "total": 21
+    },
+    {
       "name": "Consumer Discretionary",
-      "avgChangePct": 1.15,
-      "gainers": 35,
-      "losers": 12,
+      "avgChangePct": -1.04,
+      "gainers": 8,
+      "losers": 39,
       "total": 47
     },
     {
       "name": "Real Estate",
-      "avgChangePct": 0.97,
-      "gainers": 29,
-      "losers": 1,
+      "avgChangePct": -1.23,
+      "gainers": 3,
+      "losers": 27,
       "total": 30
     },
     {
-      "name": "Information Technology",
-      "avgChangePct": 0.93,
-      "gainers": 53,
-      "losers": 21,
-      "total": 74
-    },
-    {
-      "name": "Consumer Staples",
-      "avgChangePct": 0.82,
-      "gainers": 26,
-      "losers": 7,
-      "total": 33
-    },
-    {
       "name": "Materials",
-      "avgChangePct": 0.78,
-      "gainers": 15,
-      "losers": 9,
+      "avgChangePct": -1.36,
+      "gainers": 3,
+      "losers": 22,
       "total": 25
     },
     {
-      "name": "Energy",
-      "avgChangePct": 0.67,
-      "gainers": 15,
-      "losers": 6,
-      "total": 21
-    },
-    {
       "name": "Industrials",
-      "avgChangePct": 0.67,
-      "gainers": 56,
-      "losers": 27,
-      "total": 83
-    },
-    {
-      "name": "Financials",
-      "avgChangePct": 0.16,
-      "gainers": 48,
-      "losers": 28,
-      "total": 76
-    },
-    {
-      "name": "Communication Services",
-      "avgChangePct": -0.23,
+      "avgChangePct": -1.7,
       "gainers": 10,
-      "losers": 12,
-      "total": 22
-    },
-    {
-      "name": "Health Care",
-      "avgChangePct": -0.71,
-      "gainers": 21,
-      "losers": 39,
-      "total": 60
+      "losers": 72,
+      "total": 83
     }
   ],
-  "marketMood": "bullish",
+  "marketMood": "bearish",
   "stats": {
-    "gainers": 339,
-    "losers": 162,
-    "neutral": 1,
-    "total": 502
+    "gainers": 137,
+    "losers": 360,
+    "neutral": 6,
+    "total": 503
   }
 }
