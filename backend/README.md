@@ -1,70 +1,37 @@
-# S&P 500 Dataset (CSV)
+# Backend — API S&P 500
 
-# 📈 S&P 500 Dashboard
+API REST (**Express**) que serve os dados do S&P 500 por setor e o resumo do dia.
+Os dados ficam em `data/*.json` e são regerados a partir da fonte canônica
+(`frontend/<setor>/<setor>.json`) no boot, via `scripts/sync-data.mjs`
+(hook `prestart`).
 
-Explore todas as 500 empresas do índice S&P 500, com dados de mercado, sector e capitalização.
+## Endpoints
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://sp500-dashboard.streamlit.app)
+```
+GET /api/health             → status + versão
+GET /api/setores            → lista dos 11 setores
+GET /api/setor/:setor       → empresas do setor
+GET /api/curiosidades       → curiosidade do dia
+GET /api/historico/:symbol  → histórico de preços (últimos 2 anos)
+GET /api/resumo-dia         → maiores altas e baixas do dia
+```
 
-![Release](https://img.shields.io/badge/release-v1.0-0A66C2?style=flat-square)
+A rota raiz `/` documenta os endpoints. A versão é lida do ficheiro `VERSION`
+e exposta em `/` e em `/api/health`.
 
-## 🔍 S&P 500 Search Tool (Streamlit)
+## Executar localmente
 
-Consulta e pesquisa empresas do S&P 500 diretamente no browser.
+```bash
+cd backend
+npm install
+npm start              # http://localhost:5001
+```
 
-👉 **Aceder à aplicação:**  
-https://sp500-search.streamlit.app/
+## Estrutura
 
-[![Streamlit App](https://img.shields.io/badge/Streamlit-App-red?logo=streamlit)](https://teu-nome.streamlit.app)
-
-## 📌 Pré‑visualização do dataset
-A tabela abaixo mostra apenas as primeiras linhas do dataset para facilitar a leitura.  
-O ficheiro completo está disponível no link mais abaixo.
-
-<table>
-  <tr>
-    <th>Symbol</th>
-    <th>Name</th>
-    <th>Sector</th>
-    <th>Sub‑Industry</th>
-  </tr>
-
-  <tr style="background:#E8F4FF;">
-    <td>AAPL</td><td>Apple Inc.</td><td>Information Technology</td><td>Technology Hardware, Storage & Peripherals</td>
-  </tr>
-
-  <tr style="background:#FFF7E6;">
-    <td>MSFT</td><td>Microsoft Corp.</td><td>Information Technology</td><td>Systems Software</td>
-  </tr>
-
-  <tr style="background:#F3E8FF;">
-    <td>AMZN</td><td>Amazon.com Inc.</td><td>Consumer Discretionary</td><td>Internet & Direct Marketing Retail</td>
-  </tr>
-
-  <tr style="background:#EFFFF3;">
-    <td>GOOGL</td><td>Alphabet Inc. Class A</td><td>Communication Services</td><td>Interactive Media & Services</td>
-  </tr>
-
-  <tr style="background:#FFF0F0;">
-    <td>BRK.B</td><td>Berkshire Hathaway Inc.</td><td>Financials</td><td>Multi‑Sector Holdings</td>
-  </tr>
-</table>
-
----
-
-## 📂 Ficheiro completo
-🔗 **Download / Visualizar CSV completo:**  
-https://github.com/thaywebsearch/sp500-list/blob/main/sp500-dataset%20-%20Folha1.csv
-
----
-
-## 📘 Data Dictionary
-| Coluna | Descrição |
-|--------|-----------|
-| **symbol** | Ticker da empresa |
-| **name** | Nome da empresa |
-| **sector** | Setor GICS |
-| **sub_industry** | Sub‑indústria GICS |
-| **headquarters** | Localização da sede |
-| **date_added** | Data de entrada no índice |
-| **cik** | Central Index Key (SEC) |
+- `server.js` — servidor Express
+- `data/` — JSONs por setor (cópia derivada, sincronizada no boot)
+- `scripts/sync-data.mjs` — sincroniza a fonte canônica para `data/`
+- `VERSION` — versão da API
+- `sp500-table/` — dataset CSV do S&P 500 (atualizado semanalmente via GitHub Actions)
+- `dowjones/`, `dividend-aristocrats/`, `dividend-kings/` — datasets auxiliares

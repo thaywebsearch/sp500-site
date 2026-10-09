@@ -8,8 +8,8 @@ Plataforma para explorar o índice **S&P 500** por setor GICS: datasets atualiza
 |------------|-------|-----------|
 | `frontend/` | Python + Vite | Datasets por setor (`<setor>/<setor>.json` — fonte única) + dashboard interativo |
 | `frontend/dashboard/` | Vite + Vanilla JS | Dashboard com tabela, treemap, heatmap e bubble chart |
-| `backend/` | Express + Streamlit | API REST (`/api/setores`, `/api/setor/:setor`) + apps de busca em tempo real |
-| `backend/dowjones/` | Streamlit | Dashboard do Dow Jones (30 empresas) |
+| `backend/` | Express | API REST (`/api/setores`, `/api/setor/:setor`, `/api/resumo-dia`) + datasets |
+| `backend/dowjones/` | — | Dataset do Dow Jones (30 empresas) |
 | `backend/dividend-aristocrats/` | — | 69 Aristocratas de Dividendos |
 | `backend/dividend-kings/` | — | Kings de Dividendos (50+ anos) |
 
@@ -17,7 +17,6 @@ Plataforma para explorar o índice **S&P 500** por setor GICS: datasets atualiza
 
 - **Dashboard estático** → GitHub Pages (`/docs`) e Netlify
 - **API Express** → Railway (`https://sp500-site-production.up.railway.app`)
-- **Apps Streamlit** → Streamlit Cloud
 
 ## Arquitetura de Dados (fonte única)
 
