@@ -65,7 +65,24 @@ const DATA_INICIO_CURIOSIDADE = new Date('2026-10-08T00:00:00');
 const MS_POR_DIA = 24 * 60 * 60 * 1000;
 
 // ============ MIDDLEWARE ==========
-app.use(cors());
+// CORS: origens permitidas via env CORS_ORIGINS (separadas por vírgula). Sem
+// CORS_ORIGINS definido mantém-se o comportamento permissivo, útil em dev local.
+// Pedidos sem Origin (curl, health checks, same-origin) são sempre aceites.
+const CORS_ORIGINS = (process.env.CORS_ORIGINS || '')
+  .split(',')
+  .map((origem) => origem.trim())
+  .filter(Boolean);
+
+const corsOptions = CORS_ORIGINS.length
+  ? {
+      origin(origin, callback) {
+        callback(null, !origin || CORS_ORIGINS.includes(origin));
+      },
+      methods: ['GET', 'HEAD'],
+    }
+  : {};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // ============ FUNÇÕES UTILITÁRIAS ==========

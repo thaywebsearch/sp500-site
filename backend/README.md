@@ -23,6 +23,14 @@ Os JSONs de `data/` são lidos uma única vez e mantidos em cache de memória; a
 cache é invalidada automaticamente por `mtime`/tamanho, pelo que alterações aos
 ficheiros (ou ao diretório) são refletidas sem reiniciar o servidor.
 
+## CORS
+
+Por defeito o CORS é permissivo (qualquer origem), adequado a desenvolvimento
+local. Para restringir, defina `CORS_ORIGINS` com as origens permitidas
+separadas por vírgula (ex.: `CORS_ORIGINS=https://exemplo.github.io`). Nesse
+modo apenas `GET`/`HEAD` são anunciados no preflight e pedidos sem `Origin`
+(curl, health checks) continuam aceites.
+
 ## Executar localmente
 
 ```bash
