@@ -15,11 +15,11 @@ const SECTOR_COLORS = {
   'Real Estate': '#DA77F2',
 };
 
-function getSectorColor(sector) {
+export function getSectorColor(sector) {
   return SECTOR_COLORS[sector] || '#808080';
 }
 
-function parseSectorValue(value) {
+export function parseSectorValue(value) {
   if (!value) return 0;
 
   if (typeof value === 'number') return value;
@@ -47,7 +47,7 @@ function parseSectorValue(value) {
   return parseFloat(cleanStr) || 0;
 }
 
-function parsePercentage(value) {
+export function parsePercentage(value) {
   if (!value) return 0;
   if (typeof value === 'number') return value;
 

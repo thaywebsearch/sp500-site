@@ -25,18 +25,18 @@ export async function loadDailySummary(containerId = 'daily-summary') {
   }
 }
 
-function formatPct(value) {
+export function formatPct(value) {
   const num = Number(value) || 0;
   return `${num > 0 ? '+' : ''}${num.toFixed(2)}%`;
 }
 
-function formatReferenceDate(value) {
+export function formatReferenceDate(value) {
   if (!value) return '';
   const date = new Date(`${value}T00:00:00`);
   return Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('pt-BR');
 }
 
-function renderRankList(title, items) {
+export function renderRankList(title, items) {
   const rows = (items || [])
     .map(
       (item) => `
@@ -55,7 +55,7 @@ function renderRankList(title, items) {
     </div>`;
 }
 
-function renderDailySummary(container, data) {
+export function renderDailySummary(container, data) {
   const stats = data.stats || {};
   const mood = MARKET_MOOD[data.marketMood] || { label: '—', cls: '' };
   const referenceDate = formatReferenceDate(data.referenceDate);

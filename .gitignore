@@ -30,6 +30,9 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Testes / cobertura
+coverage/
+
 # Sistema
 .DS_Store
 Thumbs.db

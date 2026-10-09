@@ -720,7 +720,7 @@ function generateStockOfDay() {
   });
 }
 
-function dateToSeed(date) {
+export function dateToSeed(date) {
   let hash = 0;
   for (let i = 0; i < date.length; i++) {
     hash = (hash << 5) - hash + date.charCodeAt(i);
@@ -729,7 +729,7 @@ function dateToSeed(date) {
   return Math.abs(hash);
 }
 
-function technicalScore(company) {
+export function technicalScore(company) {
   let score = 50;
   const dividendYield = company.dividendYield || 0;
   if (dividendYield > 4) score += 15;
@@ -769,7 +769,7 @@ function technicalScore(company) {
   return Math.min(90, score);
 }
 
-function sectorScore(sector) {
+export function sectorScore(sector) {
   const scores = {
     'information-technology': 15,
     'health-care': 8,
@@ -786,7 +786,7 @@ function sectorScore(sector) {
   return scores[sector] || 0;
 }
 
-function volatilityScore(company) {
+export function volatilityScore(company) {
   const marketCap = company.marketCap || 0;
   if (marketCap > 2e11) return 8;
   if (marketCap > 5e10) return 12;
@@ -794,7 +794,7 @@ function volatilityScore(company) {
   return 18;
 }
 
-function buildRationale(company, technical, sector, watchlist, dividend) {
+export function buildRationale(company, technical, sector, watchlist, dividend) {
   const reasons = [];
   if (technical > 60) reasons.push('Fundamentos técnicos sólidos');
   if (sector > 10) reasons.push(`Setor em momento favorável (${company.sectorName})`);

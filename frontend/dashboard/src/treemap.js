@@ -1,3 +1,12 @@
+export function getColor(value, max) {
+  const pct = (value / max) * 100;
+  if (pct >= 80) return '#ff5252';
+  if (pct >= 60) return '#ff9800';
+  if (pct >= 40) return '#ffeb3b';
+  if (pct >= 20) return '#8bc34a';
+  return '#4caf50';
+}
+
 export async function loadTreemap() {
   const container = document.getElementById('treemap-view');
   if (!container) return;
@@ -41,15 +50,6 @@ export async function loadTreemap() {
         };
       })
     );
-
-    function getColor(value, max) {
-      const pct = (value / max) * 100;
-      if (pct >= 80) return '#ff5252';
-      if (pct >= 60) return '#ff9800';
-      if (pct >= 40) return '#ffeb3b';
-      if (pct >= 20) return '#8bc34a';
-      return '#4caf50';
-    }
 
     const maxCap = Math.max(...stats.map((s) => parseFloat(s.cap)));
 

@@ -2,7 +2,7 @@
 import { formatMarketCap, escapeHtml } from './utils.js';
 import { openPriceChart } from './price-chart.js';
 
-function detailItem(label, valor) {
+export function detailItem(label, valor) {
   return `
     <div class="company-detail">
       <span class="company-detail-label">${label}</span>

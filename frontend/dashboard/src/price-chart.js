@@ -6,18 +6,18 @@ const W = 760;
 const H = 320;
 const P = { top: 28, right: 28, bottom: 44, left: 68 };
 
-function fmtDataBr(iso) {
+export function fmtDataBr(iso) {
   if (!iso) return '';
   const [y, m, d] = iso.split('-');
   return `${d}/${m}/${y.slice(2)}`;
 }
 
-function fmtPreco(valor) {
+export function fmtPreco(valor) {
   if (!Number.isFinite(valor)) return '—';
   return valor >= 100 ? `$${valor.toFixed(0)}` : `$${valor.toFixed(2)}`;
 }
 
-function buildChart(data) {
+export function buildChart(data) {
   const prices = data.map((r) => r.close);
   const min = Math.min(...prices);
   const max = Math.max(...prices);
