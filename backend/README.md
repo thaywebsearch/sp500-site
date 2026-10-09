@@ -19,6 +19,10 @@ GET /api/resumo-dia         → maiores altas e baixas do dia
 A rota raiz `/` documenta os endpoints. A versão é lida do ficheiro `VERSION`
 e exposta em `/` e em `/api/health`.
 
+Os JSONs de `data/` são lidos uma única vez e mantidos em cache de memória; a
+cache é invalidada automaticamente por `mtime`/tamanho, pelo que alterações aos
+ficheiros (ou ao diretório) são refletidas sem reiniciar o servidor.
+
 ## Executar localmente
 
 ```bash

@@ -21,6 +21,44 @@ function lerVersao() {
 }
 const VERSION = lerVersao();
 
+// ============ CACHE EM MEMÓRIA ============
+// Evita ler e parsear os JSONs do disco a cada request. A invalidação é feita
+// por data de modificação (mtimeMs) e tamanho do ficheiro: enquanto o ficheiro
+// não muda, devolve o valor já parseado; quando muda, relê e reparseia.
+const ficheirosCache = new Map(); // caminho -> { chave, value }
+const diretoriosCache = new Map(); // caminho -> { mtimeMs, files }
+let empresasCache = { assinatura: null, value: [] };
+
+/** Assinatura de invalidação de um ficheiro: mtime + tamanho. */
+function assinaturaFicheiro(caminho) {
+  const info = fs.statSync(caminho);
+  return `${info.mtimeMs}:${info.size}`;
+}
+
+/** Lê e parseia um JSON, reutilizando o resultado em cache se o ficheiro não mudou. */
+function lerJsonComCache(caminho) {
+  const chave = assinaturaFicheiro(caminho);
+  const emCache = ficheirosCache.get(caminho);
+  if (emCache && emCache.chave === chave) {
+    return emCache.value;
+  }
+  const value = JSON.parse(fs.readFileSync(caminho, 'utf-8'));
+  ficheirosCache.set(caminho, { chave, value });
+  return value;
+}
+
+/** Lista o conteúdo de um diretório, reutilizando o resultado se o mtime não mudou. */
+function lerDiretorioComCache(caminho) {
+  const { mtimeMs } = fs.statSync(caminho);
+  const emCache = diretoriosCache.get(caminho);
+  if (emCache && emCache.mtimeMs === mtimeMs) {
+    return emCache.files;
+  }
+  const files = fs.readdirSync(caminho);
+  diretoriosCache.set(caminho, { mtimeMs, files });
+  return files;
+}
+
 // Data de referência da "Curiosidade do Dia": neste dia a lista começa
 // pela 1ª empresa em ordem alfabética e avança 1 posição por dia.
 const DATA_INICIO_CURIOSIDADE = new Date('2026-10-08T00:00:00');
@@ -39,13 +77,12 @@ app.use(express.json());
  */
 function carregarDados(setor) {
   const caminhoJson = path.join(__dirname, 'data', `${setor}.json`);
-  
+
   if (!fs.existsSync(caminhoJson)) {
     throw new Error(`Dados não encontrados para: ${setor}`);
   }
-  
-  const conteudo = fs.readFileSync(caminhoJson, 'utf-8');
-  return JSON.parse(conteudo);
+
+  return lerJsonComCache(caminhoJson);
 }
 
 /**
@@ -76,7 +113,7 @@ function encontrarCuriosidades() {
  */
 function listarArquivosDeSetores() {
   const dataDir = path.join(__dirname, 'data');
-  return fs.readdirSync(dataDir)
+  return lerDiretorioComCache(dataDir)
     .filter(file => 
       file.endsWith('.json')
       && file !== 'package.json'
@@ -93,14 +130,23 @@ function listarArquivosDeSetores() {
  */
 function carregarTodasEmpresas() {
   const setores = listarArquivosDeSetores();
+  const caminhos = setores.map((setorId) => path.join(__dirname, 'data', `${setorId}.json`));
+
+  // Assinatura do conjunto: reutiliza a lista agregada enquanto nenhum setor mudar.
+  const assinatura = caminhos
+    .map((caminho) => (fs.existsSync(caminho) ? assinaturaFicheiro(caminho) : 'ausente'))
+    .join('|');
+
+  if (empresasCache.assinatura === assinatura) {
+    return empresasCache.value;
+  }
+
   const empresas = [];
 
-  for (const setorId of setores) {
-    const caminhoJson = path.join(__dirname, 'data', `${setorId}.json`);
-    if (!fs.existsSync(caminhoJson)) continue;
+  setores.forEach((setorId, i) => {
+    if (!fs.existsSync(caminhos[i])) return;
 
-    const dados = JSON.parse(fs.readFileSync(caminhoJson, 'utf-8'));
-    const lista = dados.companies || [];
+    const lista = lerJsonComCache(caminhos[i]).companies || [];
 
     lista.forEach(empresa => {
       empresas.push({
@@ -109,8 +155,9 @@ function carregarTodasEmpresas() {
         setor: empresa.sector || setorId
       });
     });
-  }
+  });
 
+  empresasCache = { assinatura, value: empresas };
   return empresas;
 }
 
@@ -195,18 +242,8 @@ function montarCuriosidade(empresa, posicao, total) {
  */
 app.get('/api/setores', (req, res) => {
   try {
-    const dataDir = path.join(__dirname, 'data');
-    const setores = fs.readdirSync(dataDir)
-      .filter(file => 
-        file.endsWith('.json')
-        && file !== 'package.json'
-        && file !== 'package-lock.json'
-        && file !== 'daily-summary.json'
-        && file !== 'curiosidades.json'
-      )
-      .map(file => file.replace('.json', ''))
-      .sort();
-    
+    const setores = listarArquivosDeSetores().sort();
+
     res.json({ 
       sucesso: true,
       total: setores.length,
@@ -254,7 +291,7 @@ app.get('/api/curiosidades', (req, res) => {
     const empresas = carregarTodasEmpresas();
 
     if (empresas.length > 0) {
-      const ordenadas = empresas.sort((a, b) => a.name.localeCompare(b.name, 'en'));
+      const ordenadas = [...empresas].sort((a, b) => a.name.localeCompare(b.name, 'en'));
 
       // Índice determinístico: avança 1 posição por dia a partir da data de referência
       const agora = new Date();
@@ -290,9 +327,8 @@ app.get('/api/curiosidades', (req, res) => {
       });
     }
     
-    const conteudo = fs.readFileSync(caminhoJson, 'utf-8');
-    const dados = JSON.parse(conteudo);
-    
+    const dados = lerJsonComCache(caminhoJson);
+
     res.json({
       sucesso: true,
       dados
@@ -394,8 +430,7 @@ app.get('/api/resumo-dia', (req, res) => {
       });
     }
 
-    const conteudo = fs.readFileSync(caminhoJson, 'utf-8');
-    const dados = JSON.parse(conteudo);
+    const dados = lerJsonComCache(caminhoJson);
 
     res.json({ 
       sucesso: true, 
