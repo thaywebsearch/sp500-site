@@ -101,7 +101,7 @@ let sectorFilter,
   headerCheckbox;
 
 // ========== INICIALIZAÇÃO ==========
-document.addEventListener('DOMContentLoaded', () => {
+function initDashboard() {
   console.log('🚀 Inicializando dashboard...');
 
   // Elementos do dashboard
@@ -190,7 +190,9 @@ document.addEventListener('DOMContentLoaded', () => {
   updateWatchlistCountBadge();
   startPriceAlertPolling();
   console.log('✅ Dashboard inicializado com sucesso!');
-});
+}
+
+document.addEventListener('DOMContentLoaded', initDashboard);
 
 // ========== NAVEGAÇÃO DE ABAS ==========
 function setActiveTab(tab) {
@@ -1078,3 +1080,41 @@ function downloadFile(content, filename, type) {
 }
 
 console.log('✅ main.js (10 colunas) carregado com sucesso!');
+
+// ========== EXPORTAÇÕES PARA TESTES ==========
+// dateToSeed, technicalScore, sectorScore, volatilityScore e buildRationale
+// já são exportados acima.
+export {
+  loadWatchlist,
+  saveWatchlist,
+  loadPriceAlerts,
+  savePriceAlerts,
+  debounce,
+  initDashboard,
+  setActiveTab,
+  updateUI,
+  loadBubbleChart,
+  updateTabButtons,
+  loadDashboardData,
+  updateFreshnessBadge,
+  applyFilters,
+  renderTable,
+  renderPagination,
+  updateStats,
+  toggleWatchlist,
+  updateWatchlistCountBadge,
+  loadWatchlistData,
+  loadStockOfDay,
+  generateStockOfDay,
+  getMarketContext,
+  getCachedStockOfDay,
+  cacheStockOfDay,
+  renderStockOfDay,
+  setPriceAlertPrompt,
+  setPriceAlert,
+  deletePriceAlert,
+  startPriceAlertPolling,
+  exportCSV,
+  exportJSON,
+  downloadFile,
+};
