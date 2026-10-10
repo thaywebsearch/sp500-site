@@ -7,6 +7,7 @@ import { openCompanyDetails } from './company-details.js';
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
 import { renderBubbleChart } from './bubble-chart.js';
+import { renderDividends } from './dividends.js';
 import { loadDailySummary } from './daily-summary.js';
 
 // ========== CONSTANTES ==========
@@ -203,6 +204,7 @@ function updateUI() {
   const treemapView = document.getElementById('treemap-view');
   const heatmapView = document.getElementById('heatmap-view');
   const bubbleChartView = document.getElementById('bubble-chart-view');
+  const dividendsView = document.getElementById('dividends-view');
   const watchlistView = document.getElementById('watchlist-view');
   const stockOfDayView = document.getElementById('stock-of-day-view');
   const dailyCuriosityView = document.getElementById('daily-curiosity-view');
@@ -213,6 +215,7 @@ function updateUI() {
     treemapView,
     heatmapView,
     bubbleChartView,
+    dividendsView,
     watchlistView,
     stockOfDayView,
     dailyCuriosityView,
@@ -256,6 +259,12 @@ function updateUI() {
         loadBubbleChart();
       }
       break;
+    case 'dividends':
+      if (dividendsView) {
+        dividendsView.style.display = 'block';
+        loadDividends();
+      }
+      break;
     case 'watchlist':
       if (watchlistView) {
         watchlistView.style.display = 'block';
@@ -280,6 +289,23 @@ function loadBubbleChart() {
 
   // Renderizar o bubble chart com os dados carregados
   renderBubbleChart(allCompanies, 'bubble-chart-view');
+}
+
+// ========== DIVIDENDOS ==========
+function loadDividends() {
+  const dividendsView = document.getElementById('dividends-view');
+  if (!dividendsView) {
+    console.error('❌ dividends-view não encontrado!');
+    return;
+  }
+
+  if (allCompanies.length === 0) {
+    dividendsView.innerHTML =
+      '<div style="text-align: center; padding: 40px;"><p>Carregando dados de dividendos...</p></div>';
+    return;
+  }
+
+  renderDividends(allCompanies, 'dividends-view');
 }
 
 function updateTabButtons() {
@@ -358,6 +384,7 @@ async function loadDashboardData() {
     applyFilters();
     updateStats();
     if (currentTab === 'bubble') loadBubbleChart();
+    if (currentTab === 'dividends') loadDividends();
   } catch (erro) {
     console.error('❌ Erro ao carregar dados:', erro);
     if (statsEl) statsEl.textContent = 'Erro ao carregar dados. Tente novamente.';
@@ -1116,6 +1143,7 @@ export {
   setActiveTab,
   updateUI,
   loadBubbleChart,
+  loadDividends,
   updateTabButtons,
   loadDashboardData,
   updateFreshnessBadge,

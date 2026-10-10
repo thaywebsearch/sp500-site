@@ -1771,3 +1771,128 @@ button:disabled {
   color: #00bcd4;
   font-weight: 600;
 }
+
+/* ========== DIVIDENDOS VIEW ========== */
+.dividends-view {
+  width: 100%;
+  padding: 30px 20px;
+  background: var(--bg-primary);
+  min-height: 100%;
+  color: var(--text-primary);
+}
+
+.dividend-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.dividend-panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.dividend-columns .dividend-panel {
+  margin-bottom: 0;
+}
+
+.dividend-panel h3 {
+  color: var(--accent-cyan);
+  font-size: 1.1em;
+  margin: 0 0 16px 0;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+
+.dividend-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88em;
+}
+
+.dividend-table th {
+  text-align: left;
+  color: var(--text-secondary);
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.dividend-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.dividend-yield {
+  color: var(--accent-green);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  text-align: right;
+}
+
+.dividend-row {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.dividend-row:hover {
+  background: rgba(0, 212, 255, 0.06);
+}
+
+.dividend-buckets {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dividend-bucket {
+  display: grid;
+  grid-template-columns: 56px 1fr 32px;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85em;
+}
+
+.dividend-bucket-label {
+  color: var(--text-secondary);
+}
+
+.dividend-bucket-track {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.dividend-bucket-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+  transition: width 0.3s ease;
+}
+
+.dividend-bucket-count {
+  text-align: right;
+  color: var(--accent-cyan);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.dividend-note {
+  margin-top: 14px;
+  font-size: 0.78em;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .dividends-view {
+    padding: 20px 12px;
+  }
+}

@@ -2,6 +2,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import './config.js';
 import { renderBubbleChart } from './bubble-chart.js';
+import { renderDividends } from './dividends.js';
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
 import { loadDailySummary } from './daily-summary.js';
@@ -347,6 +348,45 @@ describe('loadCuriosidades', () => {
     window.compartilharCuriosidade();
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect(alertSpy).toHaveBeenCalledWith(expect.stringContaining('Erro ao copiar'));
+  });
+});
+
+describe('renderDividends', () => {
+  it('renderiza resumo, top yield e setores', () => {
+    document.body.innerHTML = '<div id="dividends-view"></div>';
+    renderDividends(
+      [
+        { symbol: 'XOM', name: 'Exxon', sectorName: 'Energy', dividendYield: 3.2 },
+        { symbol: 'KO', name: 'Coca-Cola', sectorName: 'Consumer Staples', dividendYield: 2.8 },
+        { symbol: 'AAPL', name: 'Apple', sectorName: 'Information Technology', dividendYield: 0 },
+      ],
+      'dividends-view'
+    );
+    const el = document.getElementById('dividends-view');
+    expect(el.innerHTML).toContain('Dividendos');
+    expect(el.innerHTML).toContain('XOM');
+    expect(el.innerHTML).toContain('Yield médio');
+    expect(el.innerHTML).toContain('Yield médio por setor');
+    expect(el.innerHTML).toContain('2 de 3');
+  });
+
+  it('abre os detalhes ao clicar num título', () => {
+    document.body.innerHTML = '<div id="dividends-view"></div>';
+    window.openCompanyDetails = vi.fn();
+    renderDividends(
+      [{ symbol: 'XOM', name: 'Exxon', sectorName: 'Energy', dividendYield: 3.2 }],
+      'dividends-view'
+    );
+    document.querySelector('.dividend-row').click();
+    expect(window.openCompanyDetails).toHaveBeenCalledWith({ symbol: 'XOM', name: 'Exxon' });
+  });
+
+  it('mostra aviso sem dados e ignora contentor ausente', () => {
+    document.body.innerHTML = '<div id="dividends-view"></div>';
+    renderDividends([], 'dividends-view');
+    expect(document.getElementById('dividends-view').innerHTML).toContain('Sem dados');
+
+    expect(() => renderDividends([], 'ausente')).not.toThrow();
   });
 });
 

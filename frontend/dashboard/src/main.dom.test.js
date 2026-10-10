@@ -11,6 +11,7 @@ const FULL_HTML = `
   <button class="nav-tab" data-tab="treemap"></button>
   <button class="nav-tab" data-tab="heatmap"></button>
   <button class="nav-tab" data-tab="bubble"></button>
+  <button class="nav-tab" data-tab="dividends"></button>
   <button class="nav-tab" data-tab="watchlist"></button>
   <button class="nav-tab" data-tab="stock-of-day"></button>
   <button class="nav-tab" data-tab="daily-curiosity"></button>
@@ -18,6 +19,7 @@ const FULL_HTML = `
   <div id="treemap-view"></div>
   <div id="heatmap-view"></div>
   <div id="bubble-chart-view"></div>
+  <div id="dividends-view"></div>
   <div id="watchlist-view"></div>
   <div id="stock-of-day-view"></div>
   <div id="daily-curiosity-view"></div>
@@ -300,6 +302,10 @@ describe('navegação e watchlist', () => {
 
     main.setActiveTab('bubble');
     expect(document.querySelector('#bubble-chart-view svg')).toBeTruthy();
+
+    main.setActiveTab('dividends');
+    expect(document.getElementById('dividends-view').style.display).toBe('block');
+    expect(document.getElementById('dividends-view').innerHTML).toContain('Dividendos');
 
     main.setActiveTab('daily-curiosity');
     await settle();

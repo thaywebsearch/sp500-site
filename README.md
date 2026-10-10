@@ -49,6 +49,7 @@ SPA em JavaScript puro (Vite) que consome a API. Abas:
 | 🗺️ Mapa de Setores | Visão por setor com market cap relativo, nº de empresas e dividendos |
 | 🔥 Heatmap | Top 4 empresas por market cap em cada setor |
 | 🫧 Bubble Chart | Dispersão market cap × dividend yield, com tooltip e legenda |
+| 💰 Dividendos | Painel de renda: resumo, top por yield, distribuição por faixa e yield médio por setor |
 | ⭐ Minha Watchlist | Lista pessoal persistida em `localStorage` |
 
 Funcionalidades transversais:
