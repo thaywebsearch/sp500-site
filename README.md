@@ -37,6 +37,27 @@ ela está disponível, evitando divergência entre as cópias.
 
 O README de cada setor e o consolidado `TOP50-MARKET-CAP.md` são gerados pelo mesmo pipeline, preservando o enriquecimento (marketCap, dividendYield) existente.
 
+## Dashboard (`frontend/dashboard`)
+
+SPA em JavaScript puro (Vite) que consome a API. Abas:
+
+| Aba | Descrição |
+|-----|-----------|
+| 📋 Dashboard | Tabela paginada com filtros (setor, país, busca, dividend yield mín.), ordenação, seleção múltipla, estatísticas e exportação CSV/JSON |
+| 🌟 Curiosidade do Dia | Curiosidade rotativa diária de uma empresa do índice |
+| 🎯 Ação do Dia | Análise heurística de uma ação (com alternativas e disclaimer), determinística por data |
+| 🗺️ Mapa de Setores | Visão por setor com market cap relativo, nº de empresas e dividendos |
+| 🔥 Heatmap | Top 4 empresas por market cap em cada setor |
+| 🫧 Bubble Chart | Dispersão market cap × dividend yield, com tooltip e legenda |
+| ⭐ Minha Watchlist | Lista pessoal persistida em `localStorage` |
+
+Funcionalidades transversais:
+
+- **Frescura dos dados**: badge no cabeçalho com a data mais recente (`generatedAt`) e classificação por idade.
+- **Alertas de preço**: por ação (acima/abaixo de um alvo), verificados a cada 60 s via `/api/historico/:symbol` e notificados quando atingidos; persistidos em `localStorage`.
+- **Cache por aba**: Curiosidade, Mapa de Setores e Heatmap só carregam uma vez por sessão.
+- **Exportação**: tabela filtrada em CSV ou JSON.
+
 ## Pipelines (GitHub Actions)
 
 As workflows ficam em `.github/workflows/` (raiz do repositório):
@@ -50,13 +71,17 @@ As workflows ficam em `.github/workflows/` (raiz do repositório):
 ## API (Railway)
 
 ```
-GET /api/health        → status + versão
-GET /api/setores       → lista dos 11 setores
-GET /api/setor/:setor  → empresas do setor
+GET /api/health             → status + versão
+GET /api/setores            → lista dos 11 setores
+GET /api/setor/:setor       → empresas do setor
+GET /api/curiosidades       → curiosidade do dia
+GET /api/historico/:symbol  → histórico de preços (últimos 2 anos)
+GET /api/resumo-dia         → maiores altas e baixas do dia
 ```
 
-Rota raiz `/` documenta os endpoints. A versão é lida de `backend/VERSION`
-e exposta em `/` e em `/api/health`.
+A rota raiz `/` documenta os endpoints. A versão é lida de `backend/VERSION`
+e exposta em `/` e em `/api/health`. Para restringir o CORS, defina
+`CORS_ORIGINS` (ver `backend/README.md`).
 
 ## Desenvolvimento Local
 
@@ -77,7 +102,7 @@ python scripts/update_sectors.py
 
 ## Testes e Qualidade
 
-- **Dashboard**: ESLint + Prettier + Vitest (`npm run lint`, `npm run format`, `npm test`)
+- **Dashboard**: ESLint + Prettier + Vitest — `npm run lint`, `npm run format`, `npm test`, `npm run test:coverage`, `npm run build`
 - **Python**: sem framework de testes configurado ainda
 
 ## Licença
