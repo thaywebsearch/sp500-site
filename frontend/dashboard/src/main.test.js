@@ -66,15 +66,14 @@ describe('volatilityScore', () => {
 describe('buildRationale', () => {
   it('junta os motivos aplicáveis', () => {
     const company = { sectorName: 'Tech', dividendYield: 3, marketCap: 2e11 };
-    const out = buildRationale(company, 61, 11, 15, 1);
+    const out = buildRationale(company, 61, 11, 1);
     expect(out).toContain('Fundamentos técnicos sólidos');
     expect(out).toContain('Setor em momento favorável (Tech)');
-    expect(out).toContain('watchlist');
     expect(out).toContain('3.0%');
     expect(out).toContain('Grande capitalização');
   });
 
   it('devolve motivo por defeito quando nada se aplica', () => {
-    expect(buildRationale({}, 0, 0, 0, 0)).toBe('Equilíbrio entre risco e retorno');
+    expect(buildRationale({}, 0, 0, 0)).toBe('Equilíbrio entre risco e retorno');
   });
 });

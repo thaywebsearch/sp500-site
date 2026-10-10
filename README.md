@@ -50,10 +50,10 @@ SPA em JavaScript puro (Vite) que consome a API. Abas:
 | 🔥 Heatmap | Top 4 empresas por market cap em cada setor |
 | 🫧 Bubble Chart | Dispersão market cap × dividend yield, com tooltip e legenda |
 | 💰 Dividendos | Painel de renda: resumo, top por yield, distribuição por faixa e yield médio por setor |
-| ⭐ Minha Watchlist | Lista pessoal persistida em `localStorage` |
 
 Funcionalidades transversais:
 
+- **Menu de navegação**: botão ☰ no cabeçalho abre/fecha as abas; fecha com `Esc` ou clique fora.
 - **Frescura dos dados**: badge no cabeçalho com a data mais recente (`generatedAt`) e classificação por idade.
 - **Alertas de preço**: por ação (acima/abaixo de um alvo), verificados a cada 60 s via `/api/historico/:symbol` e notificados quando atingidos; persistidos em `localStorage`.
 - **Cache por aba**: Curiosidade, Mapa de Setores e Heatmap só carregam uma vez por sessão.

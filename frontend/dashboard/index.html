@@ -14,10 +14,22 @@
       <nav class="app-nav">
         <div class="nav-content">
           <div class="nav-header">
-            <h1 class="app-title">
-              <img src="./src/assets/VenomF.jfif" alt="SP500 Logo" class="app-logo" />
-              SP500 Dashboard
-            </h1>
+            <div class="nav-brand">
+              <button
+                id="menu-toggle"
+                class="menu-toggle"
+                type="button"
+                aria-label="Abrir menu de navegação"
+                aria-expanded="false"
+                aria-controls="nav-menu"
+              >
+                <span class="menu-bars" aria-hidden="true">☰</span>
+              </button>
+              <h1 class="app-title">
+                <img src="./src/assets/VenomF.jfif" alt="SP500 Logo" class="app-logo" />
+                SP500 Dashboard
+              </h1>
+            </div>
             <div class="nav-actions">
               <span
                 id="freshness-badge"
@@ -30,18 +42,17 @@
               </span>
             </div>
           </div>
-          <div class="nav-tabs">
-            <button class="nav-tab active" data-tab="dashboard">📋 Dashboard</button>
-            <button class="nav-tab" data-tab="daily-curiosity">🌟 Curiosidade do Dia</button>
-            <button class="nav-tab" data-tab="stock-of-day">🎯 Ação do Dia</button>
-            <button class="nav-tab" data-tab="treemap">🗺️ Mapa de Setores</button>
-            <button class="nav-tab" data-tab="heatmap">🔥 Heatmap</button>
-            <button class="nav-tab" data-tab="bubble">🫧 Bubble Chart</button>
-            <button class="nav-tab" data-tab="dividends">💰 Dividendos</button>
-            <button class="nav-tab" data-tab="watchlist">
-              ⭐ Minha Watchlist <span class="nav-badge" data-watchlist-count>0</span>
-            </button>
-          </div>
+          <nav id="nav-menu" class="nav-menu" aria-label="Navegação principal">
+            <div class="nav-tabs">
+              <button class="nav-tab active" data-tab="dashboard">📋 Dashboard</button>
+              <button class="nav-tab" data-tab="daily-curiosity">🌟 Curiosidade do Dia</button>
+              <button class="nav-tab" data-tab="stock-of-day">🎯 Ação do Dia</button>
+              <button class="nav-tab" data-tab="treemap">🗺️ Mapa de Setores</button>
+              <button class="nav-tab" data-tab="heatmap">🔥 Heatmap</button>
+              <button class="nav-tab" data-tab="bubble">🫧 Bubble Chart</button>
+              <button class="nav-tab" data-tab="dividends">💰 Dividendos</button>
+            </div>
+          </nav>
         </div>
       </nav>
 
@@ -115,12 +126,11 @@
                   <th>Subindústria</th>
                   <th>Sede</th>
                   <th>Div. Yield</th>
-                  <th style="width: 60px">⭐</th>
                 </tr>
               </thead>
               <tbody id="table-body">
                 <tr>
-                  <td colspan="10" class="table-message">Carregando dados...</td>
+                  <td colspan="9" class="table-message">Carregando dados...</td>
                 </tr>
               </tbody>
             </table>
@@ -147,9 +157,6 @@
 
         <!-- Ação do Dia View -->
         <div id="stock-of-day-view" style="display: none"></div>
-
-        <!-- Watchlist View -->
-        <div id="watchlist-view" style="display: none"></div>
       </main>
     </div>
 

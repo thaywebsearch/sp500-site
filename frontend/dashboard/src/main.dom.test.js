@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const WATCHLIST_KEY = 'sp500-watchlist';
 const ALERTS_KEY = 'sp500-price-alerts';
 const STOCK_KEY = 'sp500-stock-of-day';
 
@@ -12,7 +11,6 @@ const FULL_HTML = `
   <button class="nav-tab" data-tab="heatmap"></button>
   <button class="nav-tab" data-tab="bubble"></button>
   <button class="nav-tab" data-tab="dividends"></button>
-  <button class="nav-tab" data-tab="watchlist"></button>
   <button class="nav-tab" data-tab="stock-of-day"></button>
   <button class="nav-tab" data-tab="daily-curiosity"></button>
   <div id="dashboard-view"></div>
@@ -20,7 +18,6 @@ const FULL_HTML = `
   <div id="heatmap-view"></div>
   <div id="bubble-chart-view"></div>
   <div id="dividends-view"></div>
-  <div id="watchlist-view"></div>
   <div id="stock-of-day-view"></div>
   <div id="daily-curiosity-view"></div>
   <div id="daily-summary"></div>
@@ -40,7 +37,6 @@ const FULL_HTML = `
   <button id="deselect-all"></button>
   <button id="export-csv"></button>
   <button id="export-json"></button>
-  <span data-watchlist-count>0</span>
 `;
 
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
@@ -287,7 +283,7 @@ describe('carregamento e renderização', () => {
   });
 });
 
-describe('navegação e watchlist', () => {
+describe('navegação', () => {
   it('navega entre todas as abas', async () => {
     const main = await boot();
 
@@ -320,22 +316,6 @@ describe('navegação e watchlist', () => {
 
     main.setActiveTab('desconhecida');
     expect(document.getElementById('dashboard-view').style.display).toBe('block');
-  });
-
-  it('adiciona/remove da watchlist e mostra a view', async () => {
-    const main = await boot();
-    const btn = document.querySelector('#table-body .btn-watchlist');
-    const symbol = btn.dataset.symbol;
-
-    btn.click();
-    expect(document.querySelector('[data-watchlist-count]').textContent).toBe('1');
-    main.setActiveTab('watchlist');
-    expect(document.getElementById('watchlist-view').innerHTML).toContain(symbol);
-
-    document.querySelector(`#table-body .btn-watchlist[data-symbol="${symbol}"]`).click();
-    expect(document.querySelector('[data-watchlist-count]').textContent).toBe('0');
-    main.setActiveTab('watchlist');
-    expect(document.getElementById('watchlist-view').innerHTML).toContain('Nenhuma empresa');
   });
 
   it('não refaz fetch ao reabrir abas já carregadas', async () => {
@@ -462,19 +442,11 @@ describe('alertas de preço', () => {
     expect(main.loadPriceAlerts()).toEqual([]);
   });
 
-  it('loadWatchlist lê e tolera erros', async () => {
-    const main = await boot({ storage: { [WATCHLIST_KEY]: JSON.stringify(['AAPL']) } });
-    expect(main.loadWatchlist()).toEqual(['AAPL']);
-    localStorage.setItem(WATCHLIST_KEY, '{invalido');
-    expect(main.loadWatchlist()).toEqual([]);
-  });
-
-  it('saveWatchlist/savePriceAlerts toleram erro de escrita', async () => {
+  it('savePriceAlerts tolera erro de escrita', async () => {
     const main = await boot();
     const spy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new Error('quota');
     });
-    expect(() => main.toggleWatchlist('AAPL')).not.toThrow();
     expect(() => main.setPriceAlert('AAPL', 10, 'above')).not.toThrow();
     spy.mockRestore();
   });
@@ -523,8 +495,6 @@ describe('guardas e utilitários', () => {
     expect(() => main.renderTable()).not.toThrow();
     expect(() => main.renderPagination()).not.toThrow();
     expect(() => main.updateStats()).not.toThrow();
-    expect(() => main.updateWatchlistCountBadge()).not.toThrow();
-    await expect(main.loadWatchlistData()).resolves.toBeUndefined();
     expect(() => main.loadBubbleChart()).not.toThrow();
     await expect(main.loadStockOfDay()).resolves.toBeUndefined();
   });

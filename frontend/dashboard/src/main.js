@@ -11,29 +11,10 @@ import { renderDividends } from './dividends.js';
 import { loadDailySummary } from './daily-summary.js';
 
 // ========== CONSTANTES ==========
-const WATCHLIST_STORAGE_KEY = 'sp500-watchlist';
 const PRICE_ALERTS_STORAGE_KEY = 'sp500-price-alerts';
 const PAGE_SIZE = 50;
 
 // ========== FUNÇÕES AUXILIARES (DEFINIDAS PRIMEIRO) ==========
-
-function loadWatchlist() {
-  try {
-    const stored = localStorage.getItem(WATCHLIST_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
-  } catch (e) {
-    console.error('Erro ao carregar watchlist:', e);
-    return [];
-  }
-}
-
-function saveWatchlist() {
-  try {
-    localStorage.setItem(WATCHLIST_STORAGE_KEY, JSON.stringify([...watchlistSymbols]));
-  } catch (e) {
-    console.error('Erro ao salvar watchlist:', e);
-  }
-}
 
 function loadPriceAlerts() {
   try {
@@ -78,6 +59,36 @@ function debounce(func, wait) {
   };
 }
 
+// ========== MENU DE NAVEGAÇÃO (TRÊS BARRAS) ==========
+function closeNavMenu() {
+  const navMenu = document.getElementById('nav-menu');
+  const menuToggle = document.getElementById('menu-toggle');
+  if (navMenu) navMenu.classList.remove('open');
+  if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+}
+
+function setupNavMenu() {
+  const menuToggle = document.getElementById('menu-toggle');
+  const navMenu = document.getElementById('nav-menu');
+  if (!menuToggle || !navMenu) return;
+
+  menuToggle.addEventListener('click', (event) => {
+    event.stopPropagation();
+    const isOpen = navMenu.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  document.addEventListener('click', (event) => {
+    if (navMenu.classList.contains('open') && !navMenu.contains(event.target)) {
+      closeNavMenu();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeNavMenu();
+  });
+}
+
 // ========== VARIÁVEIS GLOBAIS ==========
 let allCompanies = [];
 let filteredCompanies = [];
@@ -86,7 +97,6 @@ let currentTab = 'dashboard';
 let selectedRows = new Set();
 const loadedTabs = new Set();
 
-const watchlistSymbols = new Set(loadWatchlist() || []);
 const priceAlertsArray = loadPriceAlerts();
 const priceAlerts = new Map(
   priceAlertsArray && priceAlertsArray.length > 0 ? priceAlertsArray : []
@@ -124,8 +134,11 @@ function initDashboard() {
       e.preventDefault();
       const tabName = btn.getAttribute('data-tab');
       setActiveTab(tabName);
+      closeNavMenu();
     });
   });
+
+  setupNavMenu();
 
   // Event listeners do dashboard
   if (sectorFilter) sectorFilter.addEventListener('change', applyFilters);
@@ -179,7 +192,6 @@ function initDashboard() {
   updateTabButtons();
   loadDashboardData();
   loadDailySummary();
-  updateWatchlistCountBadge();
   startPriceAlertPolling();
 }
 
@@ -205,7 +217,6 @@ function updateUI() {
   const heatmapView = document.getElementById('heatmap-view');
   const bubbleChartView = document.getElementById('bubble-chart-view');
   const dividendsView = document.getElementById('dividends-view');
-  const watchlistView = document.getElementById('watchlist-view');
   const stockOfDayView = document.getElementById('stock-of-day-view');
   const dailyCuriosityView = document.getElementById('daily-curiosity-view');
 
@@ -216,7 +227,6 @@ function updateUI() {
     heatmapView,
     bubbleChartView,
     dividendsView,
-    watchlistView,
     stockOfDayView,
     dailyCuriosityView,
   ];
@@ -263,12 +273,6 @@ function updateUI() {
       if (dividendsView) {
         dividendsView.style.display = 'block';
         loadDividends();
-      }
-      break;
-    case 'watchlist':
-      if (watchlistView) {
-        watchlistView.style.display = 'block';
-        loadWatchlistData();
       }
       break;
     default:
@@ -499,11 +503,6 @@ function renderTable() {
       <td>${escapeHtml(company.subIndustry || company.industry || 'N/A')}</td>
       <td>${escapeHtml(company.headquarters || 'N/A')}</td>
       <td>${formatDividendYield(company)}</td>
-      <td>
-        <button class="btn-watchlist" data-symbol="${escapeHtml(company.symbol)}" title="Adicionar à watchlist">
-          ${watchlistSymbols.has(company.symbol) ? '★' : '☆'}
-        </button>
-      </td>
     `;
 
     const checkbox = row.querySelector('.row-checkbox');
@@ -515,13 +514,6 @@ function renderTable() {
       }
       updateStats();
       updateHeaderCheckbox();
-    });
-
-    const watchlistBtn = row.querySelector('.btn-watchlist');
-    watchlistBtn.addEventListener('click', () => {
-      toggleWatchlist(company.symbol);
-      watchlistBtn.textContent = watchlistSymbols.has(company.symbol) ? '★' : '☆';
-      updateWatchlistCountBadge();
     });
 
     tableBody.appendChild(row);
@@ -589,51 +581,6 @@ function updateStats() {
   statsEl.innerHTML = `Total: ${total} | Selecionadas: ${selected} | Yield Médio (pagadoras): ${avgDividend}%`;
 }
 
-// ========== WATCHLIST ==========
-function toggleWatchlist(symbol) {
-  if (watchlistSymbols.has(symbol)) {
-    watchlistSymbols.delete(symbol);
-  } else {
-    watchlistSymbols.add(symbol);
-  }
-  saveWatchlist();
-}
-
-function updateWatchlistCountBadge() {
-  const badge = document.querySelector('[data-watchlist-count]');
-  if (badge) {
-    badge.textContent = watchlistSymbols.size;
-  }
-}
-
-async function loadWatchlistData() {
-  const watchlistView = document.getElementById('watchlist-view');
-  if (!watchlistView) return;
-
-  const companies = allCompanies.filter((c) => watchlistSymbols.has(c.symbol));
-
-  if (companies.length === 0) {
-    watchlistView.innerHTML = '<p>Nenhuma empresa na watchlist.</p>';
-    return;
-  }
-
-  let html =
-    '<table class="watchlist-table"><thead><tr><th>#</th><th>Símbolo</th><th>Nome</th><th>Setor</th><th>Dividend Yield</th><th>Market Cap</th></tr></thead><tbody>';
-  companies.forEach((c, idx) => {
-    html += `<tr>
-      <td>${idx + 1}</td>
-      <td><strong>${escapeHtml(c.symbol)}</strong></td>
-      <td>${escapeHtml(c.name)}</td>
-      <td>${escapeHtml(c.sectorName || 'N/A')}</td>
-      <td>${formatDividendYield(c)}</td>
-      <td>${formatMarketCap(c.marketCap)}</td>
-    </tr>`;
-  });
-  html += '</tbody></table>';
-
-  watchlistView.innerHTML = html;
-}
-
 // ========== STOCK OF DAY (AÇÃO DO DIA) ==========
 async function loadStockOfDay() {
   const stockOfDayView = document.getElementById('stock-of-day-view');
@@ -692,11 +639,10 @@ function generateStockOfDay() {
         .map((d) => {
           const technical = technicalScore(d);
           const sector = sectorScore(d.sector);
-          const watchlist = watchlistSymbols.has(d.symbol) ? 15 : 0;
           const dividend = (d.dividendYield || 0) > 2 ? 10 : 0;
           const liquidity = Math.min(20, Math.log10(d.marketCap / 1e9) * 5);
           const volatility = volatilityScore(d);
-          const score = technical + sector + watchlist + dividend + liquidity + volatility;
+          const score = technical + sector + dividend + liquidity + volatility;
 
           return {
             ...d,
@@ -704,12 +650,11 @@ function generateStockOfDay() {
             breakdown: {
               technical,
               sector,
-              watchlist,
               dividend,
               liquidity: Math.round(liquidity),
               volatility: Math.round(volatility),
             },
-            rationale: buildRationale(d, technical, sector, watchlist, dividend),
+            rationale: buildRationale(d, technical, sector, dividend),
           };
         })
         .sort((a, b) => b.score - a.score);
@@ -815,11 +760,10 @@ export function volatilityScore(company) {
   return 18;
 }
 
-export function buildRationale(company, technical, sector, watchlist, dividend) {
+export function buildRationale(company, technical, sector, dividend) {
   const reasons = [];
   if (technical > 60) reasons.push('Fundamentos técnicos sólidos');
   if (sector > 10) reasons.push(`Setor em momento favorável (${company.sectorName})`);
-  if (watchlist) reasons.push('Está na sua watchlist pessoal');
   if (dividend)
     reasons.push(`Dividend yield atrativo (${(company.dividendYield || 0).toFixed(1)}%)`);
   if (company.marketCap > 1e11) reasons.push('Grande capitalização — liquidez e estabilidade');
@@ -947,9 +891,6 @@ function renderStockOfDay(viewEl, data) {
         </div>
 
         <div class="stock-actions">
-          <button class="action-btn primary" onclick="toggleWatchlist('${primary.symbol}'); loadStockOfDay();">
-            ${watchlistSymbols.has(primary.symbol) ? '★ Remover da Watchlist' : '☆ Adicionar à Watchlist'}
-          </button>
           <button class="action-btn secondary" onclick="openCompanyDetails({symbol:'${primary.symbol}',name:'${escapeHtml(primary.name).replace(/'/g, "\\'")}'})">
             📈 Ver Detalhes
           </button>
@@ -1033,7 +974,6 @@ function deletePriceAlert(symbol) {
 
 // ========== EXPOSIÇÕES GLOBAIS (onclick inline) ==========
 window.loadStockOfDay = loadStockOfDay;
-window.toggleWatchlist = toggleWatchlist;
 window.openCompanyDetails = openCompanyDetails;
 window.setPriceAlertPrompt = setPriceAlertPrompt;
 
@@ -1134,8 +1074,6 @@ function downloadFile(content, filename, type) {
 // dateToSeed, technicalScore, sectorScore, volatilityScore e buildRationale
 // já são exportados acima.
 export {
-  loadWatchlist,
-  saveWatchlist,
   loadPriceAlerts,
   savePriceAlerts,
   debounce,
@@ -1151,9 +1089,6 @@ export {
   renderTable,
   renderPagination,
   updateStats,
-  toggleWatchlist,
-  updateWatchlistCountBadge,
-  loadWatchlistData,
   loadStockOfDay,
   generateStockOfDay,
   getMarketContext,
