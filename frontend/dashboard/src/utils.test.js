@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   formatMarketCap,
+  formatDividendYield,
   escapeHtml,
   debounce,
   getCountry,
@@ -30,6 +31,32 @@ describe('formatMarketCap', () => {
 
   it('formata valores abaixo de 1 milhão', () => {
     expect(formatMarketCap(12345)).toBe('$12,345');
+  });
+});
+
+describe('formatDividendYield', () => {
+  it('mostra N/A quando a empresa não paga dividendos', () => {
+    expect(formatDividendYield({ hasDividend: 'Não', dividendYield: 0 })).toBe('N/A');
+    expect(formatDividendYield({ hasDividend: 'Não' })).toBe('N/A');
+  });
+
+  it('formata o yield de pagadoras com duas casas', () => {
+    expect(formatDividendYield({ hasDividend: 'Sim', dividendYield: 3.2 })).toBe('3.20%');
+    expect(formatDividendYield({ hasDividend: 'Sim', dividendYield: 2.36 })).toBe('2.36%');
+  });
+
+  it('mostra 0.00% para pagadora com yield zero', () => {
+    expect(formatDividendYield({ hasDividend: 'Sim', dividendYield: 0 })).toBe('0.00%');
+  });
+
+  it('recorre ao yield quando hasDividend está ausente', () => {
+    expect(formatDividendYield({ dividendYield: 1.5 })).toBe('1.50%');
+  });
+
+  it('retorna N/A sem empresa ou sem yield válido', () => {
+    expect(formatDividendYield()).toBe('N/A');
+    expect(formatDividendYield({ hasDividend: 'Sim' })).toBe('N/A');
+    expect(formatDividendYield({ hasDividend: 'Sim', dividendYield: 'abc' })).toBe('N/A');
   });
 });
 

@@ -1,7 +1,8 @@
 // ========== IMPORTS ==========
 import { API_BASE_URL, SECTORS } from './config.js';
 import { loadCuriosidades } from './daily-curiosity.js';
-import { escapeHtml, formatMarketCap, getCountry } from './utils.js';
+import { escapeHtml, formatDividendYield, formatMarketCap, getCountry } from './utils.js';
+import { getPriceHistory } from './api.js';
 import { openCompanyDetails } from './company-details.js';
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
@@ -82,6 +83,7 @@ let filteredCompanies = [];
 let currentPage = 1;
 let currentTab = 'dashboard';
 let selectedRows = new Set();
+const loadedTabs = new Set();
 
 const watchlistSymbols = new Set(loadWatchlist() || []);
 const priceAlertsArray = loadPriceAlerts();
@@ -102,8 +104,6 @@ let sectorFilter,
 
 // ========== INICIALIZAÇÃO ==========
 function initDashboard() {
-  console.log('🚀 Inicializando dashboard...');
-
   // Elementos do dashboard
   sectorFilter = document.getElementById('sector-filter');
   countryFilter = document.getElementById('country-filter');
@@ -115,22 +115,13 @@ function initDashboard() {
   paginationEl = document.getElementById('pagination');
   headerCheckbox = document.getElementById('header-checkbox');
 
-  console.log('📍 Elementos encontrados:', {
-    sectorFilter: !!sectorFilter,
-    tableBody: !!tableBody,
-    statsEl: !!statsEl,
-    paginationEl: !!paginationEl,
-  });
-
   // Event listeners para navegação de abas
   const navTabs = document.querySelectorAll('.nav-tab');
-  console.log(`📌 Encontradas ${navTabs.length} abas`);
 
   navTabs.forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       const tabName = btn.getAttribute('data-tab');
-      console.log(`🔀 Navegando para: ${tabName}`);
       setActiveTab(tabName);
     });
   });
@@ -144,9 +135,10 @@ function initDashboard() {
 
   if (headerCheckbox) {
     headerCheckbox.addEventListener('change', () => {
+      const checked = headerCheckbox.checked;
       const visibleCheckboxes = tableBody.querySelectorAll('.row-checkbox');
       visibleCheckboxes.forEach((cb) => {
-        cb.checked = headerCheckbox.checked;
+        cb.checked = checked;
         cb.dispatchEvent(new Event('change'));
       });
     });
@@ -182,30 +174,31 @@ function initDashboard() {
   }
 
   // Inicializa
-  console.log('✅ Event listeners registrados');
   updateUI();
   updateTabButtons();
   loadDashboardData();
   loadDailySummary();
   updateWatchlistCountBadge();
   startPriceAlertPolling();
-  console.log('✅ Dashboard inicializado com sucesso!');
 }
 
 document.addEventListener('DOMContentLoaded', initDashboard);
 
 // ========== NAVEGAÇÃO DE ABAS ==========
 function setActiveTab(tab) {
-  console.log(`📍 Mudando aba para: ${tab}`);
   currentTab = tab;
   updateUI();
   updateTabButtons();
 }
 
 // ========== ATUALIZAR INTERFACE ==========
-function updateUI() {
-  console.log(`🎨 Atualizando UI para: ${currentTab}`);
+function loadTabOnce(key, loader) {
+  if (loadedTabs.has(key)) return;
+  loadedTabs.add(key);
+  loader();
+}
 
+function updateUI() {
   const dashboardView = document.getElementById('dashboard-view');
   const treemapView = document.getElementById('treemap-view');
   const heatmapView = document.getElementById('heatmap-view');
@@ -242,19 +235,19 @@ function updateUI() {
     case 'daily-curiosity':
       if (dailyCuriosityView) {
         dailyCuriosityView.style.display = 'block';
-        loadCuriosidades();
+        loadTabOnce('daily-curiosity', loadCuriosidades);
       }
       break;
     case 'treemap':
       if (treemapView) {
         treemapView.style.display = 'block';
-        loadTreemap();
+        loadTabOnce('treemap', loadTreemap);
       }
       break;
     case 'heatmap':
       if (heatmapView) {
         heatmapView.style.display = 'block';
-        loadHeatmap();
+        loadTabOnce('heatmap', loadHeatmap);
       }
       break;
     case 'bubble':
@@ -282,8 +275,6 @@ function loadBubbleChart() {
     return;
   }
 
-  console.log('📊 Carregando Bubble Chart...');
-
   bubbleChartView.innerHTML =
     '<div style="text-align: center; padding: 40px;"><p>Carregando gráfico de bolhas...</p></div>';
 
@@ -297,14 +288,12 @@ function updateTabButtons() {
     btn.classList.remove('active');
     if (btn.getAttribute('data-tab') === currentTab) {
       btn.classList.add('active');
-      console.log(`✅ Aba ativa: ${currentTab}`);
     }
   });
 }
 
 // ========== CARREGAMENTO DE DADOS ==========
 async function loadDashboardData() {
-  console.log('📊 Carregando dados do dashboard...');
   if (statsEl) statsEl.textContent = 'Carregando dados...';
 
   try {
@@ -312,8 +301,6 @@ async function loadDashboardData() {
     if (!setoresResponse.ok) throw new Error('Erro ao buscar setores');
     const setoresData = await setoresResponse.json();
     const setores = setoresData.setores || [];
-
-    console.log(`🔄 Carregando ${setores.length} setores...`);
 
     const promises = setores.map(async (setorId) => {
       try {
@@ -346,8 +333,6 @@ async function loadDashboardData() {
 
     updateFreshnessBadge(results.map((r) => r.generatedAt).filter(Boolean));
 
-    console.log(`✅ ${allCompanies.length} empresas carregadas`);
-
     if (sectorFilter) {
       sectorFilter.innerHTML = '<option value="">Todos os Setores</option>';
       const setorUnico = new Set(allCompanies.map((c) => c.sector));
@@ -372,6 +357,7 @@ async function loadDashboardData() {
 
     applyFilters();
     updateStats();
+    if (currentTab === 'bubble') loadBubbleChart();
   } catch (erro) {
     console.error('❌ Erro ao carregar dados:', erro);
     if (statsEl) statsEl.textContent = 'Erro ao carregar dados. Tente novamente.';
@@ -468,27 +454,26 @@ function renderTable() {
   const end = start + PAGE_SIZE;
   const pageCompanies = filteredCompanies.slice(start, end);
 
-  console.log(`📋 Renderizando ${pageCompanies.length} empresas (página ${currentPage})`);
-
   pageCompanies.forEach((company, index) => {
     const isSelected = selectedRows.has(company.symbol);
+    const symbol = escapeHtml(company.symbol);
 
     const row = document.createElement('tr');
     row.innerHTML = `
       <td>
-        <input type="checkbox" class="row-checkbox" data-symbol="${company.symbol}" 
+        <input type="checkbox" class="row-checkbox" data-symbol="${symbol}" 
           ${isSelected ? 'checked' : ''}>
       </td>
       <td class="col-index">${start + index + 1}</td>
-      <td><strong>${company.symbol}</strong></td>
-      <td>${company.name || 'N/A'}</td>
-      <td>${company.sectorName || company.sector || 'N/A'}</td>
+      <td><strong>${escapeHtml(company.symbol)}</strong></td>
+      <td>${escapeHtml(company.name || 'N/A')}</td>
+      <td>${escapeHtml(company.sectorName || company.sector || 'N/A')}</td>
       <td>${formatMarketCap(company.marketCap)}</td>
-      <td>${company.subIndustry || company.industry || 'N/A'}</td>
-      <td>${company.headquarters || 'N/A'}</td>
-      <td>${company.dividendYield ? parseFloat(company.dividendYield).toFixed(2) + '%' : 'N/A'}</td>
+      <td>${escapeHtml(company.subIndustry || company.industry || 'N/A')}</td>
+      <td>${escapeHtml(company.headquarters || 'N/A')}</td>
+      <td>${formatDividendYield(company)}</td>
       <td>
-        <button class="btn-watchlist" data-symbol="${company.symbol}" title="Adicionar à watchlist">
+        <button class="btn-watchlist" data-symbol="${escapeHtml(company.symbol)}" title="Adicionar à watchlist">
           ${watchlistSymbols.has(company.symbol) ? '★' : '☆'}
         </button>
       </td>
@@ -502,6 +487,7 @@ function renderTable() {
         selectedRows.delete(company.symbol);
       }
       updateStats();
+      updateHeaderCheckbox();
     });
 
     const watchlistBtn = row.querySelector('.btn-watchlist');
@@ -514,8 +500,17 @@ function renderTable() {
     tableBody.appendChild(row);
   });
 
-  console.log(`✅ ${pageCompanies.length} linhas renderizadas`);
+  updateHeaderCheckbox();
   renderPagination();
+}
+
+function updateHeaderCheckbox() {
+  if (!headerCheckbox || !tableBody) return;
+  const visibleCheckboxes = tableBody.querySelectorAll('.row-checkbox');
+  const checkedCount = Array.from(visibleCheckboxes).filter((cb) => cb.checked).length;
+  headerCheckbox.checked =
+    visibleCheckboxes.length > 0 && checkedCount === visibleCheckboxes.length;
+  headerCheckbox.indeterminate = checkedCount > 0 && checkedCount < visibleCheckboxes.length;
 }
 
 // ========== PAGINAÇÃO ==========
@@ -558,15 +553,13 @@ function updateStats() {
 
   const total = filteredCompanies.length;
   const selected = selectedRows.size;
+  const payers = filteredCompanies.filter((c) => Number(c.dividendYield) > 0);
   const avgDividend =
-    filteredCompanies.length > 0
-      ? (
-          filteredCompanies.reduce((sum, c) => sum + (parseFloat(c.dividendYield) || 0), 0) /
-          filteredCompanies.length
-        ).toFixed(2)
-      : 0;
+    payers.length > 0
+      ? (payers.reduce((sum, c) => sum + Number(c.dividendYield), 0) / payers.length).toFixed(2)
+      : '0.00';
 
-  statsEl.innerHTML = `Total: ${total} | Selecionadas: ${selected} | Dividend Yield Médio: ${avgDividend}%`;
+  statsEl.innerHTML = `Total: ${total} | Selecionadas: ${selected} | Yield Médio (pagadoras): ${avgDividend}%`;
 }
 
 // ========== WATCHLIST ==========
@@ -583,7 +576,6 @@ function updateWatchlistCountBadge() {
   const badge = document.querySelector('[data-watchlist-count]');
   if (badge) {
     badge.textContent = watchlistSymbols.size;
-    console.log(`🌟 Watchlist atualizada: ${watchlistSymbols.size} empresas`);
   }
 }
 
@@ -603,10 +595,10 @@ async function loadWatchlistData() {
   companies.forEach((c, idx) => {
     html += `<tr>
       <td>${idx + 1}</td>
-      <td><strong>${c.symbol}</strong></td>
-      <td>${c.name}</td>
-      <td>${c.sectorName || 'N/A'}</td>
-      <td>${c.dividendYield ? parseFloat(c.dividendYield).toFixed(2) + '%' : 'N/A'}</td>
+      <td><strong>${escapeHtml(c.symbol)}</strong></td>
+      <td>${escapeHtml(c.name)}</td>
+      <td>${escapeHtml(c.sectorName || 'N/A')}</td>
+      <td>${formatDividendYield(c)}</td>
       <td>${formatMarketCap(c.marketCap)}</td>
     </tr>`;
   });
@@ -1019,23 +1011,55 @@ window.openCompanyDetails = openCompanyDetails;
 window.setPriceAlertPrompt = setPriceAlertPrompt;
 
 // ========== PRICE ALERTS ==========
+async function checkPriceAlerts() {
+  const triggered = [];
+
+  for (const [symbol, alerta] of priceAlerts) {
+    if (alerta.triggered) continue;
+    try {
+      const registros = await getPriceHistory(symbol);
+      const ultimo = registros[registros.length - 1];
+      const preco = ultimo ? Number(ultimo.close) : NaN;
+      if (!Number.isFinite(preco)) continue;
+
+      const atingiu =
+        (alerta.direction === 'above' && preco >= alerta.target) ||
+        (alerta.direction === 'below' && preco <= alerta.target);
+
+      if (atingiu) {
+        alerta.triggered = true;
+        alerta.triggeredAt = new Date().toISOString();
+        alerta.triggeredPrice = preco;
+        triggered.push(`${symbol} ($${preco.toFixed(2)})`);
+      }
+    } catch (e) {
+      console.error(`Erro ao verificar ${symbol}:`, e);
+    }
+  }
+
+  if (triggered.length > 0) {
+    savePriceAlerts();
+    window.alert(`🔔 Alerta(s) de preço atingido(s): ${triggered.join(', ')}`);
+  }
+
+  return triggered;
+}
+
 async function startPriceAlertPolling() {
   if (priceAlerts.size === 0) return;
 
   setInterval(async () => {
-    for (const [symbol, alert] of priceAlerts) {
-      if (alert.triggered) continue;
-      try {
-        // Verificar alertas de preço
-      } catch (e) {
-        console.error(`Erro ao verificar ${symbol}:`, e);
-      }
-    }
+    await checkPriceAlerts();
     savePriceAlerts();
   }, 60000);
 }
 
 // ========== EXPORTAÇÃO ==========
+function csvCell(value) {
+  const text = value == null ? '' : String(value);
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
 function exportCSV() {
   const headers = [
     '#',
@@ -1055,10 +1079,10 @@ function exportCSV() {
     formatMarketCap(c.marketCap),
     c.subIndustry || c.industry || 'N/A',
     c.headquarters || 'N/A',
-    c.dividendYield || 'N/A',
+    formatDividendYield(c),
   ]);
 
-  const csv = [headers, ...rows].map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n');
+  const csv = [headers, ...rows].map((row) => row.map(csvCell).join(',')).join('\n');
   downloadFile(csv, 'sp500-export.csv', 'text/csv');
 }
 
@@ -1078,8 +1102,6 @@ function downloadFile(content, filename, type) {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
-
-console.log('✅ main.js (10 colunas) carregado com sucesso!');
 
 // ========== EXPORTAÇÕES PARA TESTES ==========
 // dateToSeed, technicalScore, sectorScore, volatilityScore e buildRationale
@@ -1113,6 +1135,7 @@ export {
   setPriceAlertPrompt,
   setPriceAlert,
   deletePriceAlert,
+  checkPriceAlerts,
   startPriceAlertPolling,
   exportCSV,
   exportJSON,

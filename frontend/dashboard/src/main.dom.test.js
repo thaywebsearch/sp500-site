@@ -240,6 +240,49 @@ describe('carregamento e renderização', () => {
     main.updateFreshnessBadge(['data-invalida']);
     expect(document.getElementById('freshness-text').textContent).toBe('Data indisponível');
   });
+
+  it('escapa HTML e mostra N/A para quem não paga dividendos', async () => {
+    const routes = routesFor({
+      energy: [
+        {
+          symbol: 'A<b>',
+          name: 'Empresa <script>alert(1)</script>',
+          subIndustry: '<i>oil</i>',
+          headquarters: 'A, Texas',
+          marketCap: 1e11,
+          hasDividend: 'Não',
+          dividendYield: 0,
+        },
+        company('PAY', { marketCap: 2e11, dividendYield: 2 }),
+      ],
+    });
+    await boot({ routes });
+
+    const html = document.getElementById('table-body').innerHTML;
+    expect(html).not.toContain('<script>');
+    expect(html).toContain('&lt;script&gt;');
+    expect(html).toContain('N/A');
+    expect(html).toContain('2.00%');
+  });
+
+  it('mantém o header-checkbox sincronizado', async () => {
+    await boot();
+    const header = document.getElementById('header-checkbox');
+    expect(header.checked).toBe(false);
+
+    const first = document.querySelector('#table-body .row-checkbox');
+    first.checked = true;
+    first.dispatchEvent(new Event('change'));
+    expect(header.indeterminate).toBe(true);
+    expect(header.checked).toBe(false);
+
+    document.getElementById('select-all').click();
+    expect(header.checked).toBe(true);
+    expect(header.indeterminate).toBe(false);
+
+    document.getElementById('deselect-all').click();
+    expect(header.checked).toBe(false);
+  });
 });
 
 describe('navegação e watchlist', () => {
@@ -287,6 +330,19 @@ describe('navegação e watchlist', () => {
     expect(document.querySelector('[data-watchlist-count]').textContent).toBe('0');
     main.setActiveTab('watchlist');
     expect(document.getElementById('watchlist-view').innerHTML).toContain('Nenhuma empresa');
+  });
+
+  it('não refaz fetch ao reabrir abas já carregadas', async () => {
+    const main = await boot();
+    main.setActiveTab('treemap');
+    await settle();
+    await settle();
+    const callsAfterFirst = globalThis.fetch.mock.calls.length;
+
+    main.setActiveTab('dashboard');
+    main.setActiveTab('treemap');
+    await settle();
+    expect(globalThis.fetch.mock.calls.length).toBe(callsAfterFirst);
   });
 });
 
@@ -425,6 +481,33 @@ describe('alertas de preço', () => {
     main.startPriceAlertPolling();
     await vi.advanceTimersByTimeAsync(60000);
     expect(setItemSpy).toHaveBeenCalled();
+  });
+
+  it('checkPriceAlerts dispara e marca o alerta atingido', async () => {
+    const routes = routesFor(defaultSectors());
+    routes['/api/historico/AAPL'] = { registros: [{ data: '2026-10-01', close: 150 }] };
+    globalThis.alert = vi.fn();
+    const main = await boot({ routes });
+
+    main.setPriceAlert('AAPL', 100, 'above');
+    const triggered = await main.checkPriceAlerts();
+
+    expect(triggered).toHaveLength(1);
+    expect(globalThis.alert).toHaveBeenCalled();
+    expect(main.loadPriceAlerts()).toEqual([
+      ['AAPL', expect.objectContaining({ triggered: true, triggeredPrice: 150 })],
+    ]);
+  });
+
+  it('checkPriceAlerts não dispara sem preço válido', async () => {
+    globalThis.alert = vi.fn();
+    const main = await boot();
+
+    main.setPriceAlert('ZZ', 10, 'below');
+    const triggered = await main.checkPriceAlerts();
+
+    expect(triggered).toEqual([]);
+    expect(globalThis.alert).not.toHaveBeenCalled();
   });
 });
 

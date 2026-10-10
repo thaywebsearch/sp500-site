@@ -24,5 +24,3 @@ export const SECTORS = [
 // Backward compatibility - também define no window
 window.API_BASE_URL = API_BASE_URL;
 window.SECTORS = SECTORS;
-
-console.log('✅ Configuração global carregada:', API_BASE_URL);

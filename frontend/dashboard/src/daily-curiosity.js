@@ -75,7 +75,6 @@ function selecionarCuriosidadeDoDia() {
   const indice = indiceDoDia % todasAsCuriosidades.length;
 
   curiosidadeDoDia = todasAsCuriosidades[indice];
-  console.log(`Curiosidade do dia: ${curiosidadeDoDia?.empresa}`);
 }
 
 // ========== RENDERIZAR CURIOSIDADE ==========
@@ -487,7 +486,7 @@ function compartilharCuriosidade() {
         text: texto,
         url: window.location.href,
       })
-      .catch((err) => console.log('Erro ao compartilhar:', err));
+      .catch((err) => console.error('Erro ao compartilhar:', err));
   } else {
     // Fallback: copiar para clipboard
     navigator.clipboard

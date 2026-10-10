@@ -43,6 +43,7 @@ describe('renderBubbleChart', () => {
     );
     expect(document.querySelector('#bubble svg')).toBeTruthy();
     expect(document.querySelector('#bubble').textContent).toContain('Setores');
+    expect(document.querySelector('#bubble').textContent).toContain('Como ler o gráfico');
   });
 
   it('mostra aviso quando não há dados válidos', () => {

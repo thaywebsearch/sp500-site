@@ -62,8 +62,6 @@ export function renderBubbleChart(companies, containerId) {
     return;
   }
 
-  console.log(`📊 Renderizando Bubble Chart com ${companies.length} empresas...`);
-
   // Limpar container
   container.innerHTML = '';
 
@@ -81,8 +79,6 @@ export function renderBubbleChart(companies, containerId) {
       dividendYield: parsePercentage(c.dividendYield),
       index: idx,
     }));
-
-  console.log(`✅ ${validData.length} empresas com dados válidos`);
 
   if (validData.length === 0) {
     container.innerHTML = '<p>Sem dados disponíveis para o gráfico de bolhas.</p>';
@@ -124,7 +120,8 @@ export function renderBubbleChart(companies, containerId) {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('width', width + margin.left + margin.right);
   svg.setAttribute('height', height + margin.top + margin.bottom);
-  svg.style.cssText = 'display: block; margin: 20px auto; background: #fff;';
+  svg.style.cssText =
+    'display: block; margin: 20px auto; background: var(--plot-bg); border-radius: 8px;';
 
   // Grupo principal
   const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -140,7 +137,7 @@ export function renderBubbleChart(companies, containerId) {
     line.setAttribute('y1', y);
     line.setAttribute('x2', width);
     line.setAttribute('y2', y);
-    line.setAttribute('stroke', '#e0e0e0');
+    line.setAttribute('stroke', 'var(--chart-axis)');
     line.setAttribute('stroke-width', '1');
     line.setAttribute('stroke-dasharray', '4');
     g.appendChild(line);
@@ -150,7 +147,7 @@ export function renderBubbleChart(companies, containerId) {
     text.setAttribute('y', y + 5);
     text.setAttribute('text-anchor', 'end');
     text.setAttribute('font-size', '12');
-    text.setAttribute('fill', '#666');
+    text.setAttribute('fill', 'var(--chart-label)');
     text.textContent = yieldValue.toFixed(1) + '%';
     g.appendChild(text);
   }
@@ -161,7 +158,7 @@ export function renderBubbleChart(companies, containerId) {
   yAxis.setAttribute('y1', 0);
   yAxis.setAttribute('x2', 0);
   yAxis.setAttribute('y2', height);
-  yAxis.setAttribute('stroke', '#333');
+  yAxis.setAttribute('stroke', 'var(--chart-label)');
   yAxis.setAttribute('stroke-width', '2');
   g.appendChild(yAxis);
 
@@ -173,7 +170,7 @@ export function renderBubbleChart(companies, containerId) {
   yLabel.setAttribute('text-anchor', 'middle');
   yLabel.setAttribute('font-size', '14');
   yLabel.setAttribute('font-weight', 'bold');
-  yLabel.setAttribute('fill', '#333');
+  yLabel.setAttribute('fill', 'var(--chart-text)');
   yLabel.textContent = '💵 Dividend Yield (%)';
   g.appendChild(yLabel);
 
@@ -183,7 +180,7 @@ export function renderBubbleChart(companies, containerId) {
   xAxis.setAttribute('y1', height);
   xAxis.setAttribute('x2', width);
   xAxis.setAttribute('y2', height);
-  xAxis.setAttribute('stroke', '#333');
+  xAxis.setAttribute('stroke', 'var(--chart-label)');
   xAxis.setAttribute('stroke-width', '2');
   g.appendChild(xAxis);
 
@@ -194,7 +191,7 @@ export function renderBubbleChart(companies, containerId) {
   xLabel.setAttribute('text-anchor', 'middle');
   xLabel.setAttribute('font-size', '14');
   xLabel.setAttribute('font-weight', 'bold');
-  xLabel.setAttribute('fill', '#333');
+  xLabel.setAttribute('fill', 'var(--chart-text)');
   xLabel.textContent = '📊 Distribuição Aleatória (cada bolha = empresa)';
   g.appendChild(xLabel);
 
@@ -252,8 +249,6 @@ export function renderBubbleChart(companies, containerId) {
 
   // Legenda
   addLegend(container, validData);
-
-  console.log('✅ Bubble Chart renderizado com sucesso!');
 }
 
 function addLegend(container, data) {
@@ -262,20 +257,21 @@ function addLegend(container, data) {
     margin: 30px auto;
     max-width: 800px;
     padding: 20px;
-    background: #f9f9f9;
+    background: var(--surface);
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border);
   `;
 
   // Título
   const title = document.createElement('h3');
   title.textContent = '🫧 Como ler o gráfico';
-  title.style.cssText = 'margin: 0 0 12px 0; color: #333;';
+  title.style.cssText = 'margin: 0 0 12px 0; color: var(--text-primary);';
   legendContainer.appendChild(title);
 
   // Explicação
   const info = document.createElement('div');
-  info.style.cssText = 'margin-bottom: 16px; font-size: 13px; color: #666; line-height: 1.8;';
+  info.style.cssText =
+    'margin-bottom: 16px; font-size: 13px; color: var(--text-secondary); line-height: 1.8;';
   info.innerHTML = `
     <div><strong>Tamanho da bolha:</strong> Market Cap da empresa (quanto maior, mais valiosa)</div>
     <div><strong>Eixo Y (vertical):</strong> Dividend Yield (mais acima = maior dividendo)</div>
@@ -287,7 +283,8 @@ function addLegend(container, data) {
   // Cores por setor
   const sectorTitle = document.createElement('div');
   sectorTitle.textContent = 'Setores';
-  sectorTitle.style.cssText = 'font-size: 13px; font-weight: 600; color: #333; margin-bottom: 8px;';
+  sectorTitle.style.cssText =
+    'font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px;';
   legendContainer.appendChild(sectorTitle);
 
   const sectorsSet = new Set(data.map((d) => d.sector));
@@ -297,7 +294,7 @@ function addLegend(container, data) {
   sectorsSet.forEach((sector) => {
     const item = document.createElement('div');
     item.style.cssText =
-      'display: flex; align-items: center; gap: 6px; font-size: 12px; color: #333;';
+      'display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-primary);';
 
     const swatch = document.createElement('span');
     swatch.style.cssText = `display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: ${getSectorColor(sector)};`;
@@ -322,8 +319,9 @@ function showTooltip(event, d) {
   const tooltip = document.createElement('div');
   tooltip.style.cssText = `
     position: fixed;
-    background: rgba(0, 0, 0, 0.85);
-    color: #fff;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--accent-cyan);
     padding: 10px 14px;
     border-radius: 6px;
     font-size: 12px;
@@ -362,5 +360,3 @@ function hideTooltip() {
     currentTooltip = null;
   }
 }
-
-console.log('✅ bubble-chart.js carregado!');

@@ -9,6 +9,13 @@ export function formatMarketCap(marketCap) {
   return `$${value.toLocaleString('en-US')}`;
 }
 
+export function formatDividendYield(company) {
+  if (!company || company.hasDividend === 'Não') return 'N/A';
+  const value = Number(company.dividendYield);
+  if (!Number.isFinite(value)) return 'N/A';
+  return `${value.toFixed(2)}%`;
+}
+
 export function escapeHtml(text) {
   if (!text) return '';
   return String(text)
