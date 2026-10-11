@@ -8,6 +8,7 @@ import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
 import { renderBubbleChart } from './bubble-chart.js';
 import { renderDividends } from './dividends.js';
+import { renderDowJones } from './dow-jones.js';
 import { loadDailySummary } from './daily-summary.js';
 
 // ========== CONSTANTES ==========
@@ -219,6 +220,7 @@ function updateUI() {
   const dividendsView = document.getElementById('dividends-view');
   const stockOfDayView = document.getElementById('stock-of-day-view');
   const dailyCuriosityView = document.getElementById('daily-curiosity-view');
+  const dowJonesView = document.getElementById('dow-jones-view');
 
   // Hide all views
   const allViews = [
@@ -229,6 +231,7 @@ function updateUI() {
     dividendsView,
     stockOfDayView,
     dailyCuriosityView,
+    dowJonesView,
   ];
   allViews.forEach((view) => {
     if (view) view.style.display = 'none';
@@ -275,6 +278,12 @@ function updateUI() {
         loadDividends();
       }
       break;
+    case 'dow-jones':
+      if (dowJonesView) {
+        dowJonesView.style.display = 'block';
+        loadTabOnce('dow-jones', loadDowJones);
+      }
+      break;
     default:
       if (dashboardView) dashboardView.style.display = 'block';
   }
@@ -310,6 +319,17 @@ function loadDividends() {
   }
 
   renderDividends(allCompanies, 'dividends-view');
+}
+
+// ========== DOW JONES 30 ==========
+function loadDowJones() {
+  const dowJonesView = document.getElementById('dow-jones-view');
+  if (!dowJonesView) {
+    console.error('❌ dow-jones-view não encontrado!');
+    return;
+  }
+
+  renderDowJones('dow-jones-view');
 }
 
 function updateTabButtons() {
@@ -1082,6 +1102,7 @@ export {
   updateUI,
   loadBubbleChart,
   loadDividends,
+  loadDowJones,
   updateTabButtons,
   loadDashboardData,
   updateFreshnessBadge,

@@ -11,6 +11,7 @@ const FULL_HTML = `
   <button class="nav-tab" data-tab="heatmap"></button>
   <button class="nav-tab" data-tab="bubble"></button>
   <button class="nav-tab" data-tab="dividends"></button>
+  <button class="nav-tab" data-tab="dow-jones"></button>
   <button class="nav-tab" data-tab="stock-of-day"></button>
   <button class="nav-tab" data-tab="daily-curiosity"></button>
   <div id="dashboard-view"></div>
@@ -20,6 +21,7 @@ const FULL_HTML = `
   <div id="dividends-view"></div>
   <div id="stock-of-day-view"></div>
   <div id="daily-curiosity-view"></div>
+  <div id="dow-jones-view"></div>
   <div id="daily-summary"></div>
   <select id="sector-filter"></select>
   <select id="country-filter"></select>
@@ -302,6 +304,10 @@ describe('navegação', () => {
     main.setActiveTab('dividends');
     expect(document.getElementById('dividends-view').style.display).toBe('block');
     expect(document.getElementById('dividends-view').innerHTML).toContain('Dividendos');
+
+    main.setActiveTab('dow-jones');
+    expect(document.getElementById('dow-jones-view').style.display).toBe('block');
+    expect(document.getElementById('dow-jones-view').innerHTML).toContain('Dow Jones 30');
 
     main.setActiveTab('daily-curiosity');
     await settle();

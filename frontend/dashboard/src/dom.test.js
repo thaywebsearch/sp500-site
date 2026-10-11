@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import './config.js';
 import { renderBubbleChart } from './bubble-chart.js';
 import { renderDividends } from './dividends.js';
+import { renderDowJones } from './dow-jones.js';
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
 import { loadDailySummary } from './daily-summary.js';
@@ -387,6 +388,59 @@ describe('renderDividends', () => {
     expect(document.getElementById('dividends-view').innerHTML).toContain('Sem dados');
 
     expect(() => renderDividends([], 'ausente')).not.toThrow();
+  });
+});
+
+describe('renderDowJones', () => {
+  it('renderiza cabeçalho, cartões, filtros e setores', () => {
+    document.body.innerHTML = '<div id="dow-jones-view"></div>';
+    renderDowJones('dow-jones-view');
+    const el = document.getElementById('dow-jones-view');
+    expect(el.innerHTML).toContain('Dow Jones 30');
+    expect(el.innerHTML).toContain('Empresas');
+    expect(el.querySelectorAll('.dow-card')).toHaveLength(30);
+    expect(el.querySelector('#dow-search')).toBeTruthy();
+    expect(el.querySelector('#dow-sector')).toBeTruthy();
+    expect(el.innerHTML).toContain('Distribuição por setor');
+  });
+
+  it('filtra por busca e setor e alterna para tabela', () => {
+    document.body.innerHTML = '<div id="dow-jones-view"></div>';
+    renderDowJones('dow-jones-view');
+    const el = document.getElementById('dow-jones-view');
+
+    const search = el.querySelector('#dow-search');
+    search.value = 'apple';
+    search.dispatchEvent(new Event('input'));
+    expect(el.querySelectorAll('.dow-card')).toHaveLength(1);
+    expect(el.textContent).toContain('AAPL');
+
+    const sector = el.querySelector('#dow-sector');
+    sector.value = 'Financials';
+    sector.dispatchEvent(new Event('change'));
+    expect(el.querySelector('.dow-empty')).toBeTruthy();
+
+    search.value = '';
+    search.dispatchEvent(new Event('input'));
+
+    el.querySelector('.dow-view-btn[data-view="table"]').dispatchEvent(new Event('click'));
+    expect(el.querySelector('.dow-table')).toBeTruthy();
+    expect(el.querySelectorAll('.dow-table tbody tr')).toHaveLength(5);
+  });
+
+  it('ordena pela coluna da tabela ao clicar', () => {
+    document.body.innerHTML = '<div id="dow-jones-view"></div>';
+    renderDowJones('dow-jones-view');
+    const el = document.getElementById('dow-jones-view');
+    el.querySelector('.dow-view-btn[data-view="table"]').dispatchEvent(new Event('click'));
+    const firstBefore = el.querySelector('.dow-table tbody tr td').textContent;
+    el.querySelector('.dow-table th[data-sort="ticker"]').dispatchEvent(new Event('click'));
+    const firstAfter = el.querySelector('.dow-table tbody tr td').textContent;
+    expect(firstBefore).not.toBe(firstAfter);
+  });
+
+  it('ignora contentor ausente', () => {
+    expect(() => renderDowJones('ausente')).not.toThrow();
   });
 });
 

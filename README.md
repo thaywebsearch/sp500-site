@@ -50,6 +50,7 @@ SPA em JavaScript puro (Vite) que consome a API. Abas:
 | 🔥 Heatmap | Top 4 empresas por market cap em cada setor |
 | 🫧 Bubble Chart | Dispersão market cap × dividend yield, com tooltip e legenda |
 | 💰 Dividendos | Painel de renda: resumo, top por yield, distribuição por faixa e yield médio por setor |
+| 📈 Dow Jones 30 | As 30 empresas do DJIA: cartões/tabela, busca, filtro por setor e distribuição por setor |
 
 Funcionalidades transversais:
 
