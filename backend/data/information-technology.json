@@ -1,7 +1,7 @@
 {
   "sector": "Information Technology",
-  "count": 74,
-  "generatedAt": "2026-10-05",
+  "count": 75,
+  "generatedAt": "2026-10-12",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -965,6 +965,16 @@
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
+    },
+    {
+      "symbol": "TWLO",
+      "name": "Twilio",
+      "sector": "Information Technology",
+      "subIndustry": "Systems Software",
+      "headquarters": "San Francisco, California",
+      "dateAdded": "2026-10-06",
+      "cik": 1447669,
+      "founded": "2008"
     },
     {
       "symbol": "TYL",

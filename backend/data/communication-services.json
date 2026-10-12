@@ -1,7 +1,7 @@
 {
   "sector": "Communication Services",
-  "count": 23,
-  "generatedAt": "2026-10-05",
+  "count": 22,
+  "generatedAt": "2026-10-12",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -215,20 +215,6 @@
       "hasDividend": "Sim"
     },
     {
-      "symbol": "PSKY",
-      "name": "Paramount Skydance Corporation",
-      "sector": "Communication Services",
-      "subIndustry": "Movies & Entertainment",
-      "headquarters": "Los Angeles, California",
-      "dateAdded": "1994-09-30",
-      "cik": 2041610,
-      "founded": "2025 (Paramount Pictures 1912)",
-      "marketCap": 12156281856,
-      "marketCapClassification": "Large",
-      "dividendYield": 1.85,
-      "hasDividend": "Sim"
-    },
-    {
       "symbol": "RDDT",
       "name": "Reddit",
       "sector": "Communication Services",
@@ -241,6 +227,16 @@
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
+    },
+    {
+      "symbol": "SKYD",
+      "name": "Skydance Corporation",
+      "sector": "Communication Services",
+      "subIndustry": "Movies & Entertainment",
+      "headquarters": "New York City, New York",
+      "dateAdded": "1994-09-30",
+      "cik": 2041610,
+      "founded": "2025 (Paramount Pictures 1912)"
     },
     {
       "symbol": "TMUS",
@@ -311,20 +307,6 @@
       "marketCapClassification": "Large",
       "dividendYield": 1.4,
       "hasDividend": "Sim"
-    },
-    {
-      "symbol": "WBD",
-      "name": "Warner Bros. Discovery",
-      "sector": "Communication Services",
-      "subIndustry": "Broadcasting",
-      "headquarters": "New York City, New York",
-      "dateAdded": "2022-04-11",
-      "cik": 1437107,
-      "founded": "2022 (Warner Bros. 1923)",
-      "marketCap": 72092712960,
-      "marketCapClassification": "Large",
-      "dividendYield": null,
-      "hasDividend": "Não"
     }
   ]
 }

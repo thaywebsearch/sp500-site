@@ -1,6 +1,6 @@
 # S&P 500 — Setor Communication Services
 
-> Fonte: `communication-services.json` · Ordenado por Market Cap (maior para menor) · Total: 23 empresas
+> Fonte: `communication-services.json` · Ordenado por Market Cap (maior para menor) · Total: 22 empresas
 
 | # | Símbolo | Empresa | Market Cap | Subindústria | Sedes | Dividend Yield |
 |---|---------|---------|------------|--------------|-------|----------------|
@@ -14,16 +14,15 @@
 | 8 | T | AT&T | $177.72B | Integrated Telecommunication Services | Dallas, Texas | 4.36% |
 | 9 | APP | AppLovin | $107.17B | Advertising | Palo Alto, California | — |
 | 10 | CMCSA | Comcast | $95.69B | Cable & Satellite | Philadelphia, Pennsylvania | 5.00% |
-| 11 | WBD | Warner Bros. Discovery | $72.09B | Broadcasting | New York City, New York | — |
-| 12 | TTWO | Take-Two Interactive | $43.65B | Interactive Home Entertainment | New York City, New York | — |
-| 13 | LYV | Live Nation Entertainment | $42.04B | Movies & Entertainment | Beverly Hills, California | — |
-| 14 | TKO | TKO Group Holdings | $34.93B | Movies & Entertainment | New York City, New York | 1.69% |
-| 15 | RDDT | Reddit | $29.61B | Interactive Media & Services | San Francisco, California | — |
-| 16 | FOXA | Fox Corporation (Class A) | $28.93B | Broadcasting | New York City, New York | 0.83% |
-| 17 | FOX | Fox Corporation (Class B) | $25.87B | Broadcasting | New York City, New York | 0.93% |
-| 18 | ECHO | EchoStar | $25.14B | Wireless Telecommunication Services | Englewood, Colorado | — |
-| 19 | OMC | Omnicom Group | $24.19B | Advertising | New York City, New York | 3.64% |
-| 20 | CHTR | Charter Communications | $20.77B | Cable & Satellite | Stamford, Connecticut | — |
-| 21 | NWS | News Corp (Class B) | $18.71B | Publishing | New York City, New York | 0.57% |
-| 22 | NWSA | News Corp (Class A) | $16.63B | Publishing | New York City, New York | 0.64% |
-| 23 | PSKY | Paramount Skydance Corporation | $12.16B | Movies & Entertainment | Los Angeles, California | 1.85% |
+| 11 | TTWO | Take-Two Interactive | $43.65B | Interactive Home Entertainment | New York City, New York | — |
+| 12 | LYV | Live Nation Entertainment | $42.04B | Movies & Entertainment | Beverly Hills, California | — |
+| 13 | TKO | TKO Group Holdings | $34.93B | Movies & Entertainment | New York City, New York | 1.69% |
+| 14 | RDDT | Reddit | $29.61B | Interactive Media & Services | San Francisco, California | — |
+| 15 | FOXA | Fox Corporation (Class A) | $28.93B | Broadcasting | New York City, New York | 0.83% |
+| 16 | FOX | Fox Corporation (Class B) | $25.87B | Broadcasting | New York City, New York | 0.93% |
+| 17 | ECHO | EchoStar | $25.14B | Wireless Telecommunication Services | Englewood, Colorado | — |
+| 18 | OMC | Omnicom Group | $24.19B | Advertising | New York City, New York | 3.64% |
+| 19 | CHTR | Charter Communications | $20.77B | Cable & Satellite | Stamford, Connecticut | — |
+| 20 | NWS | News Corp (Class B) | $18.71B | Publishing | New York City, New York | 0.57% |
+| 21 | NWSA | News Corp (Class A) | $16.63B | Publishing | New York City, New York | 0.64% |
+| 22 | SKYD | Skydance Corporation | N/A | Movies & Entertainment | New York City, New York | — |

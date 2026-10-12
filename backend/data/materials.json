@@ -1,7 +1,7 @@
 {
   "sector": "Materials",
-  "count": 25,
-  "generatedAt": "2026-10-05",
+  "count": 24,
+  "generatedAt": "2026-10-12",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -86,20 +86,6 @@
       "marketCap": 18963423232,
       "marketCapClassification": "Large",
       "dividendYield": 1.91,
-      "hasDividend": "Sim"
-    },
-    {
-      "symbol": "CTVA",
-      "name": "Corteva",
-      "sector": "Materials",
-      "subIndustry": "Fertilizers & Agricultural Chemicals",
-      "headquarters": "Indianapolis, Indiana",
-      "dateAdded": "2019-06-03",
-      "cik": 1755672,
-      "founded": "2019",
-      "marketCap": 55477350400,
-      "marketCapClassification": "Large",
-      "dividendYield": 0.87,
       "hasDividend": "Sim"
     },
     {

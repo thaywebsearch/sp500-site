@@ -1,6 +1,6 @@
 # S&P 500 — Setor Information Technology
 
-> Fonte: `information-technology.json` · Ordenado por Market Cap (maior para menor) · Total: 74 empresas
+> Fonte: `information-technology.json` · Ordenado por Market Cap (maior para menor) · Total: 75 empresas
 
 | # | Símbolo | Empresa | Market Cap | Subindústria | Sedes | Dividend Yield |
 |---|---------|---------|------------|--------------|-------|----------------|
@@ -78,3 +78,4 @@
 | 72 | GDDY | GoDaddy | $12.18B | Internet Services & Infrastructure | Tempe, Arizona | — |
 | 73 | SWKS | Skyworks Solutions | $9.79B | Semiconductors | Irvine, California | 4.13% |
 | 74 | P | Everpure | N/A | Technology Hardware, Storage & Peripherals | Santa Clara, California | — |
+| 75 | TWLO | Twilio | N/A | Systems Software | San Francisco, California | — |
