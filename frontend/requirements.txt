@@ -1,3 +1,6 @@
 # requirements.txt
-# Este script usa apenas bibliotecas padrão do Python (stdlib)
-# Nenhuma dependência externa necessária
+# update_sectors.py e update_daily_summary.py usam apenas a stdlib do Python.
+# update_live_data.py usa yfinance (fonte primaria) e requests (fallback
+# cookie + crumb do Yahoo, em scripts/yahoo_quotes.py).
+yfinance>=0.2.55
+requests>=2.31.0

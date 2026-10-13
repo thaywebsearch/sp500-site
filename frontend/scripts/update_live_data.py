@@ -5,7 +5,8 @@ JSONs que alimentam o site, reutilizando o pipeline existente.
 
 Fluxo:
   1. Lê os JSONs canônicos de cada setor (fonte única em frontend/<setor>/)
-  2. Busca marketCap e dividendYield ao vivo via yfinance (Yahoo Finance)
+  2. Busca marketCap e dividendYield ao vivo via yfinance (Yahoo Finance),
+     com fallback cookie+crumb (yahoo_quotes) quando o yfinance esta bloqueado
   3. Regrava os JSONs canônicos preservando todos os demais campos
   4. Sincroniza a cópia derivada: backend/data (API)
 
@@ -41,6 +42,7 @@ except ImportError:  # pragma: no cover
     sys.exit("[ERROR] yfinance não instalado. Rode: pip install yfinance")
 
 import update_sectors as us  # reutiliza paths, mapas de setores e sync_derived_copies
+import yahoo_quotes  # fallback de cotacoes (cookie + crumb do Yahoo)
 
 
 # ============ CLASSIFICAÇÃO DE MARKET CAP ============
@@ -98,47 +100,89 @@ def _is_nan(value):
     return isinstance(value, float) and value != value
 
 
+def _ok(symbol, market_cap, dividend_yield):
+    return {
+        "symbol": symbol,
+        "ok": True,
+        "marketCap": market_cap,
+        "dividendYield": dividend_yield,
+        "error": None,
+    }
+
+
+def _fail(symbol, error):
+    return {
+        "symbol": symbol,
+        "ok": False,
+        "marketCap": None,
+        "dividendYield": None,
+        "error": error,
+    }
+
+
+def _normalize_dividend_yield(value):
+    """Converte a fracao do Yahoo (0.015) em percentagem (1.5)."""
+    if isinstance(value, (int, float)) and not _is_nan(value) and float(value) > 0:
+        return round(float(value) * 100, 2)
+    return None
+
+
+def _quote_from_yfinance(symbol):
+    """marketCap/dividendYield via yfinance (uma requisicao por ticker)."""
+    info = yf.Ticker(symbol).info
+
+    cap = info.get("marketCap")
+    if cap is None:  # marketCap nem sempre vem no info -> fallback leve
+        cap = _safe_fast_info(symbol, "market_cap")
+
+    return cap, _normalize_dividend_yield(info.get("dividendYield"))
+
+
+# O yfinance pode estar bloqueado por rate limit (HTTP 429). Faz-se uma unica
+# sondagem no inicio da execucao para nao multiplicar o backoff por 500+ tickers.
+_yfinance_enabled = True
+
+
+def _probe_yfinance():
+    """Testa se o yfinance esta operacional antes de processar todos os tickers."""
+    try:
+        yf.Ticker("AAPL").info.get("marketCap")
+        return True
+    except Exception:
+        return False
+
+
 def fetch_quote(symbol, retries=3, base_delay=2):
     """
-    Busca marketCap e dividendYield atuais de um ticker via yfinance.
+    Busca marketCap e dividendYield atuais de um ticker.
 
-    Usa exclusivamente `Ticker.info` (uma única requisição por ticker) para
-    minimizar requisições ao Yahoo Finance e contornar rate limits. O marketCap
-    vem da própria resposta; o dividendYield é uma fração decimal (0.015 → 1.5%).
-    Em caso de rate limit, faz backoff exponencial (2s → 4s → 8s).
+    Tenta primeiro o yfinance (uma requisicao por ticker). Se estiver
+    indisponivel, usa o fallback `yahoo_quotes` (cookie + crumb do Yahoo), que
+    contorna o rate limit HTTP 429. O dividendYield e uma fracao decimal
+    (0.015 -> 1.5%); empresas sem dividendo devolvem None.
     """
-    for attempt in range(retries + 1):
-        try:
-            info = yf.Ticker(symbol).info
+    if _yfinance_enabled:
+        for attempt in range(retries + 1):
+            try:
+                cap, div_yield = _quote_from_yfinance(symbol)
+                if cap is not None:
+                    return _ok(symbol, cap, div_yield)
+                break  # sem marketCap -> tenta o fallback
+            except Exception:  # noqa: BLE001
+                if attempt < retries:
+                    time.sleep(base_delay * (2 ** attempt))  # backoff exponencial
+                    continue
+                break
 
-            cap = info.get("marketCap")
-            if cap is None:  # marketCap nem sempre vem no info → fallback leve
-                cap = _safe_fast_info(symbol, "market_cap")
+    try:
+        cap, div_yield = yahoo_quotes.fetch_market_data(symbol)
+    except Exception as exc:  # noqa: BLE001
+        return _fail(symbol, str(exc))
 
-            div_yield = info.get("dividendYield")
-            if isinstance(div_yield, (int, float)) and not _is_nan(div_yield):
-                div_yield = round(float(div_yield) * 100, 2)
-            else:
-                div_yield = None
+    if cap is None:
+        return _fail(symbol, "sem marketCap (yfinance e fallback)")
 
-            return {
-                "symbol": symbol,
-                "ok": True,
-                "marketCap": cap,
-                "dividendYield": div_yield,
-                "error": None,
-            }
-        except Exception as exc:
-            if attempt < retries:
-                time.sleep(base_delay * (2 ** attempt))  # backoff exponencial
-                continue
-            return {
-                "symbol": symbol,
-                "ok": False,
-                "marketCap": None,
-                "dividendYield": None,
-                "error": str(exc),
-            }
+    return _ok(symbol, cap, div_yield)
 
 
 def _safe_fast_info(symbol, attr, default=None):
@@ -152,6 +196,16 @@ def _safe_fast_info(symbol, attr, default=None):
 
 def fetch_all_quotes(symbols, workers):
     """Busca as cotações de todos os símbolos em paralelo."""
+    global _yfinance_enabled
+
+    _yfinance_enabled = _probe_yfinance()
+    if _yfinance_enabled:
+        print("[INFO] Fonte primaria: yfinance")
+    else:
+        print(
+            "[WARN] yfinance indisponivel (rate limit) - a usar fallback Yahoo (cookie+crumb)"
+        )
+
     quotes = {}
     total = len(symbols)
 

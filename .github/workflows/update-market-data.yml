@@ -1,0 +1,74 @@
+name: Atualização de Dados de Mercado (S&P 500)
+
+on:
+  schedule:
+    # A cada ~48h (dias 1, 3, 5, ... do mês) às 06:00 UTC.
+    # O GitHub Actions não suporta "a cada 48h" nativo; usa-se o dia ímpar.
+    - cron: "0 6 */2 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Evita execuções sobrepostas (o commit/push concorrente falharia).
+concurrency:
+  group: update-market-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout repositório
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Atualizar dados de mercado (marketCap e dividendYield)
+        run: python scripts/update_live_data.py --once
+
+      - name: Regenerar o Resumo do Dia
+        run: python scripts/update_daily_summary.py
+
+      - name: Verificar mudanças
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "Nenhuma mudança detectada."
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Mudanças detectadas — commitando..."
+          fi
+
+      - name: Commit e push das mudanças
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: atualização automática de dados de mercado (${{ github.run_id }})"
+          git push
+
+      - name: Resumo da execução
+        run: |
+          echo "## Dados de Mercado (S&P 500)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Data**: $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "- **Run ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.changes.outputs.changed }}" = "true" ]; then
+            echo "- **Status**: ✅ marketCap/dividendYield + Resumo do Dia atualizados e commitados" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Status**: ℹ️ Nenhuma mudança nos dados" >> $GITHUB_STEP_SUMMARY
+          fi
