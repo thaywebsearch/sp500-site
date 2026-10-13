@@ -173,7 +173,12 @@ def build_summary(companies, quotes):
 
     movers.sort(key=lambda m: m["changePct"], reverse=True)
     gainers = [m for m in movers if m["changePct"] > 0]
-    losers = [m for m in movers if m["changePct"] < 0]
+    # Ordena as baixas da maior queda para a menor (o sort acima e decrescente,
+    # por isso os "losers" seguiam a ordem errada e o TOP_N ficava com as
+    # variacoes menos negativas).
+    losers = sorted(
+        (m for m in movers if m["changePct"] < 0), key=lambda m: m["changePct"]
+    )
     neutral = len(movers) - len(gainers) - len(losers)
 
     if gainers or losers:
