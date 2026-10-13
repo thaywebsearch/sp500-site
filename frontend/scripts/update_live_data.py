@@ -216,10 +216,9 @@ def fetch_all_quotes(symbols, workers):
             result = future.result()
             quotes[result["symbol"]] = result
             done += 1
+            status = "OK" if result["ok"] else f"ERRO ({result['error']})"
             print(
-                f"\r  [INFO] {result['symbol']}: "
-                f"{'OK' if result['ok'] else f'ERRO ({result['error']})'} "
-                f"({done}/{total})",
+                f"\r  [INFO] {result['symbol']}: {status} ({done}/{total})",
                 end="",
                 flush=True,
             )
