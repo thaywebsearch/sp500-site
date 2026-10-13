@@ -37,6 +37,8 @@ ela está disponível, evitando divergência entre as cópias.
 
 O README de cada setor e o consolidado `TOP50-MARKET-CAP.md` são gerados pelo mesmo pipeline, preservando o enriquecimento (marketCap, dividendYield) existente.
 
+O `frontend/scripts/update_live_data.py` atualiza `marketCap` e `dividendYield` via yfinance e, se o Yahoo impuser rate limit, recorre ao fallback cookie+crumb (`frontend/scripts/yahoo_quotes.py`).
+
 ## Dashboard (`frontend/dashboard`)
 
 SPA em JavaScript puro (Vite) que consome a API. Abas:
@@ -68,6 +70,8 @@ As workflows ficam em `.github/workflows/` (raiz do repositório):
 |----------|---------|------|
 | `update-sectors.yml` | Segunda 06:00 | Regenera JSONs/READMEs dos setores + sincroniza cópias |
 | `update-sp500-table.yml` | Segunda 00:00 | Atualiza `backend/sp500-table/sp500-table.csv` |
+| `update-market-data.yml` | A cada ~48h (06:00 UTC) | Atualiza `marketCap`/`dividendYield` + Resumo do Dia |
+| `update-daily-summary.yml` | Dias úteis 21:30 UTC | Regenera o Resumo do Dia (`backend/data/daily-summary.json`) |
 | `deploy-dashboard.yml` | Após push + Segunda 07:00 | Builda o dashboard em `frontend/docs/` |
 
 ## API (Railway)
