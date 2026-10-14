@@ -10,6 +10,7 @@ import { renderBubbleChart } from './bubble-chart.js';
 import { renderDividends } from './dividends.js';
 import { renderDowJones } from './dow-jones.js';
 import { renderDividendKings } from './dividend-kings.js';
+import { renderDividendAristocrats } from './dividend-aristocrats.js';
 import { loadDailySummary } from './daily-summary.js';
 
 // ========== CONSTANTES ==========
@@ -223,6 +224,7 @@ function updateUI() {
   const dailyCuriosityView = document.getElementById('daily-curiosity-view');
   const dowJonesView = document.getElementById('dow-jones-view');
   const dividendKingsView = document.getElementById('dividend-kings-view');
+  const dividendAristocratsView = document.getElementById('dividend-aristocrats-view');
 
   // Hide all views
   const allViews = [
@@ -235,6 +237,7 @@ function updateUI() {
     dailyCuriosityView,
     dowJonesView,
     dividendKingsView,
+    dividendAristocratsView,
   ];
   allViews.forEach((view) => {
     if (view) view.style.display = 'none';
@@ -291,6 +294,12 @@ function updateUI() {
       if (dividendKingsView) {
         dividendKingsView.style.display = 'block';
         loadTabOnce('dividend-kings', loadDividendKings);
+      }
+      break;
+    case 'dividend-aristocrats':
+      if (dividendAristocratsView) {
+        dividendAristocratsView.style.display = 'block';
+        loadTabOnce('dividend-aristocrats', loadDividendAristocrats);
       }
       break;
     default:
@@ -350,6 +359,17 @@ function loadDividendKings() {
   }
 
   renderDividendKings('dividend-kings-view');
+}
+
+// ========== DIVIDEND ARISTOCRATS ==========
+function loadDividendAristocrats() {
+  const dividendAristocratsView = document.getElementById('dividend-aristocrats-view');
+  if (!dividendAristocratsView) {
+    console.error('❌ dividend-aristocrats-view não encontrado!');
+    return;
+  }
+
+  renderDividendAristocrats('dividend-aristocrats-view');
 }
 
 function updateTabButtons() {
@@ -1124,6 +1144,7 @@ export {
   loadDividends,
   loadDowJones,
   loadDividendKings,
+  loadDividendAristocrats,
   updateTabButtons,
   loadDashboardData,
   updateFreshnessBadge,

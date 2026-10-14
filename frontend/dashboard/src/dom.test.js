@@ -5,6 +5,7 @@ import { renderBubbleChart } from './bubble-chart.js';
 import { renderDividends } from './dividends.js';
 import { renderDowJones } from './dow-jones.js';
 import { renderDividendKings } from './dividend-kings.js';
+import { renderDividendAristocrats } from './dividend-aristocrats.js';
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
 import { loadDailySummary } from './daily-summary.js';
@@ -451,6 +452,74 @@ describe('renderDividendKings', () => {
 
   it('ignora contentor ausente', () => {
     expect(() => renderDividendKings('ausente')).not.toThrow();
+  });
+});
+
+describe('renderDividendAristocrats', () => {
+  it('renderiza cabeçalho, cartões, filtros e setores', () => {
+    document.body.innerHTML = '<div id="dividend-aristocrats-view"></div>';
+    renderDividendAristocrats('dividend-aristocrats-view');
+    const el = document.getElementById('dividend-aristocrats-view');
+    expect(el.innerHTML).toContain('Dividend Aristocrats');
+    expect(el.innerHTML).toContain('Empresas');
+    expect(el.querySelectorAll('.da-card')).toHaveLength(71);
+    expect(el.querySelector('#da-search')).toBeTruthy();
+    expect(el.querySelector('#da-sector')).toBeTruthy();
+    expect(el.querySelector('#da-min-years')).toBeTruthy();
+    expect(el.querySelector('#da-sort')).toBeTruthy();
+    expect(el.innerHTML).toContain('Distribuição por setor');
+    // Ordenação por omissão: anos desc > Dover (70)
+    expect(el.querySelector('.da-card h3').textContent).toBe('Dover');
+  });
+
+  it('filtra por busca e mínimo de anos e alterna para tabela', () => {
+    document.body.innerHTML = '<div id="dividend-aristocrats-view"></div>';
+    renderDividendAristocrats('dividend-aristocrats-view');
+    const el = document.getElementById('dividend-aristocrats-view');
+
+    const search = el.querySelector('#da-search');
+    search.value = 'coca';
+    search.dispatchEvent(new Event('input'));
+    expect(el.querySelectorAll('.da-card')).toHaveLength(1);
+    expect(el.textContent).toContain('KO');
+
+    const minYears = el.querySelector('#da-min-years');
+    minYears.value = '70';
+    minYears.dispatchEvent(new Event('input'));
+    expect(el.querySelector('.da-empty')).toBeTruthy();
+
+    minYears.value = '';
+    minYears.dispatchEvent(new Event('input'));
+    search.value = '';
+    search.dispatchEvent(new Event('input'));
+
+    const sector = el.querySelector('#da-sector');
+    sector.value = 'Energy';
+    sector.dispatchEvent(new Event('change'));
+    expect(el.querySelectorAll('.da-card')).toHaveLength(3);
+
+    el.querySelector('.da-view-btn[data-view="table"]').dispatchEvent(new Event('click'));
+    expect(el.querySelector('.da-table')).toBeTruthy();
+    expect(el.querySelectorAll('.da-table tbody tr')).toHaveLength(3);
+  });
+
+  it('ordena pela coluna da tabela ao clicar', () => {
+    document.body.innerHTML = '<div id="dividend-aristocrats-view"></div>';
+    renderDividendAristocrats('dividend-aristocrats-view');
+    const el = document.getElementById('dividend-aristocrats-view');
+    el.querySelector('.da-view-btn[data-view="table"]').dispatchEvent(new Event('click'));
+
+    const firstTicker = () =>
+      el.querySelector('.da-table tbody tr td:nth-child(2)').textContent.trim();
+    // Por omissão: anos desc > Dover (70)
+    expect(firstTicker()).toBe('DOV');
+
+    el.querySelector('.da-table th[data-sort="ticker"]').dispatchEvent(new Event('click'));
+    expect(firstTicker()).toBe('ABBV');
+  });
+
+  it('ignora contentor ausente', () => {
+    expect(() => renderDividendAristocrats('ausente')).not.toThrow();
   });
 });
 

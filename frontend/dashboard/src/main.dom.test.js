@@ -13,6 +13,7 @@ const FULL_HTML = `
   <button class="nav-tab" data-tab="dividends"></button>
   <button class="nav-tab" data-tab="dow-jones"></button>
   <button class="nav-tab" data-tab="dividend-kings"></button>
+  <button class="nav-tab" data-tab="dividend-aristocrats"></button>
   <button class="nav-tab" data-tab="stock-of-day"></button>
   <button class="nav-tab" data-tab="daily-curiosity"></button>
   <div id="dashboard-view"></div>
@@ -24,6 +25,7 @@ const FULL_HTML = `
   <div id="daily-curiosity-view"></div>
   <div id="dow-jones-view"></div>
   <div id="dividend-kings-view"></div>
+  <div id="dividend-aristocrats-view"></div>
   <div id="daily-summary"></div>
   <select id="sector-filter"></select>
   <select id="country-filter"></select>
@@ -314,6 +316,12 @@ describe('navegação', () => {
     main.setActiveTab('dividend-kings');
     expect(document.getElementById('dividend-kings-view').style.display).toBe('block');
     expect(document.getElementById('dividend-kings-view').innerHTML).toContain('Dividend Kings');
+
+    main.setActiveTab('dividend-aristocrats');
+    expect(document.getElementById('dividend-aristocrats-view').style.display).toBe('block');
+    expect(document.getElementById('dividend-aristocrats-view').innerHTML).toContain(
+      'Dividend Aristocrats'
+    );
 
     main.setActiveTab('daily-curiosity');
     await settle();
