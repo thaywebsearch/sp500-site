@@ -9,6 +9,7 @@ import { loadHeatmap } from './heatmap.js';
 import { renderBubbleChart } from './bubble-chart.js';
 import { renderDividends } from './dividends.js';
 import { renderDowJones } from './dow-jones.js';
+import { renderDividendKings } from './dividend-kings.js';
 import { loadDailySummary } from './daily-summary.js';
 
 // ========== CONSTANTES ==========
@@ -221,6 +222,7 @@ function updateUI() {
   const stockOfDayView = document.getElementById('stock-of-day-view');
   const dailyCuriosityView = document.getElementById('daily-curiosity-view');
   const dowJonesView = document.getElementById('dow-jones-view');
+  const dividendKingsView = document.getElementById('dividend-kings-view');
 
   // Hide all views
   const allViews = [
@@ -232,6 +234,7 @@ function updateUI() {
     stockOfDayView,
     dailyCuriosityView,
     dowJonesView,
+    dividendKingsView,
   ];
   allViews.forEach((view) => {
     if (view) view.style.display = 'none';
@@ -284,6 +287,12 @@ function updateUI() {
         loadTabOnce('dow-jones', loadDowJones);
       }
       break;
+    case 'dividend-kings':
+      if (dividendKingsView) {
+        dividendKingsView.style.display = 'block';
+        loadTabOnce('dividend-kings', loadDividendKings);
+      }
+      break;
     default:
       if (dashboardView) dashboardView.style.display = 'block';
   }
@@ -330,6 +339,17 @@ function loadDowJones() {
   }
 
   renderDowJones('dow-jones-view');
+}
+
+// ========== DIVIDEND KINGS ==========
+function loadDividendKings() {
+  const dividendKingsView = document.getElementById('dividend-kings-view');
+  if (!dividendKingsView) {
+    console.error('❌ dividend-kings-view não encontrado!');
+    return;
+  }
+
+  renderDividendKings('dividend-kings-view');
 }
 
 function updateTabButtons() {
@@ -1103,6 +1123,7 @@ export {
   loadBubbleChart,
   loadDividends,
   loadDowJones,
+  loadDividendKings,
   updateTabButtons,
   loadDashboardData,
   updateFreshnessBadge,

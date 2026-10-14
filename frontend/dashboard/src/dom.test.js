@@ -4,6 +4,7 @@ import './config.js';
 import { renderBubbleChart } from './bubble-chart.js';
 import { renderDividends } from './dividends.js';
 import { renderDowJones } from './dow-jones.js';
+import { renderDividendKings } from './dividend-kings.js';
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
 import { loadDailySummary } from './daily-summary.js';
@@ -388,6 +389,68 @@ describe('renderDividends', () => {
     expect(document.getElementById('dividends-view').innerHTML).toContain('Sem dados');
 
     expect(() => renderDividends([], 'ausente')).not.toThrow();
+  });
+});
+
+describe('renderDividendKings', () => {
+  it('renderiza cabeçalho, cartões, filtros e setores', () => {
+    document.body.innerHTML = '<div id="dividend-kings-view"></div>';
+    renderDividendKings('dividend-kings-view');
+    const el = document.getElementById('dividend-kings-view');
+    expect(el.innerHTML).toContain('Dividend Kings');
+    expect(el.innerHTML).toContain('Empresas');
+    expect(el.querySelectorAll('.dk-card')).toHaveLength(38);
+    expect(el.querySelector('#dk-search')).toBeTruthy();
+    expect(el.querySelector('#dk-sector')).toBeTruthy();
+    expect(el.innerHTML).toContain('Distribuição por setor');
+  });
+
+  it('filtra por busca e setor e alterna para tabela', () => {
+    document.body.innerHTML = '<div id="dividend-kings-view"></div>';
+    renderDividendKings('dividend-kings-view');
+    const el = document.getElementById('dividend-kings-view');
+
+    const search = el.querySelector('#dk-search');
+    search.value = 'coca';
+    search.dispatchEvent(new Event('input'));
+    expect(el.querySelectorAll('.dk-card')).toHaveLength(1);
+    expect(el.textContent).toContain('KO');
+
+    const sector = el.querySelector('#dk-sector');
+    sector.value = 'Healthcare';
+    sector.dispatchEvent(new Event('change'));
+    expect(el.querySelector('.dk-empty')).toBeTruthy();
+
+    search.value = '';
+    search.dispatchEvent(new Event('input'));
+
+    el.querySelector('.dk-view-btn[data-view="table"]').dispatchEvent(new Event('click'));
+    expect(el.querySelector('.dk-table')).toBeTruthy();
+    expect(el.querySelectorAll('.dk-table tbody tr')).toHaveLength(1);
+  });
+
+  it('ordena pela coluna da tabela ao clicar', () => {
+    document.body.innerHTML = '<div id="dividend-kings-view"></div>';
+    renderDividendKings('dividend-kings-view');
+    const el = document.getElementById('dividend-kings-view');
+    el.querySelector('.dk-view-btn[data-view="table"]').dispatchEvent(new Event('click'));
+
+    const tickers = () =>
+      [...el.querySelectorAll('.dk-table tbody tr td:nth-child(2)')].map((td) =>
+        td.textContent.trim()
+      );
+    const byCompany = tickers();
+    expect(byCompany[0]).toBe('ABM');
+
+    el.querySelector('.dk-table th[data-sort="ticker"]').dispatchEvent(new Event('click'));
+    const byTicker = tickers();
+    expect(byTicker[0]).toBe('ABM');
+    expect(byTicker[1]).toBe('ADP');
+    expect(byTicker).not.toEqual(byCompany);
+  });
+
+  it('ignora contentor ausente', () => {
+    expect(() => renderDividendKings('ausente')).not.toThrow();
   });
 });
 

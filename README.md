@@ -53,6 +53,7 @@ SPA em JavaScript puro (Vite) que consome a API. Abas:
 | 🫧 Bubble Chart | Dispersão market cap × dividend yield, com tooltip e legenda |
 | 💰 Dividendos | Painel de renda: resumo, top por yield, distribuição por faixa e yield médio por setor |
 | 📈 Dow Jones 30 | As 30 empresas do DJIA: cartões/tabela, busca, filtro por setor e distribuição por setor |
+| 👑 Dividend Kings | As 38 empresas com 50+ anos de aumentos de dividendos: cartões/tabela, busca, filtro por setor e distribuição por setor |
 
 Funcionalidades transversais:
 
