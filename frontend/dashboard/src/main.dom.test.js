@@ -6,17 +6,39 @@ const STOCK_KEY = 'sp500-stock-of-day';
 
 const FULL_HTML = `
   <div id="freshness-badge"><span id="freshness-text"></span></div>
-  <button class="nav-tab" data-tab="dashboard"></button>
-  <button class="nav-tab" data-tab="treemap"></button>
-  <button class="nav-tab" data-tab="heatmap"></button>
-  <button class="nav-tab" data-tab="bubble"></button>
-  <button class="nav-tab" data-tab="dividends"></button>
-  <button class="nav-tab" data-tab="dow-jones"></button>
-  <button class="nav-tab" data-tab="dividend-kings"></button>
-  <button class="nav-tab" data-tab="dividend-aristocrats"></button>
-  <button class="nav-tab" data-tab="nasdaq-100"></button>
-  <button class="nav-tab" data-tab="stock-of-day"></button>
-  <button class="nav-tab" data-tab="daily-curiosity"></button>
+  <div class="nav-tabs">
+    <div class="nav-group" role="group" aria-label="Geral">
+      <span class="nav-group-label">Geral</span>
+      <div class="nav-group-tabs">
+        <button class="nav-tab" data-tab="dashboard"></button>
+        <button class="nav-tab" data-tab="daily-curiosity"></button>
+        <button class="nav-tab" data-tab="stock-of-day"></button>
+      </div>
+    </div>
+    <div class="nav-group" role="group" aria-label="Mercado">
+      <span class="nav-group-label">Mercado</span>
+      <div class="nav-group-tabs">
+        <button class="nav-tab" data-tab="treemap"></button>
+        <button class="nav-tab" data-tab="heatmap"></button>
+        <button class="nav-tab" data-tab="bubble"></button>
+      </div>
+    </div>
+    <div class="nav-group" role="group" aria-label="Dividendos">
+      <span class="nav-group-label">Dividendos</span>
+      <div class="nav-group-tabs">
+        <button class="nav-tab" data-tab="dividends"></button>
+        <button class="nav-tab" data-tab="dividend-kings"></button>
+        <button class="nav-tab" data-tab="dividend-aristocrats"></button>
+      </div>
+    </div>
+    <div class="nav-group" role="group" aria-label="Índices">
+      <span class="nav-group-label">Índices</span>
+      <div class="nav-group-tabs">
+        <button class="nav-tab" data-tab="dow-jones"></button>
+        <button class="nav-tab" data-tab="nasdaq-100"></button>
+      </div>
+    </div>
+  </div>
   <div id="dashboard-view"></div>
   <div id="treemap-view"></div>
   <div id="heatmap-view"></div>
@@ -328,6 +350,13 @@ describe('navegação', () => {
     main.setActiveTab('nasdaq-100');
     expect(document.getElementById('nasdaq-100-view').style.display).toBe('block');
     expect(document.getElementById('nasdaq-100-view').innerHTML).toContain('Nasdaq-100');
+
+    // O botão ativo vive dentro do grupo correcto
+    const activeTab = document.querySelector('.nav-tab.active');
+    expect(activeTab.getAttribute('data-tab')).toBe('nasdaq-100');
+    expect(activeTab.closest('.nav-group').querySelector('.nav-group-label').textContent).toBe(
+      'Índices'
+    );
 
     main.setActiveTab('daily-curiosity');
     await settle();

@@ -41,25 +41,25 @@ O `frontend/scripts/update_live_data.py` atualiza `marketCap` e `dividendYield` 
 
 ## Dashboard (`frontend/dashboard`)
 
-SPA em JavaScript puro (Vite) que consome a API. Abas:
+SPA em JavaScript puro (Vite) que consome a API. Abas (agrupadas por categoria no menu):
 
-| Aba | Descrição |
-|-----|-----------|
-| 📋 Dashboard | Tabela paginada com filtros (setor, país, busca, dividend yield mín.), ordenação, seleção múltipla, estatísticas e exportação CSV/JSON |
-| 🌟 Curiosidade do Dia | Curiosidade rotativa diária de uma empresa do índice |
-| 🎯 Ação do Dia | Análise heurística de uma ação (com alternativas e disclaimer), determinística por data |
-| 🗺️ Mapa de Setores | Visão por setor com market cap relativo, nº de empresas e dividendos |
-| 🔥 Heatmap | Top 4 empresas por market cap em cada setor |
-| 🫧 Bubble Chart | Dispersão market cap × dividend yield, com tooltip e legenda |
-| 💰 Dividendos | Painel de renda: resumo, top por yield, distribuição por faixa e yield médio por setor |
-| 📈 Dow Jones 30 | As 30 empresas do DJIA: cartões/tabela, busca, filtro por setor e distribuição por setor |
-| 👑 Dividend Kings | As 38 empresas com 50+ anos de aumentos de dividendos: cartões/tabela, busca, filtro por setor e distribuição por setor |
-| 🏆 Dividend Aristocrats | As 71 empresas do S&P 500 com 25+ anos de aumentos de dividendos: cartões/tabela, busca, filtro por setor, mínimo de anos e distribuição por setor |
-| 💻 Nasdaq-100 | As 100 maiores empresas não financeiras da Nasdaq: cartões/tabela, busca, filtros por setor e capitalização, ranking, market cap, peso no índice e distribuição por setor |
+| Aba | Grupo | Descrição |
+|-----|-------|-----------|
+| 📋 Dashboard | Geral | Tabela paginada com filtros (setor, país, busca, dividend yield mín.), ordenação, seleção múltipla, estatísticas e exportação CSV/JSON |
+| 🌟 Curiosidade do Dia | Geral | Curiosidade rotativa diária de uma empresa do índice |
+| 🎯 Ação do Dia | Geral | Análise heurística de uma ação (com alternativas e disclaimer), determinística por data |
+| 🗺️ Mapa de Setores | Mercado | Visão por setor com market cap relativo, nº de empresas e dividendos |
+| 🔥 Heatmap | Mercado | Top 4 empresas por market cap em cada setor |
+| 🫧 Bubble Chart | Mercado | Dispersão market cap × dividend yield, com tooltip e legenda |
+| 💰 Dividendos | Dividendos | Painel de renda: resumo, top por yield, distribuição por faixa e yield médio por setor |
+| 👑 Dividend Kings | Dividendos | As 38 empresas com 50+ anos de aumentos de dividendos: cartões/tabela, busca, filtro por setor e distribuição por setor |
+| 🏆 Dividend Aristocrats | Dividendos | As 71 empresas do S&P 500 com 25+ anos de aumentos de dividendos: cartões/tabela, busca, filtro por setor, mínimo de anos e distribuição por setor |
+| 📈 Dow Jones 30 | Índices | As 30 empresas do DJIA: cartões/tabela, busca, filtro por setor e distribuição por setor |
+| 💻 Nasdaq-100 | Índices | As 100 maiores empresas não financeiras da Nasdaq: cartões/tabela, busca, filtros por setor e capitalização, ranking, market cap, peso no índice e distribuição por setor |
 
 Funcionalidades transversais:
 
-- **Menu de navegação**: botão ☰ no cabeçalho abre/fecha as abas; fecha com `Esc` ou clique fora.
+- **Menu de navegação**: botão ☰ no cabeçalho abre/fecha as abas, agrupadas por categoria (Geral, Mercado, Dividendos, Índices); fecha com `Esc` ou clique fora.
 - **Frescura dos dados**: badge no cabeçalho com a data mais recente (`generatedAt`) e classificação por idade.
 - **Alertas de preço**: por ação (acima/abaixo de um alvo), verificados a cada 60 s via `/api/historico/:symbol` e notificados quando atingidos; persistidos em `localStorage`.
 - **Cache por aba**: Curiosidade, Mapa de Setores e Heatmap só carregam uma vez por sessão.

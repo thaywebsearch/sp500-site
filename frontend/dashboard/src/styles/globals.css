@@ -220,11 +220,36 @@ body {
 /* ========== NAVIGATION TABS ========== */
 .nav-tabs {
   display: flex;
-  gap: 15px;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 14px;
   border-top: 1px solid var(--border);
   padding-top: 15px;
+}
+
+.nav-group {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+
+.nav-group-label {
+  flex: 0 0 auto;
+  min-width: 96px;
+  padding-top: 8px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.68em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+}
+
+.nav-group-tabs {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .nav-tab {
@@ -504,7 +529,17 @@ body {
   }
 
   .nav-tabs {
-    gap: 10px;
+    gap: 12px;
+  }
+
+  .nav-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nav-group-label {
+    min-width: 0;
+    padding-top: 0;
   }
 
   .nav-tab {
