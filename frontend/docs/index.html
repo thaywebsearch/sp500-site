@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SP500 Dashboard</title>
     <link rel="icon" type="image/jpeg" href="./assets/VenomF-Ci10DD8U.jfif" />
-    <script type="module" crossorigin src="./assets/index-D9-WSepv.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DzIj-3ET.css">
+    <script type="module" crossorigin src="./assets/index-BIPVPrnF.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Cbq2HvTU.css">
   </head>
   <body>
     <div class="app-container">
@@ -44,19 +44,39 @@
           </div>
           <nav id="nav-menu" class="nav-menu" aria-label="Navegação principal">
             <div class="nav-tabs">
-              <button class="nav-tab active" data-tab="dashboard">📋 Dashboard</button>
-              <button class="nav-tab" data-tab="daily-curiosity">🌟 Curiosidade do Dia</button>
-              <button class="nav-tab" data-tab="stock-of-day">🎯 Ação do Dia</button>
-              <button class="nav-tab" data-tab="treemap">🗺️ Mapa de Setores</button>
-              <button class="nav-tab" data-tab="heatmap">🔥 Heatmap</button>
-              <button class="nav-tab" data-tab="bubble">🫧 Bubble Chart</button>
-              <button class="nav-tab" data-tab="dividends">💰 Dividendos</button>
-              <button class="nav-tab" data-tab="dow-jones">📈 Dow Jones 30</button>
-              <button class="nav-tab" data-tab="dividend-kings">👑 Dividend Kings</button>
-              <button class="nav-tab" data-tab="dividend-aristocrats">
-                🏆 Dividend Aristocrats
-              </button>
-              <button class="nav-tab" data-tab="nasdaq-100">💻 Nasdaq-100</button>
+              <div class="nav-group" role="group" aria-label="Geral">
+                <span class="nav-group-label">Geral</span>
+                <div class="nav-group-tabs">
+                  <button class="nav-tab active" data-tab="dashboard">📋 Dashboard</button>
+                  <button class="nav-tab" data-tab="daily-curiosity">🌟 Curiosidade do Dia</button>
+                  <button class="nav-tab" data-tab="stock-of-day">🎯 Ação do Dia</button>
+                </div>
+              </div>
+              <div class="nav-group" role="group" aria-label="Mercado">
+                <span class="nav-group-label">Mercado</span>
+                <div class="nav-group-tabs">
+                  <button class="nav-tab" data-tab="treemap">🗺️ Mapa de Setores</button>
+                  <button class="nav-tab" data-tab="heatmap">🔥 Heatmap</button>
+                  <button class="nav-tab" data-tab="bubble">🫧 Bubble Chart</button>
+                </div>
+              </div>
+              <div class="nav-group" role="group" aria-label="Dividendos">
+                <span class="nav-group-label">Dividendos</span>
+                <div class="nav-group-tabs">
+                  <button class="nav-tab" data-tab="dividends">💰 Dividendos</button>
+                  <button class="nav-tab" data-tab="dividend-kings">👑 Dividend Kings</button>
+                  <button class="nav-tab" data-tab="dividend-aristocrats">
+                    🏆 Dividend Aristocrats
+                  </button>
+                </div>
+              </div>
+              <div class="nav-group" role="group" aria-label="Índices">
+                <span class="nav-group-label">Índices</span>
+                <div class="nav-group-tabs">
+                  <button class="nav-tab" data-tab="dow-jones">📈 Dow Jones 30</button>
+                  <button class="nav-tab" data-tab="nasdaq-100">💻 Nasdaq-100</button>
+                </div>
+              </div>
             </div>
           </nav>
         </div>
