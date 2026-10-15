@@ -14,6 +14,7 @@ const FULL_HTML = `
   <button class="nav-tab" data-tab="dow-jones"></button>
   <button class="nav-tab" data-tab="dividend-kings"></button>
   <button class="nav-tab" data-tab="dividend-aristocrats"></button>
+  <button class="nav-tab" data-tab="nasdaq-100"></button>
   <button class="nav-tab" data-tab="stock-of-day"></button>
   <button class="nav-tab" data-tab="daily-curiosity"></button>
   <div id="dashboard-view"></div>
@@ -26,6 +27,7 @@ const FULL_HTML = `
   <div id="dow-jones-view"></div>
   <div id="dividend-kings-view"></div>
   <div id="dividend-aristocrats-view"></div>
+  <div id="nasdaq-100-view"></div>
   <div id="daily-summary"></div>
   <select id="sector-filter"></select>
   <select id="country-filter"></select>
@@ -322,6 +324,10 @@ describe('navegação', () => {
     expect(document.getElementById('dividend-aristocrats-view').innerHTML).toContain(
       'Dividend Aristocrats'
     );
+
+    main.setActiveTab('nasdaq-100');
+    expect(document.getElementById('nasdaq-100-view').style.display).toBe('block');
+    expect(document.getElementById('nasdaq-100-view').innerHTML).toContain('Nasdaq-100');
 
     main.setActiveTab('daily-curiosity');
     await settle();

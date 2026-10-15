@@ -55,6 +55,7 @@ SPA em JavaScript puro (Vite) que consome a API. Abas:
 | 📈 Dow Jones 30 | As 30 empresas do DJIA: cartões/tabela, busca, filtro por setor e distribuição por setor |
 | 👑 Dividend Kings | As 38 empresas com 50+ anos de aumentos de dividendos: cartões/tabela, busca, filtro por setor e distribuição por setor |
 | 🏆 Dividend Aristocrats | As 71 empresas do S&P 500 com 25+ anos de aumentos de dividendos: cartões/tabela, busca, filtro por setor, mínimo de anos e distribuição por setor |
+| 💻 Nasdaq-100 | As 100 maiores empresas não financeiras da Nasdaq: cartões/tabela, busca, filtros por setor e capitalização, ranking, market cap, peso no índice e distribuição por setor |
 
 Funcionalidades transversais:
 

@@ -11,6 +11,7 @@ import { renderDividends } from './dividends.js';
 import { renderDowJones } from './dow-jones.js';
 import { renderDividendKings } from './dividend-kings.js';
 import { renderDividendAristocrats } from './dividend-aristocrats.js';
+import { renderNasdaq100 } from './nasdaq-100.js';
 import { loadDailySummary } from './daily-summary.js';
 
 // ========== CONSTANTES ==========
@@ -225,6 +226,7 @@ function updateUI() {
   const dowJonesView = document.getElementById('dow-jones-view');
   const dividendKingsView = document.getElementById('dividend-kings-view');
   const dividendAristocratsView = document.getElementById('dividend-aristocrats-view');
+  const nasdaqView = document.getElementById('nasdaq-100-view');
 
   // Hide all views
   const allViews = [
@@ -238,6 +240,7 @@ function updateUI() {
     dowJonesView,
     dividendKingsView,
     dividendAristocratsView,
+    nasdaqView,
   ];
   allViews.forEach((view) => {
     if (view) view.style.display = 'none';
@@ -300,6 +303,12 @@ function updateUI() {
       if (dividendAristocratsView) {
         dividendAristocratsView.style.display = 'block';
         loadTabOnce('dividend-aristocrats', loadDividendAristocrats);
+      }
+      break;
+    case 'nasdaq-100':
+      if (nasdaqView) {
+        nasdaqView.style.display = 'block';
+        loadTabOnce('nasdaq-100', loadNasdaq100);
       }
       break;
     default:
@@ -370,6 +379,17 @@ function loadDividendAristocrats() {
   }
 
   renderDividendAristocrats('dividend-aristocrats-view');
+}
+
+// ========== NASDAQ-100 ==========
+function loadNasdaq100() {
+  const nasdaqView = document.getElementById('nasdaq-100-view');
+  if (!nasdaqView) {
+    console.error('❌ nasdaq-100-view não encontrado!');
+    return;
+  }
+
+  renderNasdaq100('nasdaq-100-view');
 }
 
 function updateTabButtons() {
@@ -1145,6 +1165,7 @@ export {
   loadDowJones,
   loadDividendKings,
   loadDividendAristocrats,
+  loadNasdaq100,
   updateTabButtons,
   loadDashboardData,
   updateFreshnessBadge,

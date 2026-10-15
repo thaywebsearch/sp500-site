@@ -6,6 +6,7 @@ import { renderDividends } from './dividends.js';
 import { renderDowJones } from './dow-jones.js';
 import { renderDividendKings } from './dividend-kings.js';
 import { renderDividendAristocrats } from './dividend-aristocrats.js';
+import { renderNasdaq100 } from './nasdaq-100.js';
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
 import { loadDailySummary } from './daily-summary.js';
@@ -520,6 +521,80 @@ describe('renderDividendAristocrats', () => {
 
   it('ignora contentor ausente', () => {
     expect(() => renderDividendAristocrats('ausente')).not.toThrow();
+  });
+});
+
+describe('renderNasdaq100', () => {
+  it('renderiza cabeçalho, cartões, filtros e setores', () => {
+    document.body.innerHTML = '<div id="nasdaq-100-view"></div>';
+    renderNasdaq100('nasdaq-100-view');
+    const el = document.getElementById('nasdaq-100-view');
+    expect(el.innerHTML).toContain('Nasdaq-100');
+    expect(el.innerHTML).toContain('Empresas');
+    expect(el.innerHTML).toContain('44.18T');
+    expect(el.innerHTML).toContain('99.94%');
+    expect(el.querySelectorAll('.nq-card')).toHaveLength(100);
+    expect(el.querySelector('#nq-search')).toBeTruthy();
+    expect(el.querySelector('#nq-sector')).toBeTruthy();
+    expect(el.querySelector('#nq-cap')).toBeTruthy();
+    expect(el.querySelector('#nq-sort')).toBeTruthy();
+    expect(el.innerHTML).toContain('Distribuição por setor');
+    // Ordenação por omissão: ranking > #1 NVIDIA
+    expect(el.querySelector('.nq-card-head h3').textContent).toBe('NVIDIA Corporation');
+  });
+
+  it('filtra por busca, setor e categoria e alterna para tabela', () => {
+    document.body.innerHTML = '<div id="nasdaq-100-view"></div>';
+    renderNasdaq100('nasdaq-100-view');
+    const el = document.getElementById('nasdaq-100-view');
+
+    const search = el.querySelector('#nq-search');
+    search.value = 'apple';
+    search.dispatchEvent(new Event('input'));
+    expect(el.querySelectorAll('.nq-card')).toHaveLength(1);
+    expect(el.textContent).toContain('AAPL');
+
+    search.value = '';
+    search.dispatchEvent(new Event('input'));
+
+    const sector = el.querySelector('#nq-sector');
+    sector.value = 'Energy';
+    sector.dispatchEvent(new Event('change'));
+    expect(el.querySelectorAll('.nq-card')).toHaveLength(2);
+
+    const cap = el.querySelector('#nq-cap');
+    cap.value = 'Mega Cap';
+    cap.dispatchEvent(new Event('change'));
+    expect(el.querySelector('.nq-empty')).toBeTruthy();
+
+    cap.value = '';
+    cap.dispatchEvent(new Event('change'));
+    expect(el.querySelectorAll('.nq-card')).toHaveLength(2);
+
+    el.querySelector('.nq-view-btn[data-view="table"]').dispatchEvent(new Event('click'));
+    expect(el.querySelector('.nq-table')).toBeTruthy();
+    expect(el.querySelectorAll('.nq-table tbody tr')).toHaveLength(2);
+  });
+
+  it('ordena pela coluna da tabela ao clicar', () => {
+    document.body.innerHTML = '<div id="nasdaq-100-view"></div>';
+    renderNasdaq100('nasdaq-100-view');
+    const el = document.getElementById('nasdaq-100-view');
+    el.querySelector('.nq-view-btn[data-view="table"]').dispatchEvent(new Event('click'));
+
+    const firstTicker = () =>
+      el.querySelector('.nq-table tbody tr td:nth-child(3)').textContent.trim();
+    expect(firstTicker()).toBe('NVDA');
+
+    el.querySelector('.nq-table th[data-sort="ticker"]').dispatchEvent(new Event('click'));
+    expect(firstTicker()).toBe('AAPL');
+
+    el.querySelector('.nq-table th[data-sort="cap"]').dispatchEvent(new Event('click'));
+    expect(firstTicker()).toBe('NVDA');
+  });
+
+  it('ignora contentor ausente', () => {
+    expect(() => renderNasdaq100('ausente')).not.toThrow();
   });
 });
 
