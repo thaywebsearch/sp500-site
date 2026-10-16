@@ -120,10 +120,26 @@ def _fail(symbol, error):
     }
 
 
+# O Yahoo expõe o dividendYield em unidades diferentes conforme o endpoint: o
+# quoteSummary usado pelo fallback devolve uma fração decimal (0.015 = 1.5%),
+# enquanto o endpoint consumido pelo yfinance (>= 0.2.55) devolve já a
+# percentagem (2.11 = 2.11%). Cada fonte faz a sua própria conversão para
+# percentagem na origem, para o dataset ficar sempre na mesma unidade.
+MAX_DIVIDEND_YIELD_PERCENT = 100.0
+
+
 def _normalize_dividend_yield(value):
-    """Converte a fracao do Yahoo (0.015) em percentagem (1.5)."""
-    if isinstance(value, (int, float)) and not _is_nan(value) and float(value) > 0:
-        return round(float(value) * 100, 2)
+    """Normaliza o dividendYield do yfinance para percentagem.
+
+    O yfinance (>= 0.2.55) devolve ``info['dividendYield']`` já em percentagem
+    (2.11 -> 2.11%), pelo que NÃO deve ser multiplicado por 100. Valores fora
+    do intervalo plausível (0, 100%] são descartados para não propagar dados
+    corrompidos (ex.: um ×100 acidental) para os JSONs.
+    """
+    if isinstance(value, (int, float)) and not _is_nan(value):
+        value = float(value)
+        if 0 < value <= MAX_DIVIDEND_YIELD_PERCENT:
+            return round(value, 2)
     return None
 
 
@@ -158,8 +174,8 @@ def fetch_quote(symbol, retries=3, base_delay=2):
 
     Tenta primeiro o yfinance (uma requisicao por ticker). Se estiver
     indisponivel, usa o fallback `yahoo_quotes` (cookie + crumb do Yahoo), que
-    contorna o rate limit HTTP 429. O dividendYield e uma fracao decimal
-    (0.015 -> 1.5%); empresas sem dividendo devolvem None.
+    contorna o rate limit HTTP 429. Em ambos os casos o dividendYield devolvido
+    esta em percentagem (2.11 -> 2.11%); empresas sem dividendo devolvem None.
     """
     if _yfinance_enabled:
         for attempt in range(retries + 1):

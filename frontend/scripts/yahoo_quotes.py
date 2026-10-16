@@ -26,6 +26,10 @@ USER_AGENT = (
     "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 )
 
+# Limite superior plausivel para um dividend yield (nenhuma empresa do S&P 500
+# paga perto de 100%). Guarda contra erros de unidade (fracao vs. percentagem).
+MAX_DIVIDEND_YIELD_PERCENT = 100.0
+
 # Cada thread tem a sua propria sessao (cookies e crumb isolados).
 _local = threading.local()
 
@@ -103,11 +107,16 @@ def _parse(result):
     # O dividendYield "forward" vem 0.0 em alguns pagadores (ex.: SWKS);
     # nesse caso usa-se o trailingAnnualDividendYield. O dataset representa
     # empresas sem dividendo como null/None.
+    # Aqui o Yahoo devolve uma fracao decimal (0.0207 = 2.07%), ao contrario do
+    # yfinance (>= 0.2.55), que ja devolve percentagem. A conversao para
+    # percentagem e feita so nesta origem, uma unica vez.
     forward = (detail.get("dividendYield") or {}).get("raw")
     trailing = (detail.get("trailingAnnualDividendYield") or {}).get("raw")
     dividend_yield = forward if _is_positive_number(forward) else trailing
     if _is_positive_number(dividend_yield):
         dividend_yield = round(float(dividend_yield) * 100, 2)
+        if dividend_yield > MAX_DIVIDEND_YIELD_PERCENT:
+            dividend_yield = None
     else:
         dividend_yield = None
 
