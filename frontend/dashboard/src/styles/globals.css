@@ -55,6 +55,25 @@ body {
     color 0.3s ease;
 }
 
+/* ========== ACESSIBILIDADE ========== */
+/* Link "saltar para o conteúdo": invisível até receber foco por teclado. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1000;
+  padding: 10px 16px;
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+  font-weight: 700;
+  border-radius: 0 0 4px 0;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
 @keyframes pulse {
   0%,
   100% {

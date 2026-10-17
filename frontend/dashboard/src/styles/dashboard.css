@@ -104,6 +104,13 @@ tr:hover {
   box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
 }
 
+/* Anel de foco visível para navegação por teclado (o glow acima cobre o rato). */
+.control-group input:focus-visible,
+.control-group select:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
 /* ========== BUTTONS ========== */
 .button-group {
   display: flex;
@@ -1468,6 +1475,11 @@ button:disabled {
   box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
 }
 
+.search-input:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
 .search-input::placeholder {
   color: var(--text-muted);
 }
@@ -1786,6 +1798,12 @@ button:disabled {
   outline: none;
   border-color: #ffc107;
   box-shadow: 0 0 12px rgba(255, 193, 7, 0.2);
+}
+
+.dow-filter input:focus-visible,
+.dow-filter select:focus-visible {
+  outline: 2px solid #ffc107;
+  outline-offset: 2px;
 }
 
 .dow-view-toggle {
@@ -2159,6 +2177,12 @@ button:disabled {
   outline: none;
   border-color: #00e676;
   box-shadow: 0 0 12px rgba(0, 230, 118, 0.2);
+}
+
+.dk-filter input:focus-visible,
+.dk-filter select:focus-visible {
+  outline: 2px solid #00e676;
+  outline-offset: 2px;
 }
 
 .dk-view-toggle {
@@ -2536,6 +2560,12 @@ button:disabled {
   outline: none;
   border-color: #ffc107;
   box-shadow: 0 0 12px rgba(255, 193, 7, 0.2);
+}
+
+.da-filter input:focus-visible,
+.da-filter select:focus-visible {
+  outline: 2px solid #ffc107;
+  outline-offset: 2px;
 }
 
 .da-view-toggle {
@@ -2923,6 +2953,12 @@ button:disabled {
   outline: none;
   border-color: #00d4ff;
   box-shadow: 0 0 12px rgba(0, 212, 255, 0.2);
+}
+
+.nq-filter input:focus-visible,
+.nq-filter select:focus-visible {
+  outline: 2px solid #00d4ff;
+  outline-offset: 2px;
 }
 
 .nq-view-toggle {

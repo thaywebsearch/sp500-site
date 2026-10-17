@@ -3,12 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SP500 Dashboard</title>
+    <title>SP500 Dashboard — S&amp;P 500 por Setor, Dividendos e Índices</title>
+    <meta
+      name="description"
+      content="Dashboard interativo do S&P 500: market cap e dividend yield por setor, mapa de setores, heatmap, Dow Jones 30, Nasdaq-100, Dividend Kings e Aristocrats. Dados atualizados automaticamente."
+    />
+    <meta name="theme-color" content="#101018" />
+    <link rel="canonical" href="https://thaywebsearch.github.io/sp500-site/frontend/docs/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SP500 Dashboard" />
+    <meta property="og:locale" content="pt_PT" />
+    <meta
+      property="og:title"
+      content="SP500 Dashboard — S&amp;P 500 por Setor, Dividendos e Índices"
+    />
+    <meta
+      property="og:description"
+      content="Dashboard interativo do S&P 500: market cap e dividend yield por setor, mapa de setores, heatmap, Dow Jones 30, Nasdaq-100, Dividend Kings e Aristocrats."
+    />
+    <meta property="og:url" content="https://thaywebsearch.github.io/sp500-site/frontend/docs/" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="SP500 Dashboard — S&amp;P 500 por Setor, Dividendos e Índices"
+    />
+    <meta
+      name="twitter:description"
+      content="Dashboard interativo do S&P 500: market cap e dividend yield por setor, mapa de setores, heatmap, Dow Jones 30, Nasdaq-100, Dividend Kings e Aristocrats."
+    />
+
     <link rel="icon" type="image/jpeg" href="./assets/VenomF-Ci10DD8U.jfif" />
-    <script type="module" crossorigin src="./assets/index-BIPVPrnF.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-Cbq2HvTU.css">
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "SP500 Dashboard",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web",
+        "inLanguage": "pt",
+        "description": "Dashboard interativo do S&P 500 com market cap e dividend yield por setor, Dow Jones 30, Nasdaq-100, Dividend Kings e Aristocrats.",
+        "url": "https://thaywebsearch.github.io/sp500-site/frontend/docs/"
+      }
+    </script>
+    <script type="module" crossorigin src="./assets/index-1fx-T0VO.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DnwOab-n.css">
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Saltar para o conteúdo principal</a>
     <div class="app-container">
       <!-- Navegação -->
       <nav class="app-nav">
@@ -26,7 +70,7 @@
                 <span class="menu-bars" aria-hidden="true">☰</span>
               </button>
               <h1 class="app-title">
-                <img src="./assets/VenomF-Ci10DD8U.jfif" alt="SP500 Logo" class="app-logo" />
+                <img src="./assets/VenomF-Ci10DD8U.jfif" alt="" class="app-logo" />
                 SP500 Dashboard
               </h1>
             </div>
@@ -83,7 +127,7 @@
       </nav>
 
       <!-- Conteúdo Principal -->
-      <main class="app-main">
+      <main id="main-content" class="app-main" tabindex="-1">
         <!-- Dashboard View -->
         <div id="dashboard-view" class="dashboard-view">
           <!-- Resumo do Dia -->
@@ -138,20 +182,24 @@
 
           <!-- Tabela -->
           <div class="table-wrapper">
-            <table>
+            <table aria-label="Empresas do S&amp;P 500">
               <thead>
                 <tr>
-                  <th class="col-check">
-                    <input type="checkbox" id="header-checkbox" />
+                  <th class="col-check" scope="col">
+                    <input
+                      type="checkbox"
+                      id="header-checkbox"
+                      aria-label="Selecionar todas as empresas"
+                    />
                   </th>
-                  <th class="col-index">#</th>
-                  <th>Símbolo</th>
-                  <th>Empresa</th>
-                  <th>Setor</th>
-                  <th>Market Cap</th>
-                  <th>Subindústria</th>
-                  <th>Sede</th>
-                  <th>Div. Yield</th>
+                  <th class="col-index" scope="col">#</th>
+                  <th scope="col">Símbolo</th>
+                  <th scope="col">Empresa</th>
+                  <th scope="col">Setor</th>
+                  <th scope="col">Market Cap</th>
+                  <th scope="col">Subindústria</th>
+                  <th scope="col">Sede</th>
+                  <th scope="col">Div. Yield</th>
                 </tr>
               </thead>
               <tbody id="table-body">

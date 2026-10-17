@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SP500 Setor</title>
+  <meta
+    name="description"
+    content="Página de detalhe de um setor do S&P 500: empresas, market cap total e dividendo médio, com pesquisa, ordenação e vista em cards ou tabela."
+  />
+  <meta name="theme-color" content="#101018" />
   <style>
     * {
       margin: 0;
@@ -147,6 +152,12 @@
       outline: none;
       border-color: rgb(var(--sector-accent-rgb));
       box-shadow: 0 0 12px rgba(var(--sector-accent-rgb), 0.2);
+    }
+
+    .filter-group input:focus-visible,
+    .filter-group select:focus-visible {
+      outline: 2px solid rgb(var(--sector-accent-rgb));
+      outline-offset: 2px;
     }
 
     .view-toggle {

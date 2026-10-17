@@ -1,0 +1,7 @@
+# Aviso: o site está alojado num subpath do GitHub Pages
+# (https://thaywebsearch.github.io/sp500-site/frontend/docs/).
+# Os crawlers só respeitam robots.txt na RAIZ do domínio, por isso este
+# ficheiro só passa a ter efeito quando o site for servido a partir de um
+# domínio próprio (ex.: https://dominio.com/).
+User-agent: *
+Allow: /
