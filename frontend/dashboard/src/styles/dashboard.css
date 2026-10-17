@@ -663,27 +663,6 @@ button:disabled {
   font-size: 0.95rem;
 }
 
-.market-context {
-  padding: 0.35rem 0.75rem;
-  border-radius: 99px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.market-context.calm {
-  background: rgba(0, 230, 118, 0.15);
-  color: var(--accent-green);
-}
-.market-context.moderate {
-  background: rgba(255, 171, 0, 0.15);
-  color: var(--accent-amber);
-}
-.market-context.elevated {
-  background: rgba(255, 82, 82, 0.15);
-  color: var(--accent-red);
-}
-
 .stock-main-card {
   background: var(--bg-secondary);
   border: 1px solid var(--border);

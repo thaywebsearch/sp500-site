@@ -408,19 +408,32 @@ describe('ação do dia', () => {
   it('renderStockOfDay sem primary mostra aviso', async () => {
     const main = await boot();
     const el = document.createElement('div');
-    main.renderStockOfDay(el, { primary: null, alternatives: [], marketContext: {} });
+    main.renderStockOfDay(el, { primary: null, alternatives: [] });
     expect(el.innerHTML).toContain('Sem dados suficientes');
   });
 
-  it('getMarketContext cobre os três níveis', async () => {
+  it('renderStockOfDay não apresenta contexto de mercado fabricado', async () => {
     const main = await boot();
-    const spy = vi.spyOn(Math, 'random');
-    spy.mockReturnValueOnce(0);
-    expect(main.getMarketContext().level).toBe('Calmo');
-    spy.mockReturnValueOnce(0.3);
-    expect(main.getMarketContext().level).toBe('Moderado');
-    spy.mockReturnValueOnce(0.9);
-    expect(main.getMarketContext().level).toBe('Elevado');
+    const el = document.createElement('div');
+    main.renderStockOfDay(el, {
+      primary: {
+        symbol: 'AAPL',
+        name: 'Apple Inc.',
+        sector: 'Information Technology',
+        sectorName: 'Tecnologia',
+        score: 80,
+        breakdown: {},
+        marketCap: 3e12,
+        dividendYield: 0.5,
+        subIndustry: 'Technology Hardware',
+        rationale: 'Equilíbrio entre risco e retorno',
+      },
+      alternatives: [],
+      generatedAt: new Date().toISOString(),
+    });
+    expect(el.innerHTML).toContain('AAPL');
+    expect(el.innerHTML).not.toContain('market-context');
+    expect(el.innerHTML).not.toContain('contexto');
   });
 
   it('cacheStockOfDay e getCachedStockOfDay', async () => {

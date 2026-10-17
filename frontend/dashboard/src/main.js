@@ -744,7 +744,6 @@ function generateStockOfDay() {
           date: today,
           primary: null,
           alternatives: [],
-          marketContext: getMarketContext(),
           generatedAt: new Date().toISOString(),
         });
         return;
@@ -759,7 +758,6 @@ function generateStockOfDay() {
         date: today,
         primary,
         alternatives,
-        marketContext: getMarketContext(),
         generatedAt: new Date().toISOString(),
       });
     }, 100);
@@ -851,29 +849,6 @@ export function buildRationale(company, technical, sector, dividend) {
   return reasons.join(' • ');
 }
 
-function getMarketContext() {
-  const value = Math.random() * 30 + 10;
-  if (value < 15) {
-    return {
-      level: 'Calmo',
-      description: 'Baixa volatilidade - ambiente propício para acumulação',
-      class: 'calm',
-    };
-  }
-  if (value < 25) {
-    return {
-      level: 'Moderado',
-      description: 'Volatilidade normal - seleção seletiva recomendada',
-      class: 'moderate',
-    };
-  }
-  return {
-    level: 'Elevado',
-    description: 'Alta volatilidade - foco em qualidade e liquidez',
-    class: 'elevated',
-  };
-}
-
 function getCachedStockOfDay(date) {
   try {
     const raw = localStorage.getItem('sp500-stock-of-day');
@@ -894,7 +869,7 @@ function cacheStockOfDay(date, data) {
 }
 
 function renderStockOfDay(viewEl, data) {
-  const { primary, alternatives, marketContext, generatedAt } = data;
+  const { primary, alternatives, generatedAt } = data;
   if (!primary) {
     viewEl.innerHTML = `
       <div class="stock-of-day-error">
@@ -915,7 +890,6 @@ function renderStockOfDay(viewEl, data) {
         </div>
         <div class="stock-meta">
           <span class="stock-date">${new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}</span>
-          <span class="market-context ${marketContext.class}">${marketContext.level}</span>
         </div>
       </header>
 
@@ -1175,7 +1149,6 @@ export {
   updateStats,
   loadStockOfDay,
   generateStockOfDay,
-  getMarketContext,
   getCachedStockOfDay,
   cacheStockOfDay,
   renderStockOfDay,
