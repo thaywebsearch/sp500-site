@@ -16,9 +16,9 @@ Plataforma para explorar o índice **S&P 500** por setor GICS: datasets atualiza
 ## Deploy
 
 - **Dashboard estático** → GitHub Pages (`/docs`) e Netlify
-- **API Express** → Railway (`https://sp500-site-production.up.railway.app`)
-  — passo-a-passo em `backend/README.md` → "Deploy (Railway)". O URL da API no
-  frontend pode ser repontado sem editar código com a variável de repositório
+- **API Express** → Render (plano gratuito, Blueprint `render.yaml`); o Railway
+  fica mantido como rollback. Passo-a-passo em `backend/README.md` → "Deploy".
+  O URL da API no frontend pode ser repontado sem editar código com a variável
   `VITE_API_URL`.
 
 ## Arquitetura de Dados (fonte única)

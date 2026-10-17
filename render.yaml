@@ -1,0 +1,26 @@
+# Render Blueprint (infra as code) para o backend do SP500 Dashboard.
+#
+# Uso: Render Dashboard -> New -> Blueprint -> ligar ao repo
+# thaywebsearch/sp500-site (branch main). O Render le este ficheiro e cria o
+# Web Service abaixo. Nao e preciso configurar nada a mao.
+#
+# Depois de criado, confirmar no painel (Environment):
+#   CORS_ORIGINS = <origem do frontend>   (ex.: https://thaywebsearch.github.io,
+#                                          https://<site>.netlify.app)
+#   Obrigatorio: por omissao a API tem CORS restritivo.
+#
+# Nota: o plano free dorme apos 15 min sem trafego e leva ~1 minuto a acordar.
+
+services:
+  - type: web
+    name: sp500-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: CORS_ORIGINS
+        sync: false

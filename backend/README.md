@@ -35,30 +35,41 @@ checks, same-origin) continuam aceites.
 > Nota: o CORS é verificado pelo browser, não pela API. Se a origem não estiver
 > em `CORS_ORIGINS`, o dashboard em GitHub Pages é bloqueado no cliente.
 
-## Deploy (Railway)
+## Deploy
 
-O repositório não tem `package.json` na raiz, pelo que o serviço Railway tem de
-usar **Root Directory = `backend`**. Com isso o Railway lê `backend/railway.toml`
-(Nixpacks → `npm start`, `healthcheckPath` em `/api/health`).
+O repositório não tem `package.json` na raiz, pelo que qualquer serviço de
+hospedagem tem de usar **`backend` como diretório raiz**.
+
+### Render (plano gratuito) — recomendado
+
+O Render lê o Blueprint `render.yaml` na raiz do repositório.
 
 Checklist:
 
-1. Criar/reabrir o serviço no projeto Railway, apontado a
+1. Render Dashboard → **New → Blueprint** → ligar a
    `thaywebsearch/sp500-site`, branch `main`.
-2. **Settings → Root Directory**: `backend`.
-3. **Settings → Networking**: gerar/confirmar o domínio público
-   (ex.: `sp500-site-production.up.railway.app`). Se o domínio tiver mudado,
-   atualize o frontend — sem editar código (ver abaixo).
-4. **Variables**: `CORS_ORIGINS=https://thaywebsearch.github.io`
-   (**obrigatório** — por omissão o CORS é restritivo e o dashboard seria
-   bloqueado).
-5. Fazer deploy e confirmar `GET https://<dominio>/api/health` → `200`.
+2. Confirmar o serviço `sp500-api` (Root Directory `backend`,
+   `npm ci` → `npm start`, health check em `/api/health`).
+3. Quando pedido, definir `CORS_ORIGINS` com a origem do frontend
+   (ex.: `https://thaywebsearch.github.io,https://<site>.netlify.app`).
+   **Obrigatório** — por omissão o CORS é restritivo.
+4. Confirmar `GET https://<servico>.onrender.com/api/health` → `200`.
 
-Repontar o frontend para outro domínio de API, sem alterar código:
+> No plano gratuito o serviço **dorme após 15 minutos sem tráfego** e leva
+> cerca de 1 minuto a acordar no pedido seguinte.
 
-- **Dashboard** (`index.html`): definir a variável de repositório
-  `VITE_API_URL` (Settings → Secrets and variables → Actions → Variables) e
-  reexecutar o workflow `deploy-dashboard` (`workflow_dispatch`).
+### Railway (legado / rollback)
+
+Alternativa mantida. Requer **Root Directory = `backend`**; o Railway lê
+`railway.toml` (Nixpacks → `npm start`, `healthcheckPath` em `/api/health`).
+Criar/reabrir o serviço, confirmar Root Directory, domínio e `CORS_ORIGINS`, e
+validar `GET https://<dominio>/api/health` → `200`.
+
+### Repontar o frontend (sem alterar código)
+
+- **Dashboard** (`index.html`): definir `VITE_API_URL` (variável de repositório
+  em Settings → Secrets and variables → Actions → Variables, ou variável de
+  ambiente no painel da Netlify se for esse o alojamento) e reconstruir.
 - **`sector.html`** (estático): acrescentar `?api=<url>` ao abrir a página.
 
 ## Executar localmente
