@@ -427,9 +427,11 @@
   </div>
 
   <script>
-    const API_BASE_URL = window.location.hostname === 'localhost'
-      ? 'http://localhost:5001'
-      : 'https://sp500-site-production.up.railway.app';
+    const API_BASE_URL =
+      new URLSearchParams(window.location.search).get('api') ||
+      (window.location.hostname === 'localhost'
+        ? 'http://localhost:5001'
+        : 'https://sp500-site-production.up.railway.app');
 
     const SECTORS_CONFIG = {
       'communication-services': {

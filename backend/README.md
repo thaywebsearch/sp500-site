@@ -25,11 +25,41 @@ ficheiros (ou ao diretório) são refletidas sem reiniciar o servidor.
 
 ## CORS
 
-Por defeito o CORS é permissivo (qualquer origem), adequado a desenvolvimento
-local. Para restringir, defina `CORS_ORIGINS` com as origens permitidas
-separadas por vírgula (ex.: `CORS_ORIGINS=https://exemplo.github.io`). Nesse
-modo apenas `GET`/`HEAD` são anunciados no preflight e pedidos sem `Origin`
-(curl, health checks) continuam aceites.
+Por defeito o CORS é **restritivo**: sem `CORS_ORIGINS` definido, nenhuma
+origem externa é aceite (o arranque regista um aviso). Para autorizar o
+dashboard, defina `CORS_ORIGINS` com as origens permitidas separadas por
+vírgula (ex.: `CORS_ORIGINS=https://thaywebsearch.github.io`). Apenas
+`GET`/`HEAD` são anunciados no preflight e pedidos sem `Origin` (curl, health
+checks, same-origin) continuam aceites.
+
+> Nota: o CORS é verificado pelo browser, não pela API. Se a origem não estiver
+> em `CORS_ORIGINS`, o dashboard em GitHub Pages é bloqueado no cliente.
+
+## Deploy (Railway)
+
+O repositório não tem `package.json` na raiz, pelo que o serviço Railway tem de
+usar **Root Directory = `backend`**. Com isso o Railway lê `backend/railway.toml`
+(Nixpacks → `npm start`, `healthcheckPath` em `/api/health`).
+
+Checklist:
+
+1. Criar/reabrir o serviço no projeto Railway, apontado a
+   `thaywebsearch/sp500-site`, branch `main`.
+2. **Settings → Root Directory**: `backend`.
+3. **Settings → Networking**: gerar/confirmar o domínio público
+   (ex.: `sp500-site-production.up.railway.app`). Se o domínio tiver mudado,
+   atualize o frontend — sem editar código (ver abaixo).
+4. **Variables**: `CORS_ORIGINS=https://thaywebsearch.github.io`
+   (**obrigatório** — por omissão o CORS é restritivo e o dashboard seria
+   bloqueado).
+5. Fazer deploy e confirmar `GET https://<dominio>/api/health` → `200`.
+
+Repontar o frontend para outro domínio de API, sem alterar código:
+
+- **Dashboard** (`index.html`): definir a variável de repositório
+  `VITE_API_URL` (Settings → Secrets and variables → Actions → Variables) e
+  reexecutar o workflow `deploy-dashboard` (`workflow_dispatch`).
+- **`sector.html`** (estático): acrescentar `?api=<url>` ao abrir a página.
 
 ## Executar localmente
 

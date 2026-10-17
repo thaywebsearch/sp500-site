@@ -20,4 +20,13 @@ describe('config', () => {
     window.location = original;
     vi.resetModules();
   });
+
+  it('permite repontar a API via VITE_API_URL', async () => {
+    vi.stubEnv('VITE_API_URL', 'https://api.exemplo.com');
+    vi.resetModules();
+    const mod = await import('./config.js');
+    expect(mod.API_BASE_URL).toBe('https://api.exemplo.com');
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
 });

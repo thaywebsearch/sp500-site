@@ -1,0 +1,25 @@
+# Configuracao de deploy do Railway (config as code).
+#
+# IMPORTANTE: no painel do Railway, defina o "Root Directory" do servico como
+# `backend` -- o repositorio nao tem package.json na raiz. Com isso o Railway
+# le este ficheiro e:
+#   - constroi com Nixpacks (deteta Node via backend/package.json);
+#   - corre `npm start` (server.js), que escuta em process.env.PORT;
+#   - valida o deploy em GET /api/health antes de o promover.
+#
+# Variaveis de ambiente a definir no servico (Railway -> Variables):
+#   CORS_ORIGINS=https://thaywebsearch.github.io
+#     (obrigatorio: por omissao a API tem CORS restritivo e o dashboard em
+#      GitHub Pages seria bloqueado pelo browser)
+#
+# Ver backend/README.md -> "Deploy (Railway)" para o passo-a-passo.
+
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10

@@ -45,6 +45,10 @@ jobs:
       - name: Build (gera ../docs)
         working-directory: frontend/dashboard
         run: npm run build
+        env:
+          # Opcional: reponta o dashboard para outra API sem alterar codigo.
+          # Definir em Settings > Secrets and variables > Actions > Variables.
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
 
       - name: Commit e push das mudanças em docs/
         run: |

@@ -17,6 +17,9 @@ Plataforma para explorar o índice **S&P 500** por setor GICS: datasets atualiza
 
 - **Dashboard estático** → GitHub Pages (`/docs`) e Netlify
 - **API Express** → Railway (`https://sp500-site-production.up.railway.app`)
+  — passo-a-passo em `backend/README.md` → "Deploy (Railway)". O URL da API no
+  frontend pode ser repontado sem editar código com a variável de repositório
+  `VITE_API_URL`.
 
 ## Arquitetura de Dados (fonte única)
 
@@ -89,8 +92,9 @@ GET /api/resumo-dia         → maiores altas e baixas do dia
 ```
 
 A rota raiz `/` documenta os endpoints. A versão é lida de `backend/VERSION`
-e exposta em `/` e em `/api/health`. Para restringir o CORS, defina
-`CORS_ORIGINS` (ver `backend/README.md`).
+e exposta em `/` e em `/api/health`. O CORS é **restritivo por omissão**:
+defina `CORS_ORIGINS` com as origens autorizadas (obrigatório para o dashboard
+em GitHub Pages); ver `backend/README.md`.
 
 ## Desenvolvimento Local
 
