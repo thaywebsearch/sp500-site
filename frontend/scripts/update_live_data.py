@@ -143,6 +143,29 @@ def _normalize_dividend_yield(value):
     return None
 
 
+def _dividend_yield_from_info(info):
+    """dividendYield (em %) a partir do ``info`` do yfinance, com fallback.
+
+    ``info['dividendYield']`` pode vir ausente/zero mesmo para pagadores
+    (ex.: SWKS), pelo que se usa ``trailingAnnualDividendYield`` como segunda
+    fonte. Nota de unidades: ``dividendYield`` ja vem em percentagem, mas
+    ``trailingAnnualDividendYield`` vem como fracao decimal (0.0359 = 3.59%),
+    logo e a unica conversao x100 deste caminho.
+    """
+    value = _normalize_dividend_yield(info.get("dividendYield"))
+    if value is not None:
+        return value
+
+    trailing = info.get("trailingAnnualDividendYield")
+    if (
+        isinstance(trailing, (int, float))
+        and not _is_nan(trailing)
+        and 0 < trailing <= 1
+    ):
+        return _normalize_dividend_yield(trailing * 100)
+    return None
+
+
 def _quote_from_yfinance(symbol):
     """marketCap/dividendYield via yfinance (uma requisicao por ticker)."""
     info = yf.Ticker(symbol).info
@@ -151,7 +174,7 @@ def _quote_from_yfinance(symbol):
     if cap is None:  # marketCap nem sempre vem no info -> fallback leve
         cap = _safe_fast_info(symbol, "market_cap")
 
-    return cap, _normalize_dividend_yield(info.get("dividendYield"))
+    return cap, _dividend_yield_from_info(info)
 
 
 # O yfinance pode estar bloqueado por rate limit (HTTP 429). Faz-se uma unica
@@ -264,15 +287,23 @@ def apply_quotes(sector, quotes, now):
             company["marketCapClassification"] = classify_market_cap(cap)
 
         # A chave dividendYield tem de existir sempre (o esquema representa
-        # "sem dividendo" como null). Sem isto, empresas sem dividendo ficavam
-        # sem a chave e o esquema tornava-se inconsistente (hasDividend="Não"
-        # mas sem dividendYield).
+        # "sem dividendo" como null) e hasDividend tem de estar em sincronia.
+        #
+        # ``div_yield is None`` significa tanto "nao paga dividendo" como
+        # "dado indisponivel" (yfinance em rate limit / fallback sem o campo).
+        # Para nao perder o dividendo de pagadores conhecidos (ex.: SWKS), so se
+        # marca "Não" quando a empresa nunca teve um yield conhecido; caso
+        # contrario preserva-se o valor anterior.
         if div_yield is not None:
             company["dividendYield"] = div_yield
             company["hasDividend"] = "Sim"
-        elif cap is not None:
+        elif company.get("dividendYield") is None:
             company["dividendYield"] = None
             company["hasDividend"] = "Não"
+        else:
+            # Ja havia yield conhecido -> mantem (indisponibilidade temporaria)
+            # e garante o par coerente.
+            company["hasDividend"] = "Sim"
 
         updated += 1
 

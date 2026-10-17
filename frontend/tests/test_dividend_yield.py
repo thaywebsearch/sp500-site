@@ -16,6 +16,7 @@ Os dois partilham o mesmo teto plausivel (100%).
 """
 
 import unittest
+from datetime import datetime
 
 import helpers
 
@@ -116,6 +117,91 @@ class PositiveNumberTests(unittest.TestCase):
         for valor in (0, -1, -0.5, None, "1", [], {}, float("nan")):
             with self.subTest(valor=valor):
                 self.assertFalse(yq._is_positive_number(valor))
+
+
+@unittest.skipIf(uld is None, "update_live_data indisponivel: %r" % (_ULD_ERROR,))
+class DividendYieldFromInfoTests(unittest.TestCase):
+    """Extracao do yield do ``info`` do yfinance, com fallback de trailing."""
+
+    def test_usa_dividend_yield_direto(self):
+        self.assertEqual(uld._dividend_yield_from_info({"dividendYield": 3.59}), 3.59)
+
+    def test_fallback_trailing_quando_forward_ausente(self):
+        # trailingAnnualDividendYield e fracao decimal (0.0359) -> 3.59%
+        self.assertEqual(
+            uld._dividend_yield_from_info({"trailingAnnualDividendYield": 0.0359}),
+            3.59,
+        )
+
+    def test_fallback_trailing_quando_forward_e_zero(self):
+        self.assertEqual(
+            uld._dividend_yield_from_info(
+                {"dividendYield": 0.0, "trailingAnnualDividendYield": 0.0461}
+            ),
+            4.61,
+        )
+
+    def test_sem_dividendo_devolve_none(self):
+        self.assertIsNone(uld._dividend_yield_from_info({}))
+        self.assertIsNone(
+            uld._dividend_yield_from_info(
+                {"dividendYield": None, "trailingAnnualDividendYield": 0.0}
+            )
+        )
+
+    def test_trailing_fora_da_faixa_e_ignorado(self):
+        # > 1 nao e uma fracao valida -> ignora (evita ler % como fracao)
+        self.assertIsNone(
+            uld._dividend_yield_from_info({"trailingAnnualDividendYield": 2.0})
+        )
+
+
+@unittest.skipIf(uld is None, "update_live_data indisponivel: %r" % (_ULD_ERROR,))
+class ApplyQuotesTests(unittest.TestCase):
+    """O merge das cotacoes nunca deve degradar um pagador conhecido."""
+
+    @staticmethod
+    def _sector(company):
+        return {"data": {"companies": [company]}}
+
+    @staticmethod
+    def _quote(symbol, cap, div_yield):
+        return {
+            symbol: {
+                "symbol": symbol,
+                "ok": True,
+                "marketCap": cap,
+                "dividendYield": div_yield,
+                "error": None,
+            }
+        }
+
+    def test_pagador_conhecido_e_preservado_sem_dados(self):
+        # Caso SWKS: a fonte devolve None, mas o yield ja conhecido nao se perde.
+        sector = self._sector(
+            {"symbol": "SWKS", "marketCap": 1, "dividendYield": 3.59, "hasDividend": "Sim"}
+        )
+        uld.apply_quotes(sector, self._quote("SWKS", 1000, None), datetime.now())
+        company = sector["data"]["companies"][0]
+        self.assertEqual(company["dividendYield"], 3.59)
+        self.assertEqual(company["hasDividend"], "Sim")
+
+    def test_nao_pagador_recebe_null_e_nao(self):
+        sector = self._sector({"symbol": "XYZ", "marketCap": 1})
+        uld.apply_quotes(sector, self._quote("XYZ", 1000, None), datetime.now())
+        company = sector["data"]["companies"][0]
+        self.assertIsNone(company["dividendYield"])
+        self.assertEqual(company["hasDividend"], "Não")
+
+    def test_valor_novo_atualiza_o_par(self):
+        sector = self._sector(
+            {"symbol": "ABC", "marketCap": 1, "dividendYield": 1.0, "hasDividend": "Sim"}
+        )
+        uld.apply_quotes(sector, self._quote("ABC", 2000, 2.5), datetime.now())
+        company = sector["data"]["companies"][0]
+        self.assertEqual(company["marketCap"], 2000)
+        self.assertEqual(company["dividendYield"], 2.5)
+        self.assertEqual(company["hasDividend"], "Sim")
 
 
 if __name__ == "__main__":
