@@ -463,8 +463,8 @@
       "founded": "2026",
       "marketCap": 48165924864,
       "marketCapClassification": "Large",
-      "hasDividend": "Não",
-      "dividendYield": null
+      "hasDividend": "Sim",
+      "dividendYield": 0.98
     },
     {
       "symbol": "WMT",
@@ -481,5 +481,5 @@
       "hasDividend": "Sim"
     }
   ],
-  "liveUpdatedAt": "2026-10-17 10:34:03 +0000"
+  "liveUpdatedAt": "2026-10-17 10:44:04 +0000"
 }

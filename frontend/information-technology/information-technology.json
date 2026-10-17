@@ -869,8 +869,8 @@
       "founded": "2002",
       "marketCap": 18742693888,
       "marketCapClassification": "Large",
-      "dividendYield": null,
-      "hasDividend": "Não"
+      "dividendYield": 3.59,
+      "hasDividend": "Sim"
     },
     {
       "symbol": "SMCI",
@@ -1055,5 +1055,5 @@
       "hasDividend": "Não"
     }
   ],
-  "liveUpdatedAt": "2026-10-17 10:34:03 +0000"
+  "liveUpdatedAt": "2026-10-17 10:44:04 +0000"
 }
