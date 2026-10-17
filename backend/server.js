@@ -1,11 +1,17 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+
+// A API corre atrás do proxy do Railway -> confiar no 1º salto para que req.ip
+// (usado pelo rate limiting) seja o IP real do cliente.
+app.set('trust proxy', 1);
 
 // Configurar __dirname para módulos ES6
 const __filename = fileURLToPath(import.meta.url);
@@ -65,24 +71,61 @@ const DATA_INICIO_CURIOSIDADE = new Date('2026-10-08T00:00:00');
 const MS_POR_DIA = 24 * 60 * 60 * 1000;
 
 // ============ MIDDLEWARE ==========
-// CORS: origens permitidas via env CORS_ORIGINS (separadas por vírgula). Sem
-// CORS_ORIGINS definido mantém-se o comportamento permissivo, útil em dev local.
-// Pedidos sem Origin (curl, health checks, same-origin) são sempre aceites.
+
+// Cabeçalhos de segurança. CSP desativada (API JSON, sem HTML) e CORP
+// cross-origin porque o frontend (GitHub Pages) consome a API noutra origem.
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  })
+);
+
+// Limites de pedidos para travar abuso (a API é pública e /api/historico faz
+// pedidos outbound ao Yahoo): um limite global + um mais apertado no histórico.
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { sucesso: false, erro: 'Demasiados pedidos. Tente novamente mais tarde.' },
+});
+
+const historicoLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { sucesso: false, erro: 'Demasiados pedidos. Tente novamente mais tarde.' },
+});
+
+// CORS: origens permitidas via env CORS_ORIGINS (separadas por vírgula).
+// RESTRITIVO por omissão: sem CORS_ORIGINS nenhuma origem externa é aceite
+// (apenas pedidos sem Origin: curl, health checks, same-origin). Em dev local
+// define-se, por exemplo, CORS_ORIGINS=http://localhost:5173.
 const CORS_ORIGINS = (process.env.CORS_ORIGINS || '')
   .split(',')
   .map((origem) => origem.trim())
   .filter(Boolean);
 
-const corsOptions = CORS_ORIGINS.length
-  ? {
-      origin(origin, callback) {
-        callback(null, !origin || CORS_ORIGINS.includes(origin));
-      },
-      methods: ['GET', 'HEAD'],
-    }
-  : {};
+if (CORS_ORIGINS.length === 0) {
+  console.warn(
+    '[WARN] CORS_ORIGINS não definido: CORS restritivo (nenhuma origem externa permitida).'
+  );
+}
 
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin(origin, callback) {
+      // Sem Origin (curl, health checks, same-origin) -> aceita sempre.
+      if (!origin) return callback(null, true);
+      return callback(null, CORS_ORIGINS.includes(origin));
+    },
+    methods: ['GET', 'HEAD'],
+  })
+);
+
+app.use('/api', apiLimiter);
 app.use(express.json());
 
 // ============ FUNÇÕES UTILITÁRIAS ==========
@@ -371,9 +414,18 @@ app.get('/api/curiosidades', (req, res) => {
  * Histórico de preços de uma ação (últimos 2 anos via Yahoo Finance)
  * GET /api/historico/:symbol
  */
-app.get('/api/historico/:symbol', async (req, res) => {
+// Formato aceite de símbolo: letra inicial + letras/dígitos/ponto/hífen
+// (ex.: AAPL, BRK.B). Rejeita input arbitrário antes de construir a URL.
+const SIMBOLO_RE = /^[A-Za-z][A-Za-z0-9.\-]{0,9}$/;
+
+app.get('/api/historico/:symbol', historicoLimiter, async (req, res) => {
+  const { symbol } = req.params;
+
+  if (!SIMBOLO_RE.test(symbol)) {
+    return res.status(400).json({ sucesso: false, erro: 'Símbolo inválido' });
+  }
+
   try {
-    const { symbol } = req.params;
     const ticker = symbol.toUpperCase().replace(/\./g, '-');
 
     const url =
