@@ -99,7 +99,8 @@
       "founded": "2001",
       "marketCap": 68229619712,
       "marketCapClassification": "Large",
-      "hasDividend": "Não"
+      "hasDividend": "Não",
+      "dividendYield": null
     },
     {
       "symbol": "BA",

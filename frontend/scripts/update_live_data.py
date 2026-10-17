@@ -263,10 +263,15 @@ def apply_quotes(sector, quotes, now):
             company["marketCap"] = int(cap)
             company["marketCapClassification"] = classify_market_cap(cap)
 
+        # A chave dividendYield tem de existir sempre (o esquema representa
+        # "sem dividendo" como null). Sem isto, empresas sem dividendo ficavam
+        # sem a chave e o esquema tornava-se inconsistente (hasDividend="Não"
+        # mas sem dividendYield).
         if div_yield is not None:
             company["dividendYield"] = div_yield
             company["hasDividend"] = "Sim"
         elif cap is not None:
+            company["dividendYield"] = None
             company["hasDividend"] = "Não"
 
         updated += 1

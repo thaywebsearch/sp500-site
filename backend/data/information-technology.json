@@ -309,7 +309,8 @@
       "founded": "2009",
       "marketCap": 42947993600,
       "marketCapClassification": "Large",
-      "hasDividend": "Não"
+      "hasDividend": "Não",
+      "dividendYield": null
     },
     {
       "symbol": "FFIV",
@@ -980,7 +981,8 @@
       "founded": "2008",
       "marketCap": 39929556992,
       "marketCapClassification": "Large",
-      "hasDividend": "Não"
+      "hasDividend": "Não",
+      "dividendYield": null
     },
     {
       "symbol": "TYL",

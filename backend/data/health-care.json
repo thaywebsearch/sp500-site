@@ -421,7 +421,8 @@
       "founded": "1998",
       "marketCap": 40493670400,
       "marketCapClassification": "Large",
-      "hasDividend": "Não"
+      "hasDividend": "Não",
+      "dividendYield": null
     },
     {
       "symbol": "INCY",
