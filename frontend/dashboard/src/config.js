@@ -2,13 +2,13 @@
 // Este arquivo deve carregar PRIMEIRO em index.html
 
 // Permite repontar a API sem alterar o codigo: definir VITE_API_URL no build.
-const API_URL_FROM_ENV = import.meta.env.VITE_API_URL || '';
+const API_URL_FROM_ENV = import.meta.env?.VITE_API_URL;
 const hostname = window.location.hostname;
 const ehLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
 
 export const API_BASE_URL =
   API_URL_FROM_ENV ||
-  (ehLocalhost ? 'http://localhost:5001' : 'https://sp500-site-production.up.railway.app');
+  (ehLocalhost ? 'http://localhost:5001' : 'https://sp500-api.onrender.com');
 
 export const SECTORS = [
   { id: 'communication-services', name: 'Communication Services' },
