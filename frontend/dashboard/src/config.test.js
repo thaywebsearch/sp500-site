@@ -11,12 +11,12 @@ describe('config', () => {
     expect(new Set(SECTORS.map((s) => s.id)).size).toBe(11);
   });
 
-  it('usa a URL de produção do Railway fora de localhost', async () => {
+  it('usa a URL de produção (Render) fora de localhost', async () => {
     const original = window.location;
     window.location = { hostname: 'sp500.example.com' };
     vi.resetModules();
     const mod = await import('./config.js');
-    expect(mod.API_BASE_URL).toBe('https://sp500-site-production.up.railway.app');
+    expect(mod.API_BASE_URL).toBe('https://sp500-api.onrender.com');
     window.location = original;
     vi.resetModules();
   });
