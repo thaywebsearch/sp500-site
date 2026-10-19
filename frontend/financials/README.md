@@ -4,79 +4,79 @@
 
 | # | Símbolo | Empresa | Market Cap | Subindústria | Sedes | Dividend Yield |
 |---|---------|---------|------------|--------------|-------|----------------|
-| 1 | JPM | JPMorgan Chase | $947.64B | Diversified Banks | New York City, New York | 1.69% |
-| 2 | V | Visa Inc. | $713.09B | Transaction & Payment Processing Services | San Francisco, California | 0.71% |
-| 3 | MA | Mastercard | $521.70B | Transaction & Payment Processing Services | Harrison, New York | 0.59% |
-| 4 | BAC | Bank of America | $436.45B | Diversified Banks | Charlotte, North Carolina | 2.06% |
-| 5 | MS | Morgan Stanley | $336.98B | Investment Banking & Brokerage | New York City, New York | 2.14% |
-| 6 | GS | Goldman Sachs | $300.87B | Investment Banking & Brokerage | New York City, New York | 1.92% |
-| 7 | WFC | Wells Fargo | $260.94B | Diversified Banks | San Francisco, California | 2.35% |
-| 8 | AXP | American Express | $224.87B | Consumer Finance | New York City, New York | 1.13% |
-| 9 | C | Citigroup | $222.53B | Diversified Banks | New York City, New York | 2.01% |
-| 10 | SCHW | Charles Schwab Corporation | $191.61B | Investment Banking & Brokerage | Westlake, Texas | 1.17% |
-| 11 | BLK | BlackRock | $189.07B | Asset Management & Custody Banks | New York City, New York | 1.96% |
-| 12 | BX | Blackstone Inc. | $170.99B | Asset Management & Custody Banks | New York City, New York | 3.64% |
-| 13 | IBKR | Interactive Brokers | $163.63B | Investment Banking & Brokerage | Greenwich, Connecticut | 0.36% |
-| 14 | COF | Capital One | $132.81B | Consumer Finance | Tysons Corner, Virginia | 1.48% |
-| 15 | CB | Chubb Limited | $131.17B | Property & Casualty Insurance | Zurich, Switzerland | 1.21% |
-| 16 | SPGI | S&P Global | $130.02B | Financial Exchanges & Data | New York City, New York | 0.89% |
-| 17 | PGR | Progressive Corporation | $127.11B | Property & Casualty Insurance | Mayfield Village, Ohio | 0.18% |
-| 18 | BNY | BNY Mellon | $110.02B | Asset Management & Custody Banks | New York City, New York | 1.37% |
-| 19 | CME | CME Group | $102.58B | Financial Exchanges & Data | Chicago, Illinois | 1.85% |
-| 20 | KKR | KKR & Co. | $101.04B | Asset Management & Custody Banks | New York City, New York | 0.71% |
-| 21 | USB | U.S. Bancorp | $97.24B | Diversified Banks | Minneapolis, Minnesota | 3.33% |
-| 22 | PNC | PNC Financial Services | $96.59B | Diversified Banks | Pittsburgh, Pennsylvania | 3.29% |
-| 23 | HOOD | Robinhood Markets | $94.16B | Investment Banking & Brokerage | Menlo Park, California | — |
-| 24 | MRSH | Marsh McLennan | $92.35B | Insurance Brokers | New York City, New York | 2.08% |
-| 25 | ICE | Intercontinental Exchange | $91.08B | Financial Exchanges & Data | Atlanta, Georgia | 1.29% |
-| 26 | MCO | Moody's Corporation | $88.98B | Financial Exchanges & Data | New York City, New York | 0.81% |
-| 27 | APO | Apollo Global Management | $80.13B | Asset Management & Custody Banks | New York City, New York | 1.69% |
-| 28 | TRV | Travelers Companies (The) | $77.04B | Property & Casualty Insurance | New York City, New York | 1.35% |
-| 29 | AON | Aon plc | $75.82B | Insurance Brokers | London, United Kingdom | 0.94% |
-| 30 | AJG | Arthur J. Gallagher & Co. | $68.75B | Insurance Brokers | Rolling Meadows, Illinois | 1.08% |
-| 31 | ALL | Allstate | $65.88B | Property & Casualty Insurance | Northbrook, Illinois | 1.68% |
-| 32 | MET | MetLife | $61.53B | Life & Health Insurance | New York City, New York | 2.46% |
-| 33 | TFC | Truist Financial | $61.38B | Diversified Banks | Charlotte, North Carolina | 4.10% |
-| 34 | AFL | Aflac | $58.42B | Life & Health Insurance | Columbus, Georgia | 2.09% |
-| 35 | NDAQ | Nasdaq, Inc. | $55.46B | Financial Exchanges & Data | New York City, New York | 1.17% |
-| 36 | STT | State Street Corporation | $53.00B | Asset Management & Custody Banks | Boston, Massachusetts | 1.90% |
-| 37 | XYZ | Block, Inc. | $50.00B | Transaction & Payment Processing Services | none | — |
-| 38 | AMP | Ameriprise Financial | $49.40B | Asset Management & Custody Banks | Minneapolis, Minnesota | 1.22% |
-| 39 | FITB | Fifth Third Bancorp | $49.22B | Regional Banks | Cincinnati, Ohio | 2.92% |
-| 40 | ARES | Ares Management | $47.01B | Asset Management & Custody Banks | Los Angeles, California | 3.79% |
-| 41 | COIN | Coinbase | $46.61B | Financial Exchanges & Data | New York City, New York | — |
-| 42 | PYPL | PayPal | $45.93B | Transaction & Payment Processing Services | San Jose, California | 0.91% |
-| 43 | MSCI | MSCI | $41.55B | Financial Exchanges & Data | New York City, New York | 1.44% |
-| 44 | PRU | Prudential Financial | $41.52B | Life & Health Insurance | Newark, New Jersey | 4.66% |
-| 45 | AIG | American International Group | $40.15B | Multi-line Insurance | New York City, New York | 2.61% |
-| 46 | HIG | Hartford (The) | $37.47B | Property & Casualty Insurance | Hartford, Connecticut | 1.74% |
-| 47 | RJF | Raymond James Financial | $34.40B | Investment Banking & Brokerage | St. Petersburg, Florida | 1.23% |
-| 48 | MTB | M&T Bank | $34.36B | Regional Banks | Buffalo, New York | 2.51% |
-| 49 | HBAN | Huntington Bancshares | $34.18B | Regional Banks | Columbus, Ohio; Detroit, Michigan | 3.68% |
-| 50 | NTRS | Northern Trust | $34.14B | Asset Management & Custody Banks | Chicago, Illinois | 1.76% |
-| 51 | ACGL | Arch Capital Group | $33.52B | Property & Casualty Insurance | Hamilton, Bermuda | — |
-| 52 | CBOE | Cboe Global Markets | $32.59B | Financial Exchanges & Data | Chicago, Illinois | 1.10% |
-| 53 | WTW | Willis Towers Watson | $32.01B | Insurance Brokers | London, United Kingdom | 1.13% |
-| 54 | CFG | Citizens Financial Group | $29.42B | Regional Banks | Providence, Rhode Island | 2.61% |
-| 55 | FISV | Fiserv | $28.24B | Transaction & Payment Processing Services | Brookfield, Wisconsin | — |
-| 56 | CPAY | Corpay | $26.76B | Transaction & Payment Processing Services | Atlanta, Georgia | — |
-| 57 | CINF | Cincinnati Financial | $26.35B | Property & Casualty Insurance | Fairfield, Ohio | 2.18% |
-| 58 | RF | Regions Financial Corporation | $25.83B | Regional Banks | Birmingham, Alabama | 3.60% |
-| 59 | SYF | Synchrony Financial | $25.55B | Consumer Finance | Stamford, Connecticut | 1.70% |
-| 60 | WRB | W. R. Berkley Corporation | $25.33B | Property & Casualty Insurance | Greenwich, Connecticut | 0.59% |
-| 61 | BRO | Brown & Brown | $24.59B | Insurance Brokers | Daytona Beach, Florida | 0.91% |
-| 62 | GPN | Global Payments | $24.35B | Transaction & Payment Processing Services | Atlanta, Georgia | 1.08% |
-| 63 | PFG | Principal Financial Group | $24.00B | Life & Health Insurance | Des Moines, Iowa | 3.00% |
-| 64 | TROW | T. Rowe Price | $23.72B | Asset Management & Custody Banks | Baltimore, Maryland | 4.63% |
-| 65 | KEY | KeyCorp | $23.39B | Regional Banks | Cleveland, Ohio | 3.72% |
-| 66 | L | Loews Corporation | $22.46B | Multi-line Insurance | New York City, New York | 0.23% |
-| 67 | FIS | Fidelity National Information Services | $21.35B | Transaction & Payment Processing Services | Jacksonville, Florida | 4.34% |
-| 68 | BEN | Franklin Resources | $17.63B | Asset Management & Custody Banks | San Mateo, California | 3.79% |
-| 69 | EG | Everest Group | $14.48B | Reinsurance | Hamilton, Bermuda | 2.12% |
-| 70 | IVZ | Invesco | $14.46B | Asset Management & Custody Banks | Atlanta, Georgia | 2.58% |
-| 71 | AIZ | Assurant | $14.14B | Multi-line Insurance | Atlanta, Georgia | 1.23% |
-| 72 | ERIE | Erie Indemnity | $13.59B | Insurance Brokers | Erie, Pennsylvania | 2.25% |
-| 73 | GL | Globe Life | $13.40B | Life & Health Insurance | McKinney, Texas | 0.75% |
-| 74 | JKHY | Jack Henry & Associates | $12.00B | Transaction & Payment Processing Services | Monett, Missouri | 1.44% |
-| 75 | FDS | FactSet | $10.90B | Financial Exchanges & Data | Norwalk, Connecticut | 1.52% |
-| 76 | BRK.B | Berkshire Hathaway | N/A | Multi-Sector Holdings | Omaha, Nebraska | — |
+| 1 | BRK.B | Berkshire Hathaway | $1.14T | Multi-Sector Holdings | Omaha, Nebraska | — |
+| 2 | JPM | JPMorgan Chase | $902.16B | Diversified Banks | New York City, New York | 1.94% |
+| 3 | V | Visa Inc. | $755.84B | Transaction & Payment Processing Services | San Francisco, California | 0.67% |
+| 4 | MA | Mastercard | $540.87B | Transaction & Payment Processing Services | Harrison, New York | 0.56% |
+| 5 | BAC | Bank of America | $358.24B | Diversified Banks | Charlotte, North Carolina | 2.50% |
+| 6 | MS | Morgan Stanley | $283.60B | Investment Banking & Brokerage | New York City, New York | 2.55% |
+| 7 | GS | Goldman Sachs | $256.60B | Investment Banking & Brokerage | New York City, New York | 2.27% |
+| 8 | WFC | Wells Fargo | $251.75B | Diversified Banks | San Francisco, California | 2.38% |
+| 9 | AXP | American Express | $211.77B | Consumer Finance | New York City, New York | 1.21% |
+| 10 | C | Citigroup | $208.44B | Diversified Banks | New York City, New York | 2.16% |
+| 11 | BLK | BlackRock | $184.31B | Asset Management & Custody Banks | New York City, New York | 2.02% |
+| 12 | SCHW | Charles Schwab Corporation | $159.03B | Investment Banking & Brokerage | Westlake, Texas | 1.39% |
+| 13 | IBKR | Interactive Brokers | $140.89B | Investment Banking & Brokerage | Greenwich, Connecticut | 0.42% |
+| 14 | CB | Chubb Limited | $138.81B | Property & Casualty Insurance | Zurich, Switzerland | 1.13% |
+| 15 | BX | Blackstone Inc. | $127.43B | Asset Management & Custody Banks | New York City, New York | 4.91% |
+| 16 | PGR | Progressive Corporation | $126.81B | Property & Casualty Insurance | Mayfield Village, Ohio | 0.18% |
+| 17 | SPGI | S&P Global | $126.66B | Financial Exchanges & Data | New York City, New York | 0.90% |
+| 18 | COF | Capital One | $123.76B | Consumer Finance | Tysons Corner, Virginia | 1.59% |
+| 19 | CME | CME Group | $105.67B | Financial Exchanges & Data | Chicago, Illinois | 1.77% |
+| 20 | BNY | BNY Mellon | $97.23B | Asset Management & Custody Banks | New York City, New York | 1.55% |
+| 21 | USB | U.S. Bancorp | $91.50B | Diversified Banks | Minneapolis, Minnesota | 3.68% |
+| 22 | ICE | Intercontinental Exchange | $90.70B | Financial Exchanges & Data | Atlanta, Georgia | 1.29% |
+| 23 | MRSH | Marsh McLennan | $89.88B | Insurance Brokers | New York City, New York | 2.10% |
+| 24 | HOOD | Robinhood Markets | $88.89B | Investment Banking & Brokerage | Menlo Park, California | — |
+| 25 | PNC | PNC Financial Services | $86.73B | Diversified Banks | Pittsburgh, Pennsylvania | 3.68% |
+| 26 | MCO | Moody's Corporation | $84.00B | Financial Exchanges & Data | New York City, New York | 0.85% |
+| 27 | TRV | Travelers Companies (The) | $81.25B | Property & Casualty Insurance | New York City, New York | 1.28% |
+| 28 | KKR | KKR & Co. | $79.62B | Asset Management & Custody Banks | New York City, New York | 0.90% |
+| 29 | APO | Apollo Global Management | $65.42B | Asset Management & Custody Banks | New York City, New York | 2.03% |
+| 30 | AJG | Arthur J. Gallagher & Co. | $65.34B | Insurance Brokers | Rolling Meadows, Illinois | 1.10% |
+| 31 | MET | MetLife | $64.03B | Life & Health Insurance | New York City, New York | 2.35% |
+| 32 | ALL | Allstate | $62.68B | Property & Casualty Insurance | Northbrook, Illinois | 1.74% |
+| 33 | AON | Aon plc | $62.06B | Insurance Brokers | London, United Kingdom | 1.12% |
+| 34 | AFL | Aflac | $60.15B | Life & Health Insurance | Columbus, Georgia | 2.03% |
+| 35 | TFC | Truist Financial | $57.50B | Diversified Banks | Charlotte, North Carolina | 4.47% |
+| 36 | NDAQ | Nasdaq, Inc. | $52.53B | Financial Exchanges & Data | New York City, New York | 1.23% |
+| 37 | PYPL | PayPal | $48.50B | Transaction & Payment Processing Services | San Jose, California | 0.99% |
+| 38 | XYZ | Block, Inc. | $46.80B | Transaction & Payment Processing Services | none | — |
+| 39 | COIN | Coinbase | $45.69B | Financial Exchanges & Data | New York City, New York | — |
+| 40 | FITB | Fifth Third Bancorp | $45.68B | Regional Banks | Cincinnati, Ohio | 3.34% |
+| 41 | STT | State Street Corporation | $45.52B | Asset Management & Custody Banks | Boston, Massachusetts | 2.22% |
+| 42 | AMP | Ameriprise Financial | $44.24B | Asset Management & Custody Banks | Minneapolis, Minnesota | 1.36% |
+| 43 | AIG | American International Group | $42.22B | Multi-line Insurance | New York City, New York | 2.48% |
+| 44 | MSCI | MSCI | $41.37B | Financial Exchanges & Data | New York City, New York | 1.44% |
+| 45 | PRU | Prudential Financial | $39.99B | Life & Health Insurance | Newark, New Jersey | 4.83% |
+| 46 | ARES | Ares Management | $37.25B | Asset Management & Custody Banks | Los Angeles, California | 4.81% |
+| 47 | HIG | Hartford (The) | $36.60B | Property & Casualty Insurance | Hartford, Connecticut | 1.78% |
+| 48 | ACGL | Arch Capital Group | $34.56B | Property & Casualty Insurance | Hamilton, Bermuda | — |
+| 49 | CBOE | Cboe Global Markets | $32.89B | Financial Exchanges & Data | Chicago, Illinois | 1.09% |
+| 50 | MTB | M&T Bank | $31.09B | Regional Banks | Buffalo, New York | 2.79% |
+| 51 | HBAN | Huntington Bancshares | $30.85B | Regional Banks | Columbus, Ohio; Detroit, Michigan | 4.06% |
+| 52 | NTRS | Northern Trust | $30.29B | Asset Management & Custody Banks | Chicago, Illinois | 1.98% |
+| 53 | RJF | Raymond James Financial | $30.12B | Investment Banking & Brokerage | St. Petersburg, Florida | 1.38% |
+| 54 | WTW | Willis Towers Watson | $29.30B | Insurance Brokers | London, United Kingdom | 1.22% |
+| 55 | WRB | W. R. Berkley Corporation | $28.00B | Property & Casualty Insurance | Greenwich, Connecticut | 0.53% |
+| 56 | CFG | Citizens Financial Group | $26.69B | Regional Banks | Providence, Rhode Island | 2.90% |
+| 57 | CINF | Cincinnati Financial | $26.28B | Property & Casualty Insurance | Fairfield, Ohio | 2.20% |
+| 58 | CPAY | Corpay | $26.25B | Transaction & Payment Processing Services | Atlanta, Georgia | — |
+| 59 | FISV | Fiserv | $25.29B | Transaction & Payment Processing Services | Brookfield, Wisconsin | — |
+| 60 | SYF | Synchrony Financial | $23.97B | Consumer Finance | Stamford, Connecticut | 1.85% |
+| 61 | RF | Regions Financial Corporation | $23.39B | Regional Banks | Birmingham, Alabama | 4.39% |
+| 62 | PFG | Principal Financial Group | $23.30B | Life & Health Insurance | Des Moines, Iowa | 3.09% |
+| 63 | BRO | Brown & Brown | $23.22B | Insurance Brokers | Daytona Beach, Florida | 0.95% |
+| 64 | L | Loews Corporation | $22.59B | Multi-line Insurance | New York City, New York | 0.23% |
+| 65 | GPN | Global Payments | $22.14B | Transaction & Payment Processing Services | Atlanta, Georgia | 1.20% |
+| 66 | TROW | T. Rowe Price | $21.54B | Asset Management & Custody Banks | Baltimore, Maryland | 5.15% |
+| 67 | KEY | KeyCorp | $21.33B | Regional Banks | Cleveland, Ohio | 4.10% |
+| 68 | FIS | Fidelity National Information Services | $18.57B | Transaction & Payment Processing Services | Jacksonville, Florida | 4.89% |
+| 69 | BEN | Franklin Resources | $15.74B | Asset Management & Custody Banks | San Mateo, California | 4.26% |
+| 70 | EG | Everest Group | $14.92B | Reinsurance | Hamilton, Bermuda | 2.06% |
+| 71 | AIZ | Assurant | $13.97B | Multi-line Insurance | Atlanta, Georgia | 1.24% |
+| 72 | GL | Globe Life | $12.97B | Life & Health Insurance | McKinney, Texas | 0.78% |
+| 73 | ERIE | Erie Indemnity | $12.74B | Insurance Brokers | Erie, Pennsylvania | 2.40% |
+| 74 | IVZ | Invesco | $12.45B | Asset Management & Custody Banks | Atlanta, Georgia | 3.05% |
+| 75 | JKHY | Jack Henry & Associates | $10.74B | Transaction & Payment Processing Services | Monett, Missouri | 1.59% |
+| 76 | FDS | FactSet | $10.73B | Financial Exchanges & Data | Norwalk, Connecticut | 1.54% |

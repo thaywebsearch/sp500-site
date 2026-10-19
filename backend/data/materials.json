@@ -1,7 +1,7 @@
 {
   "sector": "Materials",
   "count": 24,
-  "generatedAt": "2026-10-17",
+  "generatedAt": "2026-10-19",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -340,6 +340,5 @@
       "dividendYield": 0.81,
       "hasDividend": "Sim"
     }
-  ],
-  "liveUpdatedAt": "2026-10-17 10:44:04 +0000"
+  ]
 }

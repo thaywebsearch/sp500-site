@@ -1,7 +1,7 @@
 {
   "sector": "Information Technology",
   "count": 75,
-  "generatedAt": "2026-10-17",
+  "generatedAt": "2026-10-19",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -309,8 +309,8 @@
       "founded": "2009",
       "marketCap": 41323511808,
       "marketCapClassification": "Large",
-      "hasDividend": "Não",
-      "dividendYield": null
+      "dividendYield": null,
+      "hasDividend": "Não"
     },
     {
       "symbol": "FFIV",
@@ -981,8 +981,8 @@
       "founded": "2008",
       "marketCap": 37529174016,
       "marketCapClassification": "Large",
-      "hasDividend": "Não",
-      "dividendYield": null
+      "dividendYield": null,
+      "hasDividend": "Não"
     },
     {
       "symbol": "TYL",
@@ -1054,6 +1054,5 @@
       "dividendYield": null,
       "hasDividend": "Não"
     }
-  ],
-  "liveUpdatedAt": "2026-10-17 10:44:04 +0000"
+  ]
 }

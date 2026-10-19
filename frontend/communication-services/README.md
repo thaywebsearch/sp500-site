@@ -4,25 +4,25 @@
 
 | # | Símbolo | Empresa | Market Cap | Subindústria | Sedes | Dividend Yield |
 |---|---------|---------|------------|--------------|-------|----------------|
-| 1 | GOOGL | Alphabet Inc. (Class A) | $4.24T | Interactive Media & Services | Mountain View, California | 0.26% |
-| 2 | GOOG | Alphabet Inc. (Class C) | $4.20T | Interactive Media & Services | Mountain View, California | 0.26% |
-| 3 | META | Meta Platforms | $1.46T | Interactive Media & Services | Menlo Park, California | 0.37% |
-| 4 | NFLX | Netflix | $339.82B | Movies & Entertainment | Los Gatos, California | — |
-| 5 | VZ | Verizon | $207.63B | Integrated Telecommunication Services | New York City, New York | 5.64% |
-| 6 | TMUS | T-Mobile US | $194.13B | Wireless Telecommunication Services | Bellevue, Washington | 2.27% |
-| 7 | DIS | Walt Disney Company (The) | $185.98B | Movies & Entertainment | Burbank, California | 1.40% |
-| 8 | T | AT&T | $177.72B | Integrated Telecommunication Services | Dallas, Texas | 4.36% |
-| 9 | APP | AppLovin | $107.17B | Advertising | Palo Alto, California | — |
-| 10 | CMCSA | Comcast | $95.69B | Cable & Satellite | Philadelphia, Pennsylvania | 5.00% |
-| 11 | TTWO | Take-Two Interactive | $43.65B | Interactive Home Entertainment | New York City, New York | — |
-| 12 | LYV | Live Nation Entertainment | $42.04B | Movies & Entertainment | Beverly Hills, California | — |
-| 13 | TKO | TKO Group Holdings | $34.93B | Movies & Entertainment | New York City, New York | 1.69% |
-| 14 | RDDT | Reddit | $29.61B | Interactive Media & Services | San Francisco, California | — |
-| 15 | FOXA | Fox Corporation (Class A) | $28.93B | Broadcasting | New York City, New York | 0.83% |
-| 16 | FOX | Fox Corporation (Class B) | $25.87B | Broadcasting | New York City, New York | 0.93% |
-| 17 | ECHO | EchoStar | $25.14B | Wireless Telecommunication Services | Englewood, Colorado | — |
-| 18 | OMC | Omnicom Group | $24.19B | Advertising | New York City, New York | 3.64% |
-| 19 | CHTR | Charter Communications | $20.77B | Cable & Satellite | Stamford, Connecticut | — |
-| 20 | NWS | News Corp (Class B) | $18.71B | Publishing | New York City, New York | 0.57% |
-| 21 | NWSA | News Corp (Class A) | $16.63B | Publishing | New York City, New York | 0.64% |
-| 22 | SKYD | Skydance Corporation | N/A | Movies & Entertainment | New York City, New York | — |
+| 1 | GOOGL | Alphabet Inc. (Class A) | $4.17T | Interactive Media & Services | Mountain View, California | 0.26% |
+| 2 | GOOG | Alphabet Inc. (Class C) | $4.12T | Interactive Media & Services | Mountain View, California | 0.26% |
+| 3 | META | Meta Platforms | $1.81T | Interactive Media & Services | Menlo Park, California | 0.30% |
+| 4 | NFLX | Netflix | $293.68B | Movies & Entertainment | Los Gatos, California | — |
+| 5 | DIS | Walt Disney Company (The) | $190.95B | Movies & Entertainment | Burbank, California | 1.36% |
+| 6 | VZ | Verizon | $186.09B | Integrated Telecommunication Services | New York City, New York | 6.32% |
+| 7 | TMUS | T-Mobile US | $170.66B | Wireless Telecommunication Services | Bellevue, Washington | 2.94% |
+| 8 | T | AT&T | $160.62B | Integrated Telecommunication Services | Dallas, Texas | 4.74% |
+| 9 | APP | AppLovin | $89.40B | Advertising | Palo Alto, California | — |
+| 10 | CMCSA | Comcast | $77.72B | Cable & Satellite | Philadelphia, Pennsylvania | 6.03% |
+| 11 | LYV | Live Nation Entertainment | $39.72B | Movies & Entertainment | Beverly Hills, California | — |
+| 12 | TTWO | Take-Two Interactive | $38.38B | Interactive Home Entertainment | New York City, New York | — |
+| 13 | SKYD | Skydance Corporation | $34.84B | Movies & Entertainment | New York City, New York | 2.89% |
+| 14 | TKO | TKO Group Holdings | $33.22B | Movies & Entertainment | New York City, New York | 1.80% |
+| 15 | RDDT | Reddit | $30.04B | Interactive Media & Services | San Francisco, California | — |
+| 16 | FOXA | Fox Corporation (Class A) | $27.05B | Broadcasting | New York City, New York | 0.90% |
+| 17 | ECHO | EchoStar | $24.83B | Wireless Telecommunication Services | Englewood, Colorado | — |
+| 18 | FOX | Fox Corporation (Class B) | $24.13B | Broadcasting | New York City, New York | 1.01% |
+| 19 | OMC | Omnicom Group | $22.10B | Advertising | New York City, New York | 3.97% |
+| 20 | NWS | News Corp (Class B) | $17.71B | Publishing | New York City, New York | 0.61% |
+| 21 | NWSA | News Corp (Class A) | $16.18B | Publishing | New York City, New York | 0.67% |
+| 22 | CHTR | Charter Communications | $14.31B | Cable & Satellite | Stamford, Connecticut | — |

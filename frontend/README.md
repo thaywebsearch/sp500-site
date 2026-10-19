@@ -44,7 +44,7 @@ Cada pasta de setor contém:
 
 - **Origem**: [datasets/s-and-p-500-companies](https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv) no GitHub
 - **Classificação**: GICS (Global Industry Classification Standard)
-- **Atualização**: 2026-10-13
+- **Atualização**: 2026-10-19
 
 ## Uso
 
@@ -73,22 +73,10 @@ console.log(`Setor: ${data.sector}`);
 console.log(`Total: ${data.count} empresas`);
 ```
 
-## Testes
-
-Os scripts de dados têm testes em `tests/` — apenas **stdlib** (`unittest`), sem pytest:
-
-```bash
-cd frontend
-python -m unittest discover -s tests -v
-```
-
-- **`tests/test_dividend_yield.py`** — regressão do bug de 2026-10-13 (dividendYield inflado 100×). Fixa o contrato de unidades dos **dois** caminhos de dados: o *yfinance* já devolve percentagem (`update_live_data._normalize_dividend_yield`, sem ×100) e o *fallback* cookie+crumb devolve uma fração (`yahoo_quotes._parse`, com a única multiplicação ×100 e guarda >100%).
-- **`tests/test_data_integrity.py`** — integridade dos 22 datasets (11 setores × frontend/backend): esquema de empresa estável, `count` coerente, `dividendYield ∈ (0, 25]%` ou `null`, `hasDividend` em sincronia com o yield, `marketCap` inteiro positivo e espelho `backend/data` idêntico empresa a empresa.
-
 ## Licença
 
 Dados públicos do S&P 500. Consulte a [fonte original](https://github.com/datasets/s-and-p-500-companies) para detalhes de licenciamento.
 
 ---
 
-*Gerado automaticamente — Última atualização: 2026-10-13*
+*Gerado automaticamente — Última atualização: 2026-10-19*

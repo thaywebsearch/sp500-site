@@ -4,37 +4,37 @@
 
 | # | Símbolo | Empresa | Market Cap | Subindústria | Sedes | Dividend Yield |
 |---|---------|---------|------------|--------------|-------|----------------|
-| 1 | WMT | Walmart | $820.26B | Consumer Staples Merchandise Retail | Bentonville, Arkansas | 0.96% |
-| 2 | COST | Costco | $419.39B | Consumer Staples Merchandise Retail | Issaquah, Washington | 0.63% |
-| 3 | KO | Coca-Cola Company (The) | $385.96B | Soft Drinks & Non-alcoholic Beverages | Atlanta, Georgia | 2.38% |
-| 4 | PG | Procter & Gamble | $333.29B | Personal Care Products | Cincinnati, Ohio | 3.00% |
-| 5 | PM | Philip Morris International | $298.85B | Tobacco | New York City, New York | 3.09% |
-| 6 | PEP | PepsiCo | $192.54B | Soft Drinks & Non-alcoholic Beverages | Purchase, New York | 4.24% |
-| 7 | MO | Altria | $114.17B | Tobacco | Richmond, Virginia | 6.27% |
-| 8 | MNST | Monster Beverage | $91.90B | Soft Drinks & Non-alcoholic Beverages | Corona, California | — |
-| 9 | MDLZ | Mondelez International | $79.23B | Packaged Foods & Meats | Chicago, Illinois | 3.33% |
-| 10 | TGT | Target Corporation | $73.99B | Consumer Staples Merchandise Retail | Minneapolis, Minnesota | 2.83% |
-| 11 | CL | Colgate-Palmolive | $72.37B | Household Products | New York City, New York | 2.33% |
-| 12 | KDP | Keurig Dr Pepper | $44.06B | Soft Drinks & Non-alcoholic Beverages | Burlington, Massachusetts | 2.89% |
-| 13 | SYY | Sysco | $39.34B | Food Distributors | Houston, Texas | 2.67% |
-| 14 | ADM | Archer Daniels Midland | $39.28B | Agricultural Products & Services | Chicago, Illinois | 2.63% |
-| 15 | EL | Estée Lauder Companies (The) | $37.23B | Personal Care Products | New York City, New York | 1.32% |
-| 16 | KVUE | Kenvue | $36.94B | Personal Care Products | Skillman, New Jersey | 4.38% |
-| 17 | KMB | Kimberly-Clark | $36.67B | Household Products | Irving, Texas | 4.64% |
-| 18 | HSY | Hershey Company (The) | $36.10B | Packaged Foods & Meats | Hershey, Pennsylvania | 3.20% |
-| 19 | KR | Kroger | $35.33B | Food Retail | Cincinnati, Ohio | 2.53% |
-| 20 | KHC | Kraft Heinz | $30.31B | Packaged Foods & Meats | Chicago, Illinois; Pittsburgh, Pennsylvania | 6.37% |
-| 21 | CASY | Casey's | $27.96B | Food Retail | Ankeny, Iowa | 0.32% |
-| 22 | DG | Dollar General | $27.23B | Consumer Staples Merchandise Retail | Goodlettsville, Tennessee | 1.87% |
-| 23 | DLTR | Dollar Tree | $24.22B | Consumer Staples Merchandise Retail | Chesapeake, Virginia | — |
-| 24 | CHD | Church & Dwight | $24.08B | Household Products | Ewing, New Jersey | 1.20% |
-| 25 | STZ | Constellation Brands | $22.51B | Distillers & Vintners | Rochester, New York | 3.13% |
-| 26 | BG | Bunge Global | $22.17B | Agricultural Products & Services | Chesterfield, Missouri | 2.58% |
-| 27 | GIS | General Mills | $22.16B | Packaged Foods & Meats | Golden Valley, Minnesota | 6.03% |
-| 28 | TSN | Tyson Foods | $19.47B | Packaged Foods & Meats | Springdale, Arkansas | 3.61% |
-| 29 | MKC | McCormick & Company | $14.89B | Packaged Foods & Meats | Hunt Valley, Maryland | 3.52% |
-| 30 | SJM | J.M. Smucker Company (The) | $14.19B | Packaged Foods & Meats | Orrville, Ohio | 3.40% |
-| 31 | CLX | Clorox | $12.42B | Household Products | Oakland, California | 4.82% |
-| 32 | HRL | Hormel Foods | $11.78B | Packaged Foods & Meats | Austin, Minnesota | 5.50% |
-| 33 | BF.B | Brown–Forman | N/A | Distillers & Vintners | Louisville, Kentucky | — |
-| 34 | VYLR | Vylor | N/A | Agricultural Products & Services | Johnston, Iowa | — |
+| 1 | WMT | Walmart | $945.50B | Consumer Staples Merchandise Retail | Bentonville, Arkansas | 0.83% |
+| 2 | COST | Costco | $438.30B | Consumer Staples Merchandise Retail | Issaquah, Washington | 0.59% |
+| 3 | KO | Coca-Cola Company (The) | $404.01B | Soft Drinks & Non-alcoholic Beverages | Atlanta, Georgia | 2.26% |
+| 4 | PG | Procter & Gamble | $370.12B | Personal Care Products | Cincinnati, Ohio | 2.73% |
+| 5 | PM | Philip Morris International | $319.83B | Tobacco | New York City, New York | 3.12% |
+| 6 | PEP | PepsiCo | $179.19B | Soft Drinks & Non-alcoholic Beverages | Purchase, New York | 4.50% |
+| 7 | MO | Altria | $125.41B | Tobacco | Richmond, Virginia | 5.91% |
+| 8 | MNST | Monster Beverage | $89.59B | Soft Drinks & Non-alcoholic Beverages | Corona, California | — |
+| 9 | MDLZ | Mondelez International | $81.57B | Packaged Foods & Meats | Chicago, Illinois | 3.25% |
+| 10 | CL | Colgate-Palmolive | $75.02B | Household Products | New York City, New York | 2.25% |
+| 11 | TGT | Target Corporation | $70.08B | Consumer Staples Merchandise Retail | Minneapolis, Minnesota | 3.01% |
+| 12 | VYLR | Vylor | $48.17B | Agricultural Products & Services | Johnston, Iowa | 0.98% |
+| 13 | KDP | Keurig Dr Pepper | $47.11B | Soft Drinks & Non-alcoholic Beverages | Burlington, Massachusetts | 2.66% |
+| 14 | SYY | Sysco | $40.45B | Food Distributors | Houston, Texas | 2.68% |
+| 15 | ADM | Archer Daniels Midland | $39.81B | Agricultural Products & Services | Chicago, Illinois | 2.52% |
+| 16 | EL | Estée Lauder Companies (The) | $37.88B | Personal Care Products | New York City, New York | 1.34% |
+| 17 | KR | Kroger | $37.58B | Food Retail | Cincinnati, Ohio | 2.45% |
+| 18 | KVUE | Kenvue | $36.32B | Personal Care Products | Skillman, New Jersey | 4.44% |
+| 19 | KMB | Kimberly-Clark | $35.11B | Household Products | Irving, Texas | 4.85% |
+| 20 | HSY | Hershey Company (The) | $34.32B | Packaged Foods & Meats | Hershey, Pennsylvania | 3.40% |
+| 21 | DG | Dollar General | $29.64B | Consumer Staples Merchandise Retail | Goodlettsville, Tennessee | 1.76% |
+| 22 | KHC | Kraft Heinz | $28.08B | Packaged Foods & Meats | Chicago, Illinois; Pittsburgh, Pennsylvania | 6.76% |
+| 23 | CASY | Casey's | $25.47B | Food Retail | Ankeny, Iowa | 0.38% |
+| 24 | CHD | Church & Dwight | $24.79B | Household Products | Ewing, New Jersey | 1.18% |
+| 25 | DLTR | Dollar Tree | $23.30B | Consumer Staples Merchandise Retail | Chesapeake, Virginia | — |
+| 26 | STZ | Constellation Brands | $22.23B | Distillers & Vintners | Rochester, New York | 3.14% |
+| 27 | BG | Bunge Global | $20.39B | Agricultural Products & Services | Chesterfield, Missouri | 2.71% |
+| 28 | TSN | Tyson Foods | $19.31B | Packaged Foods & Meats | Springdale, Arkansas | 3.72% |
+| 29 | GIS | General Mills | $17.71B | Packaged Foods & Meats | Golden Valley, Minnesota | 7.36% |
+| 30 | SJM | J.M. Smucker Company (The) | $13.61B | Packaged Foods & Meats | Orrville, Ohio | 3.52% |
+| 31 | BF.B | Brown–Forman | $13.25B | Distillers & Vintners | Louisville, Kentucky | 3.20% |
+| 32 | MKC | McCormick & Company | $12.47B | Packaged Foods & Meats | Hunt Valley, Maryland | 4.14% |
+| 33 | HRL | Hormel Foods | $11.23B | Packaged Foods & Meats | Austin, Minnesota | 5.74% |
+| 34 | CLX | Clorox | $10.53B | Household Products | Oakland, California | 5.74% |

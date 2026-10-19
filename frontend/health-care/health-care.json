@@ -1,7 +1,7 @@
 {
   "sector": "Health Care",
   "count": 60,
-  "generatedAt": "2026-10-17",
+  "generatedAt": "2026-10-19",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -421,8 +421,8 @@
       "founded": "1998",
       "marketCap": 39643541504,
       "marketCapClassification": "Large",
-      "hasDividend": "Não",
-      "dividendYield": null
+      "dividendYield": null,
+      "hasDividend": "Não"
     },
     {
       "symbol": "INCY",
@@ -524,7 +524,7 @@
     },
     {
       "symbol": "MCK",
-      "name": "McKesson Corporation",
+      "name": "McKesson",
       "sector": "Health Care",
       "subIndustry": "Health Care Distributors",
       "headquarters": "Irving, Texas",
@@ -844,6 +844,5 @@
       "dividendYield": 2.67,
       "hasDividend": "Sim"
     }
-  ],
-  "liveUpdatedAt": "2026-10-17 10:44:04 +0000"
+  ]
 }
