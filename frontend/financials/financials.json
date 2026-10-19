@@ -897,7 +897,7 @@
       "founded": "1971",
       "marketCap": 23385466880,
       "marketCapClassification": "Large",
-      "dividendYield": 4.39,
+      "dividendYield": 4.37,
       "hasDividend": "Sim"
     },
     {
@@ -995,7 +995,7 @@
       "founded": "1872",
       "marketCap": 57501945856,
       "marketCapClassification": "Large",
-      "dividendYield": 4.47,
+      "dividendYield": 4.42,
       "hasDividend": "Sim"
     },
     {
@@ -1068,5 +1068,6 @@
       "dividendYield": 1.22,
       "hasDividend": "Sim"
     }
-  ]
+  ],
+  "liveUpdatedAt": "2026-10-19 12:19:43 +0000"
 }
