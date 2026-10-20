@@ -9,15 +9,16 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const app = express();
-const PORT = process.env.PORT || 5001;
-
-// A API corre atrás do proxy do Railway -> confiar no 1º salto para que req.ip
-// (usado pelo rate limiting) seja o IP real do cliente.
-app.set('trust proxy', 1);
 
 // Configurar __dirname para módulos ES6
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const PORT = process.env.PORT || 5001;
+
+// A API corre atrás de um proxy (Render/Railway) -> confiar no 1º salto para que
+// req.ip (usado pelo rate limiting) seja o IP real do cliente.
+app.set('trust proxy', 1);
 
 // Versão da API, lida do arquivo VERSION (fallback se ausente)
 function lerVersao() {
@@ -101,19 +102,38 @@ const historicoLimiter = rateLimit({
   message: { sucesso: false, erro: 'Demasiados pedidos. Tente novamente mais tarde.' },
 });
 
-// CORS: origens permitidas via env CORS_ORIGINS (separadas por vírgula).
+/** Normaliza uma origem: remove espaços e barras finais (o browser nunca as envia). */
+function normalizarOrigem(origem) {
+  return origem.trim().replace(/\/+$/, '');
+}
+
+// CORS: origens permitidas via env CORS_ORIGINS (plural, separadas por vírgula).
 // RESTRITIVO por omissão: sem CORS_ORIGINS nenhuma origem externa é aceite
 // (apenas pedidos sem Origin: curl, health checks, same-origin). Em dev local
 // define-se, por exemplo, CORS_ORIGINS=http://localhost:5173.
 const CORS_ORIGINS = (process.env.CORS_ORIGINS || '')
   .split(',')
-  .map((origem) => origem.trim())
+  .map(normalizarOrigem)
   .filter(Boolean);
 
 if (CORS_ORIGINS.length === 0) {
   console.warn(
-    '[WARN] CORS_ORIGINS não definido: CORS restritivo (nenhuma origem externa permitida).'
+    '[WARN] CORS_ORIGINS não definido ou vazio: CORS restritivo — nenhuma origem externa é permitida.\n' +
+      '       Defina a variável CORS_ORIGINS (plural) com uma lista separada por vírgulas.\n' +
+      '       Ex.: CORS_ORIGINS=https://a-tua-app.netlify.app,https://thaywebsearch.github.io\n' +
+      '       Produção (Render): Dashboard -> serviço -> Environment -> CORS_ORIGINS.\n' +
+      '       Local: backend/.env (ver backend/.env.example).'
   );
+
+  // Erro de configuração comum: a variável no singular é ignorada pelo código.
+  if (process.env.CORS_ORIGIN) {
+    console.warn(
+      '[WARN] Detetada a variável CORS_ORIGIN (singular), que NÃO é usada pela aplicação. ' +
+        'Renomeie-a para CORS_ORIGINS (plural).'
+    );
+  }
+} else {
+  console.log(`[CORS] ${CORS_ORIGINS.length} origem(ns) permitida(s): ${CORS_ORIGINS.join(', ')}`);
 }
 
 app.use(
