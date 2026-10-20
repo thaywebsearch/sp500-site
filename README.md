@@ -15,11 +15,11 @@ Plataforma para explorar o índice **S&P 500** por setor GICS: datasets atualiza
 
 ## Deploy
 
-- **Dashboard estático** → GitHub Pages (`/docs`) e Netlify
+- **Dashboard estático** → Netlify e GitHub Pages (`/docs`)
 - **API Express** → Render (plano gratuito, Blueprint `render.yaml`); o Railway
   fica mantido como rollback. Passo-a-passo em `backend/README.md` → "Deploy".
-  O URL da API no frontend pode ser repontado sem editar código com a variável
-  `VITE_API_URL`.
+  URL atual: `https://sp500-api.onrender.com`. O URL da API no frontend pode
+  ser repontado sem editar código com a variável `VITE_API_URL`.
 
 ## Arquitetura de Dados (fonte única)
 
@@ -31,7 +31,7 @@ CSV (GitHub datasets)
         ▼
 frontend/<setor>/<setor>.json   ← fonte única (canônica)
         │  sync automático no mesmo script
-        └──▶ backend/data/              (API Railway)
+        └──▶ backend/data/              (API Render)
 ```
 
 A cópia `backend/data/` é regerada antes do boot da API (`npm start` → hook
@@ -80,7 +80,7 @@ As workflows ficam em `.github/workflows/` (raiz do repositório):
 | `update-daily-summary.yml` | Dias úteis 21:30 UTC | Regenera o Resumo do Dia (`backend/data/daily-summary.json`) |
 | `deploy-dashboard.yml` | Após push + Segunda 07:00 | Builda o dashboard em `frontend/docs/` |
 
-## API (Railway)
+## API (Render)
 
 ```
 GET /api/health             → status + versão
@@ -93,8 +93,9 @@ GET /api/resumo-dia         → maiores altas e baixas do dia
 
 A rota raiz `/` documenta os endpoints. A versão é lida de `backend/VERSION`
 e exposta em `/` e em `/api/health`. O CORS é **restritivo por omissão**:
-defina `CORS_ORIGINS` com as origens autorizadas (obrigatório para o dashboard
-em GitHub Pages); ver `backend/README.md`.
+defina `CORS_ORIGINS` (**plural**) com as origens autorizadas separadas por
+vírgula (ex.: `https://sp500-dashboard.netlify.app,https://thaywebsearch.github.io`);
+sem ela, o dashboard é bloqueado no browser. Ver `backend/README.md`.
 
 ## Desenvolvimento Local
 
@@ -106,7 +107,9 @@ npm run dev            # http://localhost:5173
 
 # API Express
 cd backend
-node server.js         # http://localhost:5001
+npm install
+copy .env.example .env # PowerShell (bash: cp .env.example .env)
+npm run dev            # http://localhost:5001 (carrega backend/.env via dotenv)
 
 # Atualizar dataset manualmente
 cd frontend
@@ -116,6 +119,7 @@ python scripts/update_sectors.py
 ## Testes e Qualidade
 
 - **Dashboard**: ESLint + Prettier + Vitest — `npm run lint`, `npm run format`, `npm test`, `npm run test:coverage`, `npm run build`
+- **API**: testes de CORS com o runner nativo do Node (`node --test`) — `cd backend && npm test`
 - **Python**: sem framework de testes configurado ainda
 
 ## Licença

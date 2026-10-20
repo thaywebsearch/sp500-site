@@ -47,5 +47,8 @@ Desktop.ini
 # Artefatos de dados temporários
 sp500.json
 
+# Material de marketing (local; não versionado)
+marketing/
+
 # Cópia derivada do dashboard (não versionada; gerada apenas quando necessário)
 frontend/dashboard/public/data/
