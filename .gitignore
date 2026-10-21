@@ -52,3 +52,5 @@ marketing/
 
 # Cópia derivada do dashboard (não versionada; gerada apenas quando necessário)
 frontend/dashboard/public/data/
+# Local Netlify folder
+.netlify
