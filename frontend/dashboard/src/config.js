@@ -7,8 +7,7 @@ const hostname = window.location.hostname;
 const ehLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
 
 export const API_BASE_URL =
-  API_URL_FROM_ENV ||
-  (ehLocalhost ? 'http://localhost:5001' : 'https://sp500-api.onrender.com');
+  API_URL_FROM_ENV || (ehLocalhost ? 'http://localhost:5001' : 'https://sp500-api.onrender.com');
 
 export const SECTORS = [
   { id: 'communication-services', name: 'Communication Services' },
