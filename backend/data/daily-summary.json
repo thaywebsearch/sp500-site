@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-21 11:18:18 UTC",
-  "referenceDate": "2026-10-20",
+  "generatedAt": "2026-10-22 00:08:17 UTC",
+  "referenceDate": "2026-10-21",
   "topGainers": [
     {
       "symbol": "EFX",
@@ -169,9 +169,9 @@
     },
     {
       "name": "Industrials",
-      "avgChangePct": 0.82,
-      "gainers": 62,
-      "losers": 21,
+      "avgChangePct": 0.84,
+      "gainers": 63,
+      "losers": 20,
       "total": 83
     },
     {
@@ -198,8 +198,8 @@
   ],
   "marketMood": "bullish",
   "stats": {
-    "gainers": 404,
-    "losers": 99,
+    "gainers": 405,
+    "losers": 98,
     "neutral": 0,
     "total": 503
   }
