@@ -1,7 +1,7 @@
 {
   "sector": "Information Technology",
   "count": 75,
-  "generatedAt": "2026-10-25",
+  "generatedAt": "2026-10-26",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -761,20 +761,6 @@
       "hasDividend": "Não"
     },
     {
-      "symbol": "QCOM",
-      "name": "Qualcomm",
-      "sector": "Information Technology",
-      "subIndustry": "Semiconductors",
-      "headquarters": "San Diego, California",
-      "dateAdded": "1999-07-22",
-      "cik": 804328,
-      "founded": "1985",
-      "marketCap": 187843641344,
-      "marketCapClassification": "Large",
-      "dividendYield": 2.09,
-      "hasDividend": "Sim"
-    },
-    {
       "symbol": "Q",
       "name": "Qnity Electronics",
       "sector": "Information Technology",
@@ -786,6 +772,20 @@
       "marketCap": 22977374208,
       "marketCapClassification": "Large",
       "dividendYield": 0.29,
+      "hasDividend": "Sim"
+    },
+    {
+      "symbol": "QCOM",
+      "name": "Qualcomm",
+      "sector": "Information Technology",
+      "subIndustry": "Semiconductors",
+      "headquarters": "San Diego, California",
+      "dateAdded": "1999-07-22",
+      "cik": 804328,
+      "founded": "1985",
+      "marketCap": 187843641344,
+      "marketCapClassification": "Large",
+      "dividendYield": 2.09,
       "hasDividend": "Sim"
     },
     {
@@ -1054,6 +1054,5 @@
       "dividendYield": null,
       "hasDividend": "Não"
     }
-  ],
-  "liveUpdatedAt": "2026-10-25 10:51:55 +0000"
+  ]
 }

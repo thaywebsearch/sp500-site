@@ -1,7 +1,7 @@
 {
   "sector": "Communication Services",
   "count": 22,
-  "generatedAt": "2026-10-25",
+  "generatedAt": "2026-10-26",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -230,7 +230,7 @@
     },
     {
       "symbol": "SKYD",
-      "name": "Skydance Corporation",
+      "name": "Skydance",
       "sector": "Communication Services",
       "subIndustry": "Movies & Entertainment",
       "headquarters": "New York City, New York",
@@ -312,6 +312,5 @@
       "dividendYield": 1.33,
       "hasDividend": "Sim"
     }
-  ],
-  "liveUpdatedAt": "2026-10-25 10:51:55 +0000"
+  ]
 }

@@ -1,7 +1,7 @@
 {
   "sector": "Industrials",
   "count": 83,
-  "generatedAt": "2026-10-25",
+  "generatedAt": "2026-10-26",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -859,20 +859,6 @@
       "hasDividend": "Sim"
     },
     {
-      "symbol": "RTX",
-      "name": "RTX Corporation",
-      "sector": "Industrials",
-      "subIndustry": "Aerospace & Defense",
-      "headquarters": "Waltham, Massachusetts",
-      "dateAdded": "1957-03-04",
-      "cik": 101829,
-      "founded": "1922",
-      "marketCap": 257756626944,
-      "marketCapClassification": "Mega",
-      "dividendYield": 1.53,
-      "hasDividend": "Sim"
-    },
-    {
       "symbol": "RSG",
       "name": "Republic Services",
       "sector": "Industrials",
@@ -912,6 +898,20 @@
       "marketCap": 16753482752,
       "marketCapClassification": "Large",
       "dividendYield": 2.3,
+      "hasDividend": "Sim"
+    },
+    {
+      "symbol": "RTX",
+      "name": "RTX Corporation",
+      "sector": "Industrials",
+      "subIndustry": "Aerospace & Defense",
+      "headquarters": "Waltham, Massachusetts",
+      "dateAdded": "1957-03-04",
+      "cik": 101829,
+      "founded": "1922",
+      "marketCap": 257756626944,
+      "marketCapClassification": "Mega",
+      "dividendYield": 1.53,
       "hasDividend": "Sim"
     },
     {
@@ -1166,6 +1166,5 @@
       "dividendYield": 1.58,
       "hasDividend": "Sim"
     }
-  ],
-  "liveUpdatedAt": "2026-10-25 10:51:55 +0000"
+  ]
 }
