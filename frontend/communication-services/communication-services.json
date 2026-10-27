@@ -1,7 +1,7 @@
 {
   "sector": "Communication Services",
   "count": 22,
-  "generatedAt": "2026-10-26",
+  "generatedAt": "2026-10-27",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -13,9 +13,9 @@
       "dateAdded": "2006-04-03",
       "cik": 1652044,
       "founded": "1998",
-      "marketCap": 3916147458048,
+      "marketCap": 3874443231232,
       "marketCapClassification": "Mega",
-      "dividendYield": 0.27,
+      "dividendYield": 0.28,
       "hasDividend": "Sim"
     },
     {
@@ -27,7 +27,7 @@
       "dateAdded": "2014-04-03",
       "cik": 1652044,
       "founded": "1998",
-      "marketCap": 3880313683968,
+      "marketCap": 3842523267072,
       "marketCapClassification": "Mega",
       "dividendYield": 0.28,
       "hasDividend": "Sim"
@@ -41,7 +41,7 @@
       "dateAdded": "2025-09-22",
       "cik": 1751008,
       "founded": "2012",
-      "marketCap": 87428259840,
+      "marketCap": 87592869888,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -55,9 +55,9 @@
       "dateAdded": "1983-11-30",
       "cik": 732717,
       "founded": "1983 (1885)",
-      "marketCap": 140994396160,
+      "marketCap": 140455477248,
       "marketCapClassification": "Large",
-      "dividendYield": 5.3,
+      "dividendYield": 5.32,
       "hasDividend": "Sim"
     },
     {
@@ -69,7 +69,7 @@
       "dateAdded": "2016-09-08",
       "cik": 1091667,
       "founded": "1993",
-      "marketCap": 14114695168,
+      "marketCap": 13279067136,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -83,9 +83,9 @@
       "dateAdded": "2002-11-19",
       "cik": 1166691,
       "founded": "1963",
-      "marketCap": 80572334080,
+      "marketCap": 78299684864,
       "marketCapClassification": "Large",
-      "dividendYield": 5.82,
+      "dividendYield": 5.99,
       "hasDividend": "Sim"
     },
     {
@@ -97,7 +97,7 @@
       "dateAdded": "2026-03-23",
       "cik": 1415404,
       "founded": "2008",
-      "marketCap": 25905874944,
+      "marketCap": 25958221824,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -111,9 +111,9 @@
       "dateAdded": "2019-03-19",
       "cik": 1754301,
       "founded": "2019",
-      "marketCap": 28083464192,
+      "marketCap": 27547938816,
       "marketCapClassification": "Large",
-      "dividendYield": 0.87,
+      "dividendYield": 0.89,
       "hasDividend": "Sim"
     },
     {
@@ -125,9 +125,9 @@
       "dateAdded": "2019-03-19",
       "cik": 1754301,
       "founded": "2019",
-      "marketCap": 25072713728,
+      "marketCap": 24520323072,
       "marketCapClassification": "Large",
-      "dividendYield": 0.98,
+      "dividendYield": 1.0,
       "hasDividend": "Sim"
     },
     {
@@ -139,7 +139,7 @@
       "dateAdded": "2019-12-23",
       "cik": 1335258,
       "founded": "2010",
-      "marketCap": 40404496384,
+      "marketCap": 40204152832,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -153,7 +153,7 @@
       "dateAdded": "2013-12-23",
       "cik": 1326801,
       "founded": "2004",
-      "marketCap": 1637078401024,
+      "marketCap": 1606355517440,
       "marketCapClassification": "Mega",
       "dividendYield": 0.33,
       "hasDividend": "Sim"
@@ -167,7 +167,7 @@
       "dateAdded": "2010-12-20",
       "cik": 1065280,
       "founded": "1997",
-      "marketCap": 274195415040,
+      "marketCap": 266075750400,
       "marketCapClassification": "Mega",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -181,7 +181,7 @@
       "dateAdded": "2013-08-01",
       "cik": 1564708,
       "founded": "2013 (News Corporation 1980)",
-      "marketCap": 16553660416,
+      "marketCap": 16475565056,
       "marketCapClassification": "Large",
       "dividendYield": 0.65,
       "hasDividend": "Sim"
@@ -195,9 +195,9 @@
       "dateAdded": "2015-09-18",
       "cik": 1564708,
       "founded": "2013 (News Corporation 1980)",
-      "marketCap": 18188290048,
+      "marketCap": 18026713088,
       "marketCapClassification": "Large",
-      "dividendYield": 0.59,
+      "dividendYield": 0.6,
       "hasDividend": "Sim"
     },
     {
@@ -209,9 +209,9 @@
       "dateAdded": "1997-12-31",
       "cik": 29989,
       "founded": "1986",
-      "marketCap": 22682923008,
+      "marketCap": 21901037568,
       "marketCapClassification": "Large",
-      "dividendYield": 3.87,
+      "dividendYield": 4.01,
       "hasDividend": "Sim"
     },
     {
@@ -223,7 +223,7 @@
       "dateAdded": "2026-08-18",
       "cik": 1713445,
       "founded": "2005",
-      "marketCap": 27753197568,
+      "marketCap": 26637295616,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -237,9 +237,9 @@
       "dateAdded": "1994-09-30",
       "cik": 2041610,
       "founded": "2025 (Paramount Pictures 1912)",
-      "marketCap": 39177723904,
+      "marketCap": 37765910528,
       "marketCapClassification": "Large",
-      "dividendYield": 2.57,
+      "dividendYield": 2.67,
       "hasDividend": "Sim"
     },
     {
@@ -251,7 +251,7 @@
       "dateAdded": "2019-07-15",
       "cik": 1283699,
       "founded": "1994",
-      "marketCap": 157189292032,
+      "marketCap": 157607624704,
       "marketCapClassification": "Large",
       "dividendYield": 3.19,
       "hasDividend": "Sim"
@@ -265,7 +265,7 @@
       "dateAdded": "2018-03-19",
       "cik": 946581,
       "founded": "1993",
-      "marketCap": 38086049792,
+      "marketCap": 38022475776,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -279,9 +279,9 @@
       "dateAdded": "2025-03-24",
       "cik": 1973266,
       "founded": "2023",
-      "marketCap": 32756910080,
+      "marketCap": 32408651776,
       "marketCapClassification": "Large",
-      "dividendYield": 1.83,
+      "dividendYield": 1.85,
       "hasDividend": "Sim"
     },
     {
@@ -293,9 +293,9 @@
       "dateAdded": "1983-11-30",
       "cik": 732712,
       "founded": "1983 (1877)",
-      "marketCap": 185552257024,
+      "marketCap": 179070812160,
       "marketCapClassification": "Large",
-      "dividendYield": 6.34,
+      "dividendYield": 6.57,
       "hasDividend": "Sim"
     },
     {
@@ -307,10 +307,11 @@
       "dateAdded": "1976-06-30",
       "cik": 1744489,
       "founded": "1923",
-      "marketCap": 194286796800,
+      "marketCap": 190626234368,
       "marketCapClassification": "Large",
-      "dividendYield": 1.33,
+      "dividendYield": 1.36,
       "hasDividend": "Sim"
     }
-  ]
+  ],
+  "liveUpdatedAt": "2026-10-27 11:41:55 +0000"
 }
