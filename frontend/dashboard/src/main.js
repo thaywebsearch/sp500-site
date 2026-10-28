@@ -13,6 +13,7 @@ import { renderDividendKings } from './dividend-kings.js';
 import { renderDividendAristocrats } from './dividend-aristocrats.js';
 import { renderNasdaq100 } from './nasdaq-100.js';
 import { loadDailySummary } from './daily-summary.js';
+import { loadSectorIntelligence } from './sector-intelligence.js';
 
 // ========== CONSTANTES ==========
 const PRICE_ALERTS_STORAGE_KEY = 'sp500-price-alerts';
@@ -227,6 +228,7 @@ function updateUI() {
   const dividendKingsView = document.getElementById('dividend-kings-view');
   const dividendAristocratsView = document.getElementById('dividend-aristocrats-view');
   const nasdaqView = document.getElementById('nasdaq-100-view');
+  const sectorIntelligenceView = document.getElementById('sector-intelligence-view');
 
   // Hide all views
   const allViews = [
@@ -241,6 +243,7 @@ function updateUI() {
     dividendKingsView,
     dividendAristocratsView,
     nasdaqView,
+    sectorIntelligenceView,
   ];
   allViews.forEach((view) => {
     if (view) view.style.display = 'none';
@@ -309,6 +312,14 @@ function updateUI() {
       if (nasdaqView) {
         nasdaqView.style.display = 'block';
         loadTabOnce('nasdaq-100', loadNasdaq100);
+      }
+      break;
+    case 'sector-intelligence':
+      if (sectorIntelligenceView) {
+        sectorIntelligenceView.style.display = 'block';
+        loadTabOnce('sector-intelligence', () =>
+          loadSectorIntelligence('sector-intelligence-view')
+        );
       }
       break;
     default:
@@ -1140,6 +1151,7 @@ export {
   loadDividendKings,
   loadDividendAristocrats,
   loadNasdaq100,
+  loadSectorIntelligence,
   updateTabButtons,
   loadDashboardData,
   updateFreshnessBadge,
