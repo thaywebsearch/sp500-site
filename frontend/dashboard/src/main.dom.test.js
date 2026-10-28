@@ -21,6 +21,7 @@ const FULL_HTML = `
         <button class="nav-tab" data-tab="treemap"></button>
         <button class="nav-tab" data-tab="heatmap"></button>
         <button class="nav-tab" data-tab="bubble"></button>
+        <button class="nav-tab" data-tab="sector-intelligence"></button>
       </div>
     </div>
     <div class="nav-group" role="group" aria-label="Dividendos">
@@ -50,6 +51,7 @@ const FULL_HTML = `
   <div id="dividend-kings-view"></div>
   <div id="dividend-aristocrats-view"></div>
   <div id="nasdaq-100-view"></div>
+  <div id="sector-intelligence-view"></div>
   <div id="daily-summary"></div>
   <select id="sector-filter"></select>
   <select id="country-filter"></select>
@@ -356,6 +358,14 @@ describe('navegação', () => {
     expect(activeTab.getAttribute('data-tab')).toBe('nasdaq-100');
     expect(activeTab.closest('.nav-group').querySelector('.nav-group-label').textContent).toBe(
       'Índices'
+    );
+
+    main.setActiveTab('sector-intelligence');
+    await settle();
+    await settle();
+    expect(document.getElementById('sector-intelligence-view').style.display).toBe('block');
+    expect(document.getElementById('sector-intelligence-view').innerHTML).toContain(
+      'Inteligência Setorial GICS'
     );
 
     main.setActiveTab('daily-curiosity');

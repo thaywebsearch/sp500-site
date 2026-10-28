@@ -9,6 +9,7 @@ Dashboard estático interativo para visualizar os 503 componentes do S&P 500 por
 - 📈 **Ordenação**: Market Cap, símbolo, nome, dividend yield
 - ✅ **Seleção múltipla**: checkbox por linha + "Selecionar tudo"
 - 📥 **Exportação**: CSV e JSON das empresas selecionadas
+- 🧠 **Inteligência setorial**: ranking dos 11 setores por participação no índice, concentração (HHI), cobertura de dividendos e perfil, com drill-down de empresas e subindústrias
 - 📱 **Responsivo**: funciona em mobile e desktop
 - ⚡ **Leve**: ~15 KB gzipped (JS + CSS)
 
@@ -53,7 +54,7 @@ dashboard/
 
 ## Dados
 
-O dashboard consome os dados via API REST (`/api/setores`, `/api/setor/:setor`),
+O dashboard consome os dados via API REST (`/api/setores`, `/api/setor/:setor`, `/api/inteligencia-setorial`),
 alimentada pela cópia derivada `backend/data/`. A fonte única (canônica) é
 `../<setor>/<setor>.json`, sincronizada para `backend/data/` pelo script
 `scripts/update_sectors.py`. Não há cópia de dados dentro do dashboard.

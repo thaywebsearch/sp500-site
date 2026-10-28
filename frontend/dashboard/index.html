@@ -6,7 +6,7 @@
     <title>SP500 Dashboard — S&amp;P 500 por Setor, Dividendos e Índices</title>
     <meta
       name="description"
-      content="Dashboard interativo do S&P 500: market cap e dividend yield por setor, mapa de setores, heatmap, Dow Jones 30, Nasdaq-100, Dividend Kings e Aristocrats. Dados atualizados automaticamente."
+      content="Dashboard interativo do S&P 500: market cap e dividend yield por setor, mapa de setores, inteligência setorial GICS, heatmap, Dow Jones 30, Nasdaq-100, Dividend Kings e Aristocrats. Dados atualizados automaticamente."
     />
     <meta name="theme-color" content="#101018" />
     <link rel="canonical" href="https://thaywebsearch.github.io/sp500-site/frontend/docs/" />
@@ -20,7 +20,7 @@
     />
     <meta
       property="og:description"
-      content="Dashboard interativo do S&P 500: market cap e dividend yield por setor, mapa de setores, heatmap, Dow Jones 30, Nasdaq-100, Dividend Kings e Aristocrats."
+      content="Dashboard interativo do S&P 500: market cap e dividend yield por setor, mapa de setores, inteligência setorial GICS, heatmap, Dow Jones 30, Nasdaq-100, Dividend Kings e Aristocrats."
     />
     <meta property="og:url" content="https://thaywebsearch.github.io/sp500-site/frontend/docs/" />
 
@@ -31,7 +31,7 @@
     />
     <meta
       name="twitter:description"
-      content="Dashboard interativo do S&P 500: market cap e dividend yield por setor, mapa de setores, heatmap, Dow Jones 30, Nasdaq-100, Dividend Kings e Aristocrats."
+      content="Dashboard interativo do S&P 500: market cap e dividend yield por setor, mapa de setores, inteligência setorial GICS, heatmap, Dow Jones 30, Nasdaq-100, Dividend Kings e Aristocrats."
     />
 
     <link rel="icon" type="image/jpeg" href="./src/assets/VenomF.jfif" />
@@ -46,7 +46,7 @@
         "applicationCategory": "FinanceApplication",
         "operatingSystem": "Web",
         "inLanguage": "pt",
-        "description": "Dashboard interativo do S&P 500 com market cap e dividend yield por setor, Dow Jones 30, Nasdaq-100, Dividend Kings e Aristocrats.",
+        "description": "Dashboard interativo do S&P 500 com market cap e dividend yield por setor, inteligência setorial GICS, Dow Jones 30, Nasdaq-100, Dividend Kings e Aristocrats.",
         "url": "https://thaywebsearch.github.io/sp500-site/frontend/docs/"
       }
     </script>
@@ -102,6 +102,9 @@
                   <button class="nav-tab" data-tab="treemap">🗺️ Mapa de Setores</button>
                   <button class="nav-tab" data-tab="heatmap">🔥 Heatmap</button>
                   <button class="nav-tab" data-tab="bubble">🫧 Bubble Chart</button>
+                  <button class="nav-tab" data-tab="sector-intelligence">
+                    🧠 Inteligência Setorial
+                  </button>
                 </div>
               </div>
               <div class="nav-group" role="group" aria-label="Dividendos">
@@ -243,6 +246,9 @@
 
         <!-- Nasdaq-100 View -->
         <div id="nasdaq-100-view" style="display: none"></div>
+
+        <!-- Inteligência Setorial View -->
+        <div id="sector-intelligence-view" style="display: none"></div>
       </main>
     </div>
 

@@ -11,6 +11,7 @@ Os dados ficam em `data/*.json` e são regerados a partir da fonte canônica
 GET /api/health             → status + versão
 GET /api/setores            → lista dos 11 setores
 GET /api/setor/:setor       → empresas do setor
+GET /api/inteligencia-setorial  → métricas agregadas por setor (participação, HHI, dividendos)
 GET /api/curiosidades       → curiosidade do dia
 GET /api/historico/:symbol  → histórico de preços (últimos 2 anos)
 GET /api/resumo-dia         → maiores altas e baixas do dia

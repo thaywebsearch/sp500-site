@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { getDailySummary, getPriceHistory, healthCheck } from './api.js';
+import { getDailySummary, getPriceHistory, getSectorIntelligence, healthCheck } from './api.js';
 
 describe('getPriceHistory', () => {
   it('devolve os registos', async () => {
@@ -40,6 +40,29 @@ describe('getDailySummary', () => {
   it('devolve {} quando dados está ausente', async () => {
     globalThis.fetch = vi.fn(async () => ({ ok: true, json: async () => ({}) }));
     expect(await getDailySummary()).toEqual({});
+  });
+});
+
+describe('getSectorIntelligence', () => {
+  it('devolve o relatório agregado', async () => {
+    globalThis.fetch = vi.fn(async () => ({
+      ok: true,
+      json: async () => ({ dados: { sectorCount: 11, sectors: [] } }),
+    }));
+    expect(await getSectorIntelligence()).toEqual({ sectorCount: 11, sectors: [] });
+  });
+
+  it('devolve null em erro HTTP', async () => {
+    globalThis.fetch = vi.fn(async () => ({ ok: false, status: 404 }));
+    expect(await getSectorIntelligence()).toBeNull();
+  });
+
+  it('devolve null quando o fetch rebenta ou dados está ausente', async () => {
+    globalThis.fetch = vi.fn(() => Promise.reject(new Error('rede')));
+    expect(await getSectorIntelligence()).toBeNull();
+
+    globalThis.fetch = vi.fn(async () => ({ ok: true, json: async () => ({}) }));
+    expect(await getSectorIntelligence()).toBeNull();
   });
 });
 

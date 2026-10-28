@@ -16,6 +16,7 @@ const ALL_TABS = [
   'treemap',
   'heatmap',
   'bubble',
+  'sector-intelligence',
   'dividends',
   'dividend-kings',
   'dividend-aristocrats',
@@ -35,7 +36,7 @@ describe('nav agrupado por categorias (index.html)', () => {
   it('cada grupo tem role, aria-label e a contagem esperada de abas', () => {
     const groups = [...doc.querySelectorAll('.nav-group')];
     expect(groups.map((g) => g.querySelectorAll('.nav-group-tabs .nav-tab').length)).toEqual([
-      3, 3, 3, 2,
+      3, 4, 3, 2,
     ]);
     groups.forEach((group) => {
       expect(group.getAttribute('role')).toBe('group');

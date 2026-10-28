@@ -52,6 +52,7 @@ SPA em JavaScript puro (Vite) que consome a API. Abas (agrupadas por categoria n
 | 🌟 Curiosidade do Dia | Geral | Curiosidade rotativa diária de uma empresa do índice |
 | 🎯 Ação do Dia | Geral | Análise heurística de uma ação (com alternativas e disclaimer), determinística por data |
 | 🗺️ Mapa de Setores | Mercado | Visão por setor com market cap relativo, nº de empresas e dividendos |
+| 🧠 Inteligência Setorial | Mercado | Ranking dos 11 setores GICS por participação no índice, concentração (HHI), cobertura de dividendos e perfil, com drill-down de empresas e subindústrias |
 | 🔥 Heatmap | Mercado | Top 4 empresas por market cap em cada setor |
 | 🫧 Bubble Chart | Mercado | Dispersão market cap × dividend yield, com tooltip e legenda |
 | 💰 Dividendos | Dividendos | Painel de renda: resumo, top por yield, distribuição por faixa e yield médio por setor |
@@ -59,6 +60,21 @@ SPA em JavaScript puro (Vite) que consome a API. Abas (agrupadas por categoria n
 | 🏆 Dividend Aristocrats | Dividendos | As 71 empresas do S&P 500 com 25+ anos de aumentos de dividendos: cartões/tabela, busca, filtro por setor, mínimo de anos e distribuição por setor |
 | 📈 Dow Jones 30 | Índices | As 30 empresas do DJIA: cartões/tabela, busca, filtro por setor e distribuição por setor |
 | 💻 Nasdaq-100 | Índices | As 100 maiores empresas não financeiras da Nasdaq: cartões/tabela, busca, filtros por setor e capitalização, ranking, market cap, peso no índice e distribuição por setor |
+
+### Inteligência Setorial (GICS)
+
+A aba 🧠 **Inteligência Setorial** compara os 11 setores com métricas calculadas em
+`backend/sector-intelligence.mjs` e expostas em `GET /api/inteligencia-setorial`:
+
+- **Participação** — market cap do setor sobre o market cap do índice.
+- **HHI** — concentração intra-setor por market cap (0–10 000; ≥ 2 500 alta,
+  1 500–2 500 moderada).
+- **Cobertura de dividendos** — percentagem de empresas com dividend yield positivo.
+- **Perfil** — Renda (cobertura ≥ 70%), Equilibrado (40–70%), Crescimento (< 40%).
+- **Drill-down** — top 5 empresas por market cap e principais subindústrias.
+
+Se a rota ainda não existir na API em produção, o dashboard recalcula as métricas
+no browser a partir de `/api/setores` e `/api/setor/:setor`.
 
 Funcionalidades transversais:
 
@@ -86,6 +102,7 @@ As workflows ficam em `.github/workflows/` (raiz do repositório):
 GET /api/health             → status + versão
 GET /api/setores            → lista dos 11 setores
 GET /api/setor/:setor       → empresas do setor
+GET /api/inteligencia-setorial → métricas agregadas por setor (participação, HHI, dividendos)
 GET /api/curiosidades       → curiosidade do dia
 GET /api/historico/:symbol  → histórico de preços (últimos 2 anos)
 GET /api/resumo-dia         → maiores altas e baixas do dia

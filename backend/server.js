@@ -7,6 +7,7 @@ import rateLimit from 'express-rate-limit';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { buildSectorIntelligence } from './sector-intelligence.mjs';
 
 const app = express();
 
@@ -364,6 +365,39 @@ app.get('/api/setor/:setor', (req, res) => {
 });
 
 /**
+ * Obter métricas agregadas de inteligência setorial (GICS)
+ * GET /api/inteligencia-setorial
+ */
+app.get('/api/inteligencia-setorial', (req, res) => {
+  try {
+    const setores = listarArquivosDeSetores().sort();
+
+    const datasets = setores.map((id) => {
+      const dados = carregarDados(id);
+      return {
+        id,
+        name: dados.sector || id,
+        companies: dados.companies || [],
+        generatedAt: dados.generatedAt || null
+      };
+    });
+
+    const dados = buildSectorIntelligence(datasets);
+
+    res.json({
+      sucesso: true,
+      dados
+    });
+  } catch (erro) {
+    console.error('Erro ao calcular inteligência setorial:', erro);
+    res.status(500).json({
+      sucesso: false,
+      erro: erro.message
+    });
+  }
+});
+
+/**
  * Obter curiosidades do dia
  * GET /api/curiosidades
  */
@@ -575,6 +609,11 @@ app.get('/', (req, res) => {
       },
       {
         metodo: 'GET',
+        rota: '/api/inteligencia-setorial',
+        descricao: 'Obtém métricas agregadas de inteligência setorial (GICS)'
+      },
+      {
+        metodo: 'GET',
         rota: '/api/curiosidades',
         descricao: 'Obtém curiosidades do dia sobre empresas S&P 500'
       },
@@ -627,6 +666,7 @@ const server = app.listen(PORT, () => {
   console.log('\n✅ Endpoints disponíveis:');
   console.log(`  📊 GET /api/setores - Lista setores`);
   console.log(`  📈 GET /api/setor/:setor - Dados do setor`);
+  console.log(`  🧠 GET /api/inteligencia-setorial - Inteligência setorial GICS`);
   console.log(`  🌟 GET /api/curiosidades - Curiosidade do dia`);
   console.log(`  💰 GET /api/historico/:symbol - Histórico de preços`);
   console.log(`  📋 GET /api/resumo-dia - Resumo do dia`);

@@ -19,6 +19,22 @@ export async function getPriceHistory(symbol) {
 }
 
 /**
+ * Obtém o relatório agregado de inteligência setorial (GICS)
+ * @returns {Promise<Object|null>} Relatório ou null se a rota não estiver disponível
+ */
+export async function getSectorIntelligence() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/inteligencia-setorial`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    return data.dados || null;
+  } catch (erro) {
+    console.error('Erro ao buscar inteligência setorial:', erro);
+    return null;
+  }
+}
+
+/**
  * Obtém resumo do dia (maiores altas e baixas)
  * @returns {Promise<Object>} Dados do resumo do dia
  */
