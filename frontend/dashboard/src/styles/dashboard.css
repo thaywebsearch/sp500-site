@@ -973,6 +973,45 @@ button:disabled {
   margin-top: 1rem !important;
 }
 
+@media (max-width: 768px) {
+  .stock-main-card {
+    padding: 1.25rem;
+  }
+
+  .stock-symbol {
+    font-size: 2rem;
+  }
+
+  /* A grelha de 200px + 1fr empurrava o detalhe do score para fora do ecrã
+     em 320–430 px; passa a uma coluna. */
+  .stock-score {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .score-circle {
+    width: 132px;
+    height: 132px;
+  }
+
+  .score-value {
+    font-size: 2rem;
+  }
+
+  .bar-label {
+    width: 64px;
+  }
+
+  .alternatives-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .stock-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+}
+
 /* ========== TREEMAP SECTOR DETAIL ========== */
 .treemap-header {
   padding: 1.5rem 2rem;
@@ -1675,6 +1714,16 @@ button:disabled {
 @media (max-width: 768px) {
   .dividends-view {
     padding: 20px 12px;
+  }
+
+  /* Em mobile a tabela é mais larga do que o ecrã: o scroll horizontal
+     fica confinado ao painel, em vez de cortar colunas. */
+  .dividend-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .dividend-panel {
+    overflow-x: auto;
   }
 }
 
@@ -3773,5 +3822,51 @@ button:disabled {
 
   .si-company-cap {
     display: none;
+  }
+}
+
+/* ========== BUBBLE CHART: LAYOUT RESPONSIVO ========== */
+/* O SVG já é dimensionado pelo JS a partir da largura do contentor; esta
+   moldura existe apenas como rede de segurança para nunca deixar o gráfico
+   empurrar a página inteira (o scroll horizontal fica confinado aqui). */
+#bubble-chart-view {
+  padding: 16px 12px;
+}
+
+.bubble-chart-frame {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+@media (max-width: 768px) {
+  /* Barra superior mais compacta: liberta altura útil no telemóvel. */
+  .app-nav {
+    padding: 10px 0;
+  }
+
+  .nav-content {
+    padding: 0 12px;
+  }
+
+  .nav-brand {
+    gap: 8px;
+  }
+
+  .app-logo {
+    width: 34px;
+    height: 34px;
+  }
+
+  .app-title {
+    font-size: 1.05em;
+    letter-spacing: 0.5px;
+    gap: 8px;
+  }
+
+  #bubble-chart-view {
+    padding: 12px 10px;
   }
 }

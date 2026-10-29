@@ -89,6 +89,10 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  /* Em mobile, 100vh inclui a área ocupada pelas barras do navegador e
+     deixava a parte inferior do conteúdo inacessível. 100dvh usa a altura
+     realmente visível; navegadores sem suporte ignoram esta linha. */
+  height: 100dvh;
   background: var(--bg-primary);
   overflow: hidden;
 }
@@ -305,6 +309,11 @@ body {
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+  /* Evita que o último elemento fique por baixo da barra de gestos
+     (iPhone/Android) ou do selo flutuante de terceiros. */
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 .dashboard-view {

@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { getSectorColor, parseSectorValue, parsePercentage } from './bubble-chart.js';
+import {
+  computeChartLayout,
+  getSectorColor,
+  parseSectorValue,
+  parsePercentage,
+} from './bubble-chart.js';
 
 describe('parseSectorValue', () => {
   it('devolve 0 para valores falsy', () => {
@@ -48,5 +53,30 @@ describe('getSectorColor', () => {
   it('devolve cinza para setor desconhecido', () => {
     expect(getSectorColor('Inexistente')).toBe('#808080');
     expect(getSectorColor(undefined)).toBe('#808080');
+  });
+});
+
+describe('computeChartLayout', () => {
+  it('cabe na largura disponível em ecrãs pequenos', () => {
+    const layout = computeChartLayout(296);
+    expect(layout.narrow).toBe(true);
+    expect(layout.totalWidth).toBeLessThanOrEqual(296);
+    expect(layout.width).toBeGreaterThanOrEqual(200);
+  });
+
+  it('cabe na largura disponível em desktop', () => {
+    const layout = computeChartLayout(1280);
+    expect(layout.narrow).toBe(false);
+    expect(layout.totalWidth).toBeLessThanOrEqual(1280);
+  });
+
+  it('reduz o raio máximo das bolhas em ecrãs estreitos', () => {
+    expect(computeChartLayout(296).maxRadius).toBeLessThan(computeChartLayout(1280).maxRadius);
+  });
+
+  it('respeita limites mínimos para larguras anómalas', () => {
+    const layout = computeChartLayout(0);
+    expect(layout.width).toBeGreaterThanOrEqual(200);
+    expect(layout.maxRadius).toBeGreaterThanOrEqual(14);
   });
 });

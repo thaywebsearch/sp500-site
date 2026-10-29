@@ -4,12 +4,12 @@ export async function loadHeatmap() {
 
   container.style.display = 'flex';
   container.style.flexDirection = 'column';
-  container.style.height = '100%';
+  // Sem altura fixa nem scroll próprio: o conteúdo flui no .app-main, que é
+  // o único contentor com scroll vertical (evita scroll aninhado em mobile).
   container.style.width = '100%';
-  container.style.padding = '40px';
+  container.style.padding = 'clamp(12px, 4vw, 40px)';
   container.style.boxSizing = 'border-box';
   container.style.background = 'var(--bg-primary)';
-  container.style.overflowY = 'auto';
 
   container.innerHTML =
     '<div style="text-align:center;color:var(--text-secondary)">Carregando heatmap...</div>';
@@ -61,7 +61,7 @@ export async function loadHeatmap() {
 
           <div style="
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
             gap: 16px;
           ">
       `;

@@ -151,6 +151,26 @@ describe('loadTreemap', () => {
     window.navigateToSector('#', 'setor-novo');
     expect(alertSpy).toHaveBeenCalled();
   });
+
+  it('não cria um scroller vertical próprio nem cartões com largura mínima fixa', async () => {
+    document.body.innerHTML = '<div id="treemap-view"></div>';
+    mockFetch({
+      '/api/setores': { setores: ['energy'] },
+      '/api/setor/energy': {
+        dados: {
+          companies: [{ symbol: 'XOM', marketCap: 4e11, dividendYield: 3, hasDividend: 'Sim' }],
+        },
+      },
+    });
+    await loadTreemap();
+    const el = document.getElementById('treemap-view');
+    // O scroll vertical pertence só ao .app-main (evita scroll aninhado).
+    expect(el.style.height).toBe('');
+    expect(el.style.overflowY).toBe('');
+    // Em ecrãs estreitos a coluna nunca é maior do que o espaço disponível.
+    expect(el.innerHTML).toContain('minmax(min(100%, 260px), 1fr)');
+    expect(el.innerHTML).not.toContain('minmax(300px, 1fr)');
+  });
 });
 
 describe('loadHeatmap', () => {
@@ -196,6 +216,28 @@ describe('loadHeatmap', () => {
     globalThis.fetch = vi.fn(() => Promise.reject(new Error('boom')));
     await loadHeatmap();
     expect(document.getElementById('heatmap-view').innerHTML).toContain('Erro ao carregar heatmap');
+  });
+
+  it('não cria um scroller vertical próprio nem cartões com largura mínima fixa', async () => {
+    document.body.innerHTML = '<div id="heatmap-view"></div>';
+    mockFetch({
+      '/api/setores': { setores: ['energy'] },
+      '/api/setor/energy': {
+        dados: {
+          companies: [{ symbol: 'XOM', name: 'Exxon', marketCap: 4e11, dividendYield: 3 }],
+        },
+      },
+    });
+    await loadHeatmap();
+    const el = document.getElementById('heatmap-view');
+    // O scroll vertical pertence só ao .app-main (evita scroll aninhado).
+    expect(el.style.height).toBe('');
+    expect(el.style.overflowY).toBe('');
+    // Padding fluido em vez de 40px fixos em ecrãs de 320px.
+    expect(el.style.padding).toContain('clamp(12px, 4vw, 40px)');
+    // Em ecrãs estreitos a coluna nunca é maior do que o espaço disponível.
+    expect(el.innerHTML).toContain('minmax(min(100%, 240px), 1fr)');
+    expect(el.innerHTML).not.toContain('minmax(250px, 1fr)');
   });
 });
 
