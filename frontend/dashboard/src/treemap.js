@@ -13,14 +13,14 @@ export async function loadTreemap() {
 
   container.style.display = 'flex';
   container.style.flexDirection = 'column';
-  container.style.height = '100%';
+  // Sem altura fixa: o conteúdo flui no .app-main (um único scroll vertical).
   container.style.width = '100%';
   container.style.margin = '0';
   container.style.padding = '0';
   container.style.background = 'var(--bg-primary)';
 
   container.innerHTML =
-    '<div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;font-size:14px;color:var(--text-secondary)">Carregando mapa de setores...</div>';
+    '<div style="display:flex;align-items:center;justify-content:center;min-height:60vh;width:100%;font-size:14px;color:var(--text-secondary)">Carregando mapa de setores...</div>';
 
   try {
     // Usar variáveis globais de config.js
@@ -57,12 +57,10 @@ export async function loadTreemap() {
       <div style="
         display: flex;
         flex-direction: column;
-        height: 100%;
         width: 100%;
-        padding: 40px;
+        padding: clamp(12px, 4vw, 40px);
         box-sizing: border-box;
-        overflow-y: auto;
-        gap: 40px;
+        gap: clamp(20px, 4vw, 40px);
       ">
         <div>
           <h2 style="
@@ -82,7 +80,7 @@ export async function loadTreemap() {
 
         <div style="
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
           gap: 20px;
           flex: 1;
         ">
@@ -114,7 +112,7 @@ export async function loadTreemap() {
           background: var(--bg-secondary);
           border: 1px solid var(--border);
           border-radius: 12px;
-          padding: 24px;
+          padding: clamp(14px, 4vw, 24px);
           transition: all 0.3s ease;
           cursor: ${isAvailable ? 'pointer' : 'not-allowed'};
           display: flex;
@@ -179,7 +177,7 @@ export async function loadTreemap() {
           <!-- Grid de Métricas -->
           <div style="
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 16px;
           ">
             <div style="
@@ -353,7 +351,7 @@ export async function loadTreemap() {
   } catch (e) {
     console.error('Erro ao carregar treemap:', e);
     container.innerHTML =
-      '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--accent-red)">Erro ao carregar mapa de setores</div>';
+      '<div style="display:flex;align-items:center;justify-content:center;min-height:60vh;color:var(--accent-red)">Erro ao carregar mapa de setores</div>';
   }
 }
 

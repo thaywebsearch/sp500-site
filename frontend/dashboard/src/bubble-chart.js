@@ -55,6 +55,40 @@ export function parsePercentage(value) {
   return parseFloat(str.replace('%', '')) || 0;
 }
 
+const MIN_PLOT_WIDTH = 200;
+const NARROW_BREAKPOINT = 700;
+
+/**
+ * Calcula a geometria do gráfico a partir da largura realmente disponível.
+ *
+ * O gráfico era desenhado com um mínimo fixo de 800 px, o que provocava
+ * overflow horizontal (e conteúdo cortado) em ecrãs pequenos. Passa a
+ * ajustar-se ao contentor e a reduzir o raio máximo das bolhas em mobile,
+ * mantendo as proporções e sem alterar nenhum cálculo de dados.
+ */
+export function computeChartLayout(containerWidth) {
+  const available = Math.max(Math.floor(Number(containerWidth) || 0), MIN_PLOT_WIDTH);
+  const narrow = available < NARROW_BREAKPOINT;
+  const margin = narrow
+    ? { top: 30, right: 16, bottom: 78, left: 46 }
+    : { top: 40, right: 40, bottom: 60, left: 60 };
+  const width = Math.max(available - margin.left - margin.right, MIN_PLOT_WIDTH);
+  const height = narrow ? 420 : 500;
+  const maxRadius = Math.min(55, Math.max(14, Math.round(width / 11)));
+
+  return {
+    narrow,
+    margin,
+    width,
+    height,
+    maxRadius,
+    totalWidth: width + margin.left + margin.right,
+    totalHeight: height + margin.top + margin.bottom,
+  };
+}
+
+let lastRender = null;
+
 export function renderBubbleChart(companies, containerId) {
   const container = document.getElementById(containerId);
   if (!container) {
@@ -64,6 +98,7 @@ export function renderBubbleChart(companies, containerId) {
 
   // Limpar container
   container.innerHTML = '';
+  lastRender = { companies, containerId };
 
   // Filtrar dados válidos
   const validData = companies
@@ -85,10 +120,17 @@ export function renderBubbleChart(companies, containerId) {
     return;
   }
 
-  // Dimensões
-  const margin = { top: 40, right: 40, bottom: 60, left: 60 };
-  const width = Math.max(window.innerWidth - 100, 800) - margin.left - margin.right;
-  const height = 600 - margin.top - margin.bottom;
+  // Moldura com scroll horizontal próprio: em ecrãs muito estreitos o SVG
+  // nunca empurra a página; o scroll fica confinado a esta área.
+  const frame = document.createElement('div');
+  frame.className = 'bubble-chart-frame';
+  container.appendChild(frame);
+
+  // Dimensões medidas a partir do espaço real (e não de window.innerWidth).
+  const layout = computeChartLayout(
+    frame.clientWidth || container.clientWidth || window.innerWidth
+  );
+  const { margin, width, height, maxRadius, narrow } = layout;
 
   // Escalas
   const minYield = Math.min(...validData.map((d) => d.dividendYield));
@@ -102,7 +144,7 @@ export function renderBubbleChart(companies, containerId) {
 
   const sizeScale = (value) => {
     const normalized = (value - minMarketCap) / (maxMarketCap - minMarketCap || 1);
-    return 5 + normalized * 50; // Raio: 5 a 55
+    return 5 + normalized * (maxRadius - 5); // Raio: 5 até maxRadius
   };
 
   // Distribuir X aleatoriamente (com seed para repetibilidade)
@@ -118,10 +160,16 @@ export function renderBubbleChart(companies, containerId) {
 
   // Criar SVG
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('width', width + margin.left + margin.right);
-  svg.setAttribute('height', height + margin.top + margin.bottom);
+  svg.setAttribute('width', layout.totalWidth);
+  svg.setAttribute('height', layout.totalHeight);
+  svg.setAttribute('viewBox', `0 0 ${layout.totalWidth} ${layout.totalHeight}`);
+  svg.setAttribute('role', 'img');
+  svg.setAttribute(
+    'aria-label',
+    'Gráfico de bolhas: dividend yield no eixo vertical, tamanho pela capitalização bolsista e cor por setor.'
+  );
   svg.style.cssText =
-    'display: block; margin: 20px auto; background: var(--plot-bg); border-radius: 8px;';
+    'display: block; margin: 20px auto; background: var(--plot-bg); border-radius: 8px; max-width: 100%;';
 
   // Grupo principal
   const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -146,7 +194,7 @@ export function renderBubbleChart(companies, containerId) {
     text.setAttribute('x', -10);
     text.setAttribute('y', y + 5);
     text.setAttribute('text-anchor', 'end');
-    text.setAttribute('font-size', '12');
+    text.setAttribute('font-size', narrow ? '10' : '12');
     text.setAttribute('fill', 'var(--chart-label)');
     text.textContent = yieldValue.toFixed(1) + '%';
     g.appendChild(text);
@@ -168,7 +216,7 @@ export function renderBubbleChart(companies, containerId) {
   yLabel.setAttribute('y', -margin.left + 20);
   yLabel.setAttribute('x', -height / 2);
   yLabel.setAttribute('text-anchor', 'middle');
-  yLabel.setAttribute('font-size', '14');
+  yLabel.setAttribute('font-size', narrow ? '12' : '14');
   yLabel.setAttribute('font-weight', 'bold');
   yLabel.setAttribute('fill', 'var(--chart-text)');
   yLabel.textContent = '💵 Dividend Yield (%)';
@@ -184,22 +232,43 @@ export function renderBubbleChart(companies, containerId) {
   xAxis.setAttribute('stroke-width', '2');
   g.appendChild(xAxis);
 
-  // Label X
+  // Label X (em mobile parte-se em duas linhas para não ser cortado)
   const xLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
   xLabel.setAttribute('x', width / 2);
-  xLabel.setAttribute('y', height + 45);
+  xLabel.setAttribute('y', height + (narrow ? 26 : 45));
   xLabel.setAttribute('text-anchor', 'middle');
-  xLabel.setAttribute('font-size', '14');
+  xLabel.setAttribute('font-size', narrow ? '11' : '14');
   xLabel.setAttribute('font-weight', 'bold');
   xLabel.setAttribute('fill', 'var(--chart-text)');
-  xLabel.textContent = '📊 Distribuição Aleatória (cada bolha = empresa)';
+
+  if (narrow) {
+    const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+    line1.setAttribute('x', width / 2);
+    line1.setAttribute('dy', '0');
+    line1.textContent = '📊 Distribuição Aleatória';
+
+    const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+    line2.setAttribute('x', width / 2);
+    line2.setAttribute('dy', '16');
+    line2.textContent = '(cada bolha = empresa)';
+
+    xLabel.appendChild(line1);
+    xLabel.appendChild(line2);
+  } else {
+    xLabel.textContent = '📊 Distribuição Aleatória (cada bolha = empresa)';
+  }
+
   g.appendChild(xLabel);
 
   // Renderizar bolhas
   validData.forEach((d, idx) => {
-    const x = xPositions[idx];
-    const y = yScale(d.dividendYield);
     const radius = sizeScale(d.marketCap);
+    // Manter a bolha inteiramente dentro da área de plotagem (sem cortes).
+    const x = Math.min(Math.max(xPositions[idx], radius), Math.max(width - radius, radius));
+    const y = Math.min(
+      Math.max(yScale(d.dividendYield), radius),
+      Math.max(height - radius, radius)
+    );
     const color = getSectorColor(d.sector);
 
     // Círculo
@@ -245,7 +314,7 @@ export function renderBubbleChart(companies, containerId) {
   });
 
   svg.appendChild(g);
-  container.appendChild(svg);
+  frame.appendChild(svg);
 
   // Legenda
   addLegend(container, validData);
@@ -253,10 +322,12 @@ export function renderBubbleChart(companies, containerId) {
 
 function addLegend(container, data) {
   const legendContainer = document.createElement('div');
+  legendContainer.className = 'bubble-legend';
   legendContainer.style.cssText = `
     margin: 30px auto;
+    width: 100%;
     max-width: 800px;
-    padding: 20px;
+    padding: 16px;
     background: var(--surface);
     border-radius: 8px;
     border: 1px solid var(--border);
@@ -359,4 +430,26 @@ function hideTooltip() {
     currentTooltip.remove();
     currentTooltip = null;
   }
+}
+
+// ========== REDIMENSIONAMENTO ==========
+// Recalcula o gráfico quando a janela muda de tamanho (rotação do telemóvel,
+// redimensionamento do desktop). Só atua se o gráfico estiver visível.
+let resizeTimer = null;
+
+function rerenderOnResize() {
+  if (!lastRender) return;
+
+  const container = document.getElementById(lastRender.containerId);
+  if (!container || container.offsetParent === null) return;
+
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (!lastRender) return;
+    renderBubbleChart(lastRender.companies, lastRender.containerId);
+  }, 150);
+}
+
+if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+  window.addEventListener('resize', rerenderOnResize);
 }
