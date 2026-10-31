@@ -1,7 +1,7 @@
 {
   "sector": "Information Technology",
   "count": 75,
-  "generatedAt": "2026-10-29",
+  "generatedAt": "2026-10-31",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -13,9 +13,9 @@
       "dateAdded": "2011-07-06",
       "cik": 1467373,
       "founded": "1989",
-      "marketCap": 148946698240,
+      "marketCap": 158027923456,
       "marketCapClassification": "Large",
-      "dividendYield": 2.81,
+      "dividendYield": 2.65,
       "hasDividend": "Sim"
     },
     {
@@ -27,7 +27,7 @@
       "dateAdded": "1997-05-05",
       "cik": 796343,
       "founded": "1982",
-      "marketCap": 97206591488,
+      "marketCap": 97389510656,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -41,7 +41,7 @@
       "dateAdded": "2017-03-20",
       "cik": 2488,
       "founded": "1969",
-      "marketCap": 944288825344,
+      "marketCap": 824073388032,
       "marketCapClassification": "Mega",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -55,7 +55,7 @@
       "dateAdded": "2007-07-12",
       "cik": 1086222,
       "founded": "1998",
-      "marketCap": 14098598912,
+      "marketCap": 13325404160,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -69,9 +69,9 @@
       "dateAdded": "2008-09-30",
       "cik": 820313,
       "founded": "1932",
-      "marketCap": 199644676096,
+      "marketCap": 195551182848,
       "marketCapClassification": "Large",
-      "dividendYield": 0.74,
+      "dividendYield": 0.76,
       "hasDividend": "Sim"
     },
     {
@@ -83,9 +83,9 @@
       "dateAdded": "1999-10-12",
       "cik": 6281,
       "founded": "1965",
-      "marketCap": 207524855808,
+      "marketCap": 202117103616,
       "marketCapClassification": "Mega",
-      "dividendYield": 1.03,
+      "dividendYield": 1.05,
       "hasDividend": "Sim"
     },
     {
@@ -97,7 +97,7 @@
       "dateAdded": "1982-11-30",
       "cik": 320193,
       "founded": "1977",
-      "marketCap": 5017916932096,
+      "marketCap": 5029592301568,
       "marketCapClassification": "Mega",
       "dividendYield": 0.31,
       "hasDividend": "Sim"
@@ -111,9 +111,9 @@
       "dateAdded": "1995-03-16",
       "cik": 6951,
       "founded": "1967",
-      "marketCap": 330136551424,
+      "marketCap": 309574434816,
       "marketCapClassification": "Mega",
-      "dividendYield": 0.51,
+      "dividendYield": 0.54,
       "hasDividend": "Sim"
     },
     {
@@ -125,7 +125,7 @@
       "dateAdded": "2018-08-28",
       "cik": 1596532,
       "founded": "2004",
-      "marketCap": 235495882752,
+      "marketCap": 212970405888,
       "marketCapClassification": "Mega",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -139,7 +139,7 @@
       "dateAdded": "1989-12-01",
       "cik": 769397,
       "founded": "1982",
-      "marketCap": 50657419264,
+      "marketCap": 52168491008,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -153,9 +153,9 @@
       "dateAdded": "2014-05-08",
       "cik": 1730168,
       "founded": "1961",
-      "marketCap": 1679410724864,
+      "marketCap": 1556585250816,
       "marketCapClassification": "Mega",
-      "dividendYield": 0.74,
+      "dividendYield": 0.8,
       "hasDividend": "Sim"
     },
     {
@@ -167,7 +167,7 @@
       "dateAdded": "2017-09-18",
       "cik": 813672,
       "founded": "1988",
-      "marketCap": 94455947264,
+      "marketCap": 89966133248,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -181,9 +181,9 @@
       "dateAdded": "2019-09-23",
       "cik": 1402057,
       "founded": "1984",
-      "marketCap": 20335335424,
+      "marketCap": 19226429440,
       "marketCapClassification": "Large",
-      "dividendYield": 1.55,
+      "dividendYield": 1.64,
       "hasDividend": "Sim"
     },
     {
@@ -195,7 +195,7 @@
       "dateAdded": "2026-02-09",
       "cik": 936395,
       "founded": "1992",
-      "marketCap": 51506274304,
+      "marketCap": 45480833024,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -209,9 +209,9 @@
       "dateAdded": "1993-12-01",
       "cik": 858877,
       "founded": "1984",
-      "marketCap": 434827919360,
+      "marketCap": 412039774208,
       "marketCapClassification": "Mega",
-      "dividendYield": 1.52,
+      "dividendYield": 1.61,
       "hasDividend": "Sim"
     },
     {
@@ -223,9 +223,9 @@
       "dateAdded": "2006-11-17",
       "cik": 1058290,
       "founded": "1994",
-      "marketCap": 31388280832,
+      "marketCap": 29106151424,
       "marketCapClassification": "Large",
-      "dividendYield": 1.99,
+      "dividendYield": 2.03,
       "hasDividend": "Sim"
     },
     {
@@ -237,7 +237,7 @@
       "dateAdded": "2026-03-23",
       "cik": 820318,
       "founded": "1971",
-      "marketCap": 47182737408,
+      "marketCap": 41418563584,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -251,9 +251,9 @@
       "dateAdded": "1995-02-27",
       "cik": 24741,
       "founded": "1851",
-      "marketCap": 112784482304,
+      "marketCap": 106219364352,
       "marketCapClassification": "Large",
-      "dividendYield": 0.85,
+      "dividendYield": 0.91,
       "hasDividend": "Sim"
     },
     {
@@ -265,7 +265,7 @@
       "dateAdded": "2024-06-24",
       "cik": 1535527,
       "founded": "2011",
-      "marketCap": 273042472960,
+      "marketCap": 256424001536,
       "marketCapClassification": "Mega",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -279,7 +279,7 @@
       "dateAdded": "2025-07-09",
       "cik": 1561550,
       "founded": "2010",
-      "marketCap": 99970072576,
+      "marketCap": 84479582208,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -293,9 +293,9 @@
       "dateAdded": "2024-09-23",
       "cik": 1571996,
       "founded": "2016",
-      "marketCap": 313957974016,
+      "marketCap": 269775339520,
       "marketCapClassification": "Mega",
-      "dividendYield": 0.51,
+      "dividendYield": 0.59,
       "hasDividend": "Sim"
     },
     {
@@ -307,7 +307,7 @@
       "dateAdded": "2026-09-21",
       "cik": 1474432,
       "founded": "2009",
-      "marketCap": 46185299968,
+      "marketCap": 42313199616,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -321,7 +321,7 @@
       "dateAdded": "2010-12-20",
       "cik": 1048695,
       "founded": "1996",
-      "marketCap": 20698935296,
+      "marketCap": 19221434368,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -335,7 +335,7 @@
       "dateAdded": "2023-03-20",
       "cik": 814547,
       "founded": "1956",
-      "marketCap": 15079036928,
+      "marketCap": 15360885760,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -349,7 +349,7 @@
       "dateAdded": "2022-12-19",
       "cik": 1274494,
       "founded": "1999",
-      "marketCap": 18946924544,
+      "marketCap": 18742730752,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -363,7 +363,7 @@
       "dateAdded": "2026-06-22",
       "cik": 866374,
       "founded": "1969",
-      "marketCap": 34370904064,
+      "marketCap": 31950940160,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -377,7 +377,7 @@
       "dateAdded": "2018-10-11",
       "cik": 1262039,
       "founded": "2000",
-      "marketCap": 127724879872,
+      "marketCap": 99843760128,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -391,7 +391,7 @@
       "dateAdded": "2017-04-05",
       "cik": 749251,
       "founded": "1979",
-      "marketCap": 13839729664,
+      "marketCap": 14447853568,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -405,9 +405,9 @@
       "dateAdded": "2003-03-25",
       "cik": 849399,
       "founded": "1982",
-      "marketCap": 14575593472,
+      "marketCap": 17436839936,
       "marketCapClassification": "Large",
-      "dividendYield": 2.06,
+      "dividendYield": 1.71,
       "hasDividend": "Sim"
     },
     {
@@ -419,7 +419,7 @@
       "dateAdded": "2024-06-24",
       "cik": 1609711,
       "founded": "1997",
-      "marketCap": 13493046272,
+      "marketCap": 14848176128,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -433,9 +433,9 @@
       "dateAdded": "2015-11-02",
       "cik": 1645590,
       "founded": "2015",
-      "marketCap": 80085958656,
+      "marketCap": 73130041344,
       "marketCapClassification": "Large",
-      "dividendYield": 0.94,
+      "dividendYield": 1.03,
       "hasDividend": "Sim"
     },
     {
@@ -447,9 +447,9 @@
       "dateAdded": "1974-12-31",
       "cik": 47217,
       "founded": "1939 (2015)",
-      "marketCap": 29263118336,
+      "marketCap": 25953544192,
       "marketCapClassification": "Large",
-      "dividendYield": 3.7,
+      "dividendYield": 4.17,
       "hasDividend": "Sim"
     },
     {
@@ -461,9 +461,9 @@
       "dateAdded": "1957-03-04",
       "cik": 51143,
       "founded": "1911",
-      "marketCap": 239323496448,
+      "marketCap": 243661602816,
       "marketCapClassification": "Mega",
-      "dividendYield": 2.67,
+      "dividendYield": 2.62,
       "hasDividend": "Sim"
     },
     {
@@ -475,7 +475,7 @@
       "dateAdded": "1976-12-31",
       "cik": 50863,
       "founded": "1968",
-      "marketCap": 504981618688,
+      "marketCap": 349185605632,
       "marketCapClassification": "Mega",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -489,9 +489,9 @@
       "dateAdded": "2000-12-05",
       "cik": 896878,
       "founded": "1983",
-      "marketCap": 87704182784,
+      "marketCap": 91151523840,
       "marketCapClassification": "Large",
-      "dividendYield": 1.68,
+      "dividendYield": 1.62,
       "hasDividend": "Sim"
     },
     {
@@ -503,9 +503,9 @@
       "dateAdded": "2023-12-18",
       "cik": 898293,
       "founded": "1966",
-      "marketCap": 29958363136,
+      "marketCap": 28083197952,
       "marketCapClassification": "Large",
-      "dividendYield": 0.11,
+      "dividendYield": 0.12,
       "hasDividend": "Sim"
     },
     {
@@ -517,7 +517,7 @@
       "dateAdded": "2018-11-06",
       "cik": 1601046,
       "founded": "2014 (1939)",
-      "marketCap": 57117114368,
+      "marketCap": 52299190272,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -531,9 +531,9 @@
       "dateAdded": "1997-09-30",
       "cik": 319201,
       "founded": "1975/1977 (1997)",
-      "marketCap": 207195881472,
+      "marketCap": 206073577472,
       "marketCapClassification": "Mega",
-      "dividendYield": 0.6,
+      "dividendYield": 0.58,
       "hasDividend": "Sim"
     },
     {
@@ -545,9 +545,9 @@
       "dateAdded": "2012-06-29",
       "cik": 707549,
       "founded": "1980",
-      "marketCap": 317636542464,
+      "marketCap": 299228069888,
       "marketCapClassification": "Mega",
-      "dividendYield": 0.52,
+      "dividendYield": 0.55,
       "hasDividend": "Sim"
     },
     {
@@ -559,7 +559,7 @@
       "dateAdded": "2026-03-23",
       "cik": 1633978,
       "founded": "2015",
-      "marketCap": 82788204544,
+      "marketCap": 76153012224,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -573,9 +573,9 @@
       "dateAdded": "2026-06-22",
       "cik": 1835632,
       "founded": "1995",
-      "marketCap": 226159017984,
-      "marketCapClassification": "Mega",
-      "dividendYield": 0.1,
+      "marketCap": 176505585664,
+      "marketCapClassification": "Large",
+      "dividendYield": 0.12,
       "hasDividend": "Sim"
     },
     {
@@ -587,9 +587,9 @@
       "dateAdded": "2007-09-07",
       "cik": 827054,
       "founded": "1989",
-      "marketCap": 43239780352,
+      "marketCap": 41996292096,
       "marketCapClassification": "Large",
-      "dividendYield": 2.29,
+      "dividendYield": 2.35,
       "hasDividend": "Sim"
     },
     {
@@ -601,9 +601,9 @@
       "dateAdded": "1994-09-27",
       "cik": 723125,
       "founded": "1978",
-      "marketCap": 1112449220608,
+      "marketCap": 1001015410688,
       "marketCapClassification": "Mega",
-      "dividendYield": 0.06,
+      "dividendYield": 0.07,
       "hasDividend": "Sim"
     },
     {
@@ -615,9 +615,9 @@
       "dateAdded": "1994-06-01",
       "cik": 789019,
       "founded": "1975",
-      "marketCap": 3943039238144,
+      "marketCap": 3875804807168,
       "marketCapClassification": "Mega",
-      "dividendYield": 0.74,
+      "dividendYield": 0.75,
       "hasDividend": "Sim"
     },
     {
@@ -629,7 +629,7 @@
       "dateAdded": "2021-02-12",
       "cik": 1280452,
       "founded": "1997",
-      "marketCap": 59522981888,
+      "marketCap": 59543134208,
       "marketCapClassification": "Large",
       "dividendYield": 0.66,
       "hasDividend": "Sim"
@@ -643,9 +643,9 @@
       "dateAdded": "1957-03-04",
       "cik": 68505,
       "founded": "1928 (2011)",
-      "marketCap": 79998050304,
+      "marketCap": 81345167360,
       "marketCapClassification": "Large",
-      "dividendYield": 1.0,
+      "dividendYield": 0.98,
       "hasDividend": "Sim"
     },
     {
@@ -657,9 +657,9 @@
       "dateAdded": "1999-06-25",
       "cik": 1002047,
       "founded": "1992",
-      "marketCap": 43931074560,
+      "marketCap": 39122735104,
       "marketCapClassification": "Large",
-      "dividendYield": 0.93,
+      "dividendYield": 1.04,
       "hasDividend": "Sim"
     },
     {
@@ -671,9 +671,9 @@
       "dateAdded": "2001-11-30",
       "cik": 1045810,
       "founded": "1993",
-      "marketCap": 5200780722176,
+      "marketCap": 4941441662976,
       "marketCapClassification": "Mega",
-      "dividendYield": 0.46,
+      "dividendYield": 0.49,
       "hasDividend": "Sim"
     },
     {
@@ -685,9 +685,9 @@
       "dateAdded": "2021-03-22",
       "cik": 1413447,
       "founded": "1953",
-      "marketCap": 63467200512,
+      "marketCap": 65435471872,
       "marketCapClassification": "Large",
-      "dividendYield": 1.61,
+      "dividendYield": 1.56,
       "hasDividend": "Sim"
     },
     {
@@ -699,7 +699,7 @@
       "dateAdded": "2022-06-21",
       "cik": 1097864,
       "founded": "1999",
-      "marketCap": 29444165632,
+      "marketCap": 27902466048,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -713,9 +713,9 @@
       "dateAdded": "1989-08-31",
       "cik": 1341439,
       "founded": "1977",
-      "marketCap": 438173138944,
+      "marketCap": 396126224384,
       "marketCapClassification": "Mega",
-      "dividendYield": 1.38,
+      "dividendYield": 1.53,
       "hasDividend": "Sim"
     },
     {
@@ -727,7 +727,7 @@
       "dateAdded": "2024-09-23",
       "cik": 1321655,
       "founded": "2003",
-      "marketCap": 472945917952,
+      "marketCap": 442427080704,
       "marketCapClassification": "Mega",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -741,7 +741,7 @@
       "dateAdded": "2023-06-20",
       "cik": 1327567,
       "founded": "2005",
-      "marketCap": 322692808704,
+      "marketCap": 299443781632,
       "marketCapClassification": "Mega",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -755,7 +755,7 @@
       "dateAdded": "2021-04-20",
       "cik": 857005,
       "founded": "1985",
-      "marketCap": 21180024832,
+      "marketCap": 21241944064,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -769,9 +769,9 @@
       "dateAdded": "2025-11-03",
       "cik": 2058873,
       "founded": "2025",
-      "marketCap": 25704761344,
+      "marketCap": 24408360960,
       "marketCapClassification": "Large",
-      "dividendYield": 0.26,
+      "dividendYield": 0.27,
       "hasDividend": "Sim"
     },
     {
@@ -783,9 +783,9 @@
       "dateAdded": "1999-07-22",
       "cik": 804328,
       "founded": "1985",
-      "marketCap": 195382591488,
+      "marketCap": 175969255424,
       "marketCapClassification": "Large",
-      "dividendYield": 2.01,
+      "dividendYield": 2.23,
       "hasDividend": "Sim"
     },
     {
@@ -797,9 +797,9 @@
       "dateAdded": "2009-12-23",
       "cik": 882835,
       "founded": "1981",
-      "marketCap": 43581657088,
+      "marketCap": 46147145728,
       "marketCapClassification": "Large",
-      "dividendYield": 0.83,
+      "dividendYield": 0.78,
       "hasDividend": "Sim"
     },
     {
@@ -811,9 +811,9 @@
       "dateAdded": "2008-09-15",
       "cik": 1108524,
       "founded": "1999",
-      "marketCap": 199256522752,
+      "marketCap": 188606906368,
       "marketCapClassification": "Large",
-      "dividendYield": 0.73,
+      "dividendYield": 0.77,
       "hasDividend": "Sim"
     },
     {
@@ -825,8 +825,8 @@
       "dateAdded": "2025-11-28",
       "cik": 2023554,
       "founded": "1988",
-      "marketCap": 203027988480,
-      "marketCapClassification": "Mega",
+      "marketCap": 166335332352,
+      "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
     },
@@ -839,9 +839,9 @@
       "dateAdded": "2012-07-02",
       "cik": 1137789,
       "founded": "1979",
-      "marketCap": 158713495552,
+      "marketCap": 148253409280,
       "marketCapClassification": "Large",
-      "dividendYield": 0.44,
+      "dividendYield": 0.47,
       "hasDividend": "Sim"
     },
     {
@@ -853,7 +853,7 @@
       "dateAdded": "2019-11-21",
       "cik": 1373715,
       "founded": "2003",
-      "marketCap": 155213709312,
+      "marketCap": 109105840128,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -867,9 +867,9 @@
       "dateAdded": "2015-03-12",
       "cik": 4127,
       "founded": "2002",
-      "marketCap": 20513490944,
+      "marketCap": 20595800064,
       "marketCapClassification": "Large",
-      "dividendYield": 3.32,
+      "dividendYield": 3.18,
       "hasDividend": "Sim"
     },
     {
@@ -881,7 +881,7 @@
       "dateAdded": "2024-03-18",
       "cik": 1375365,
       "founded": "1993",
-      "marketCap": 23164524544,
+      "marketCap": 21647009792,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -895,7 +895,7 @@
       "dateAdded": "2017-03-16",
       "cik": 883241,
       "founded": "1986",
-      "marketCap": 92347785216,
+      "marketCap": 89611206656,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -909,9 +909,9 @@
       "dateAdded": "2011-10-17",
       "cik": 1385157,
       "founded": "2007",
-      "marketCap": 64146477056,
+      "marketCap": 61246238720,
       "marketCapClassification": "Large",
-      "dividendYield": 1.41,
+      "dividendYield": 1.46,
       "hasDividend": "Sim"
     },
     {
@@ -923,7 +923,7 @@
       "dateAdded": "2020-06-22",
       "cik": 1094285,
       "founded": "1960",
-      "marketCap": 30834819072,
+      "marketCap": 30512693248,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -937,9 +937,9 @@
       "dateAdded": "2020-09-21",
       "cik": 97210,
       "founded": "1960",
-      "marketCap": 48972177408,
+      "marketCap": 42895212544,
       "marketCapClassification": "Large",
-      "dividendYield": 0.17,
+      "dividendYield": 0.19,
       "hasDividend": "Sim"
     },
     {
@@ -951,9 +951,9 @@
       "dateAdded": "2001-03-12",
       "cik": 97476,
       "founded": "1930",
-      "marketCap": 283261337600,
+      "marketCap": 275042271232,
       "marketCapClassification": "Mega",
-      "dividendYield": 1.96,
+      "dividendYield": 2.02,
       "hasDividend": "Sim"
     },
     {
@@ -965,7 +965,7 @@
       "dateAdded": "2021-01-21",
       "cik": 864749,
       "founded": "1978",
-      "marketCap": 15005122560,
+      "marketCap": 15142699008,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -979,7 +979,7 @@
       "dateAdded": "2026-10-06",
       "cik": 1447669,
       "founded": "2008",
-      "marketCap": 38972784640,
+      "marketCap": 31487526912,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -993,7 +993,7 @@
       "dateAdded": "2020-06-22",
       "cik": 860731,
       "founded": "1966",
-      "marketCap": 14779674624,
+      "marketCap": 15677179904,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -1007,9 +1007,9 @@
       "dateAdded": "2006-02-01",
       "cik": 1014473,
       "founded": "1995",
-      "marketCap": 27538798592,
+      "marketCap": 27556737024,
       "marketCapClassification": "Large",
-      "dividendYield": 1.06,
+      "dividendYield": 1.05,
       "hasDividend": "Sim"
     },
     {
@@ -1021,9 +1021,9 @@
       "dateAdded": "2009-07-01",
       "cik": 106040,
       "founded": "1970",
-      "marketCap": 148389232640,
+      "marketCap": 137043484672,
       "marketCapClassification": "Large",
-      "dividendYield": 0.18,
+      "dividendYield": 0.19,
       "hasDividend": "Sim"
     },
     {
@@ -1035,7 +1035,7 @@
       "dateAdded": "2024-12-23",
       "cik": 1327811,
       "founded": "2005",
-      "marketCap": 49250758656,
+      "marketCap": 47674621952,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
@@ -1049,11 +1049,11 @@
       "dateAdded": "2019-12-23",
       "cik": 877212,
       "founded": "1969",
-      "marketCap": 18324566016,
+      "marketCap": 17091449856,
       "marketCapClassification": "Large",
       "dividendYield": null,
       "hasDividend": "Não"
     }
   ],
-  "liveUpdatedAt": "2026-10-29 12:24:23 +0000"
+  "liveUpdatedAt": "2026-10-31 11:47:17 +0000"
 }
