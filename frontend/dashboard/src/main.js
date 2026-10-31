@@ -1,8 +1,9 @@
 // ========== IMPORTS ==========
-import { API_BASE_URL, SECTORS } from './config.js';
+import { SECTORS } from './config.js';
 import { loadCuriosidades } from './daily-curiosity.js';
 import { escapeHtml, formatDividendYield, formatMarketCap, getCountry } from './utils.js';
-import { getPriceHistory } from './api.js';
+import { getQuotes } from './api.js';
+import { getSectorIds, getSectorPayload, getSectorName } from './sector-store.js';
 import { openCompanyDetails } from './company-details.js';
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
@@ -418,38 +419,33 @@ async function loadDashboardData() {
   if (statsEl) statsEl.textContent = 'Carregando dados...';
 
   try {
-    const setoresResponse = await fetch(`${API_BASE_URL}/api/setores`);
-    if (!setoresResponse.ok) throw new Error('Erro ao buscar setores');
-    const setoresData = await setoresResponse.json();
-    const setores = setoresData.setores || [];
+    // Refresh explícito: a entrada no dashboard força dados frescos. As abas
+    // (treemap/heatmap/inteligência) reutilizam este resultado via store.
+    const setores = await getSectorIds({ force: true });
 
-    const promises = setores.map(async (setorId) => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/setor/${setorId}`);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
+    const results = await Promise.all(
+      setores.map(async (setorId) => {
+        try {
+          const dados = await getSectorPayload(setorId, { force: true });
 
-        const sector = SECTORS.find((s) => s.id === setorId);
-        const sectorName = sector ? sector.name : setorId;
-
-        if (data.dados && data.dados.companies && Array.isArray(data.dados.companies)) {
-          return {
-            generatedAt: data.dados.generatedAt || null,
-            companies: data.dados.companies.map((c) => ({
-              ...c,
-              sector: setorId,
-              sectorName: sectorName,
-            })),
-          };
+          if (dados && Array.isArray(dados.companies)) {
+            return {
+              generatedAt: dados.generatedAt || null,
+              companies: dados.companies.map((c) => ({
+                ...c,
+                sector: setorId,
+                sectorName: getSectorName(setorId),
+              })),
+            };
+          }
+          return { generatedAt: null, companies: [] };
+        } catch (e) {
+          console.error(`❌ Erro ao carregar ${setorId}:`, e);
+          return { generatedAt: null, companies: [] };
         }
-        return { generatedAt: null, companies: [] };
-      } catch (e) {
-        console.error(`❌ Erro ao carregar ${setorId}:`, e);
-        return { generatedAt: null, companies: [] };
-      }
-    });
+      })
+    );
 
-    const results = await Promise.all(promises);
     allCompanies = results.flatMap((r) => r.companies);
 
     updateFreshnessBadge(results.map((r) => r.generatedAt).filter(Boolean));
@@ -517,8 +513,17 @@ function updateFreshnessBadge(dates) {
   }
 
   const formatted = latest.toLocaleDateString('pt-BR');
-  text.textContent = `Dados de ${formatted}`;
-  if (badge) badge.title = `Última atualização dos dados: ${formatted}`;
+  const idade = ageInDays <= 0 ? 'hoje' : `há ${ageInDays} dia${ageInDays === 1 ? '' : 's'}`;
+  const prefixo = freshnessClass === 'fd-stale' ? 'Dados desatualizados' : 'Dados';
+
+  // O texto usa sempre a data dos dados (generatedAt), nunca a data do load.
+  text.textContent = `${prefixo} de ${formatted} (${idade})`;
+
+  if (badge) {
+    badge.title = `Última atualização dos dados: ${formatted} (${idade})`;
+    badge.dataset.idadeDias = String(ageInDays);
+    badge.dataset.frescura = freshnessClass.replace('fd-', '');
+  }
 }
 
 // ========== FILTROS E ORDENAÇÃO ==========
@@ -1029,6 +1034,8 @@ function setPriceAlert(symbol, target, direction) {
     return false;
   priceAlerts.set(symbol.toUpperCase(), { target, direction, triggered: false });
   savePriceAlerts();
+  // Alertas criados depois do arranque também têm de ser monitorizados.
+  startPriceAlertPolling();
   return true;
 }
 
@@ -1043,29 +1050,35 @@ window.openCompanyDetails = openCompanyDetails;
 window.setPriceAlertPrompt = setPriceAlertPrompt;
 
 // ========== PRICE ALERTS ==========
+// Um ciclo usa 1 pedido batch /api/cotacoes (máx. 25 símbolos) em vez de N
+// pedidos de 2 anos de histórico. 5 min é suficiente para alertas de preço e
+// mantém-se muito abaixo do rate limit (300/15 min por IP).
+export const PRICE_ALERT_POLL_MS = 5 * 60 * 1000;
+
+let priceAlertTimer = null;
+let verificacaoEmCurso = false;
+
 async function checkPriceAlerts() {
+  const pendentes = [...priceAlerts.entries()].filter(([, alerta]) => !alerta.triggered);
+  if (pendentes.length === 0) return [];
+
   const triggered = [];
+  const cotacoes = await getQuotes(pendentes.map(([symbol]) => symbol));
 
-  for (const [symbol, alerta] of priceAlerts) {
-    if (alerta.triggered) continue;
-    try {
-      const registros = await getPriceHistory(symbol);
-      const ultimo = registros[registros.length - 1];
-      const preco = ultimo ? Number(ultimo.close) : NaN;
-      if (!Number.isFinite(preco)) continue;
+  for (const [symbol, alerta] of pendentes) {
+    const cotacao = cotacoes[symbol];
+    const preco = Number(cotacao && cotacao.preco);
+    if (!Number.isFinite(preco)) continue;
 
-      const atingiu =
-        (alerta.direction === 'above' && preco >= alerta.target) ||
-        (alerta.direction === 'below' && preco <= alerta.target);
+    const atingiu =
+      (alerta.direction === 'above' && preco >= alerta.target) ||
+      (alerta.direction === 'below' && preco <= alerta.target);
 
-      if (atingiu) {
-        alerta.triggered = true;
-        alerta.triggeredAt = new Date().toISOString();
-        alerta.triggeredPrice = preco;
-        triggered.push(`${symbol} ($${preco.toFixed(2)})`);
-      }
-    } catch (e) {
-      console.error(`Erro ao verificar ${symbol}:`, e);
+    if (atingiu) {
+      alerta.triggered = true;
+      alerta.triggeredAt = new Date().toISOString();
+      alerta.triggeredPrice = preco;
+      triggered.push(`${symbol} ($${preco.toFixed(2)})`);
     }
   }
 
@@ -1077,13 +1090,32 @@ async function checkPriceAlerts() {
   return triggered;
 }
 
-async function startPriceAlertPolling() {
-  if (priceAlerts.size === 0) return;
+async function verificarAlertasAgendados() {
+  // Evita ciclos sobrepostos se um pedido demorar mais que o intervalo.
+  if (verificacaoEmCurso || priceAlerts.size === 0) return;
+  verificacaoEmCurso = true;
 
-  setInterval(async () => {
+  try {
     await checkPriceAlerts();
     savePriceAlerts();
-  }, 60000);
+  } finally {
+    verificacaoEmCurso = false;
+  }
+}
+
+function startPriceAlertPolling() {
+  // Idempotente: nunca cria mais do que um loop, mesmo com chamadas repetidas.
+  if (priceAlertTimer) return;
+
+  priceAlertTimer = setInterval(verificarAlertasAgendados, PRICE_ALERT_POLL_MS);
+  // Permite que o processo de testes termine (no browser é no-op).
+  if (typeof priceAlertTimer.unref === 'function') priceAlertTimer.unref();
+}
+
+/** Para o polling (usado em testes e ao limpar todos os alertas). */
+function stopPriceAlertPolling() {
+  if (priceAlertTimer) clearInterval(priceAlertTimer);
+  priceAlertTimer = null;
 }
 
 // ========== EXPORTAÇÃO ==========
@@ -1169,6 +1201,7 @@ export {
   deletePriceAlert,
   checkPriceAlerts,
   startPriceAlertPolling,
+  stopPriceAlertPolling,
   exportCSV,
   exportJSON,
   downloadFile,

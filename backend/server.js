@@ -17,6 +17,27 @@ const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 5001;
 
+// Setores válidos (allowlist explícita). Tem de espelhar
+// frontend/dashboard/src/config.js. É a ÚNICA lista aceite por
+// /api/setor/:setor: o parâmetro nunca é usado para construir caminhos sem
+// passar primeiro por esta verificação.
+const SETORES_VALIDOS = new Set([
+  'communication-services',
+  'consumer-discretionary',
+  'consumer-staples',
+  'energy',
+  'financials',
+  'health-care',
+  'industrials',
+  'information-technology',
+  'materials',
+  'real-estate',
+  'utilities',
+]);
+
+// Formato aceite de um id de setor: minúsculas, dígitos e hífen.
+const SETOR_RE = /^[a-z][a-z0-9-]{0,40}$/;
+
 // A API corre atrás de um proxy (Render/Railway) -> confiar no 1º salto para que
 // req.ip (usado pelo rate limiting) seja o IP real do cliente.
 app.set('trust proxy', 1);
@@ -67,6 +88,23 @@ function lerDiretorioComCache(caminho) {
   const files = fs.readdirSync(caminho);
   diretoriosCache.set(caminho, { mtimeMs, files });
   return files;
+}
+
+// ============ CACHE HTTP ============
+// Os dados servidos são públicos e mudam no máximo a cada ~48 h (ou 1×/dia no
+// resumo). max-age curto mantém a informação fresca; stale-while-revalidate
+// deixa o browser/CDN servir a cópia enquanto revalida em segundo plano.
+const CACHE_MAX_AGE_PADRAO = 300; // 5 min
+const CACHE_SWR_PADRAO = 86400; // 24 h
+
+/** Permite cache partilhado (browser + CDN) com revalidação em background. */
+function cachePublico(res, maxAge = CACHE_MAX_AGE_PADRAO, swr = CACHE_SWR_PADRAO) {
+  res.set('Cache-Control', `public, max-age=${maxAge}, stale-while-revalidate=${swr}`);
+}
+
+/** Impede qualquer cache (erros, health check, dados sabidamente obsoletos). */
+function semCache(res) {
+  res.set('Cache-Control', 'no-store');
 }
 
 // Data de referência da "Curiosidade do Dia": neste dia a lista começa
@@ -149,7 +187,118 @@ app.use(
 );
 
 app.use('/api', apiLimiter);
-app.use(express.json());
+// Nota: a API é somente-leitura (GET/HEAD), pelo que não há body parsing.
+
+// ============ CHAMADAS EXTERNAS (Yahoo Finance) ============
+// Timeout explícito + retry limitado com backoff. Sem isto, um hang do Yahoo
+// prendia a request até ao limite da plataforma.
+const YAHOO_BASE = (process.env.YAHOO_BASE_URL || 'https://query1.finance.yahoo.com').replace(
+  /\/+$/,
+  ''
+);
+const YAHOO_TIMEOUT_MS = Number(process.env.YAHOO_TIMEOUT_MS) || 8000;
+const YAHOO_TENTATIVAS = 2;
+
+/** Erro tipado da fonte externa: distingue timeout, falha e ausência de dados. */
+class ErroFonte extends Error {
+  constructor(tipo, mensagem, status = 502) {
+    super(mensagem);
+    this.name = 'ErroFonte';
+    this.tipo = tipo; // 'timeout' | 'fonte' | 'sem-dados' | 'rede'
+    this.status = status;
+  }
+}
+
+/** fetch com AbortController; lança ErroFonte('timeout') em vez de pendurar. */
+async function fetchComTimeout(url, { timeoutMs = YAHOO_TIMEOUT_MS } = {}) {
+  const controller = new AbortController();
+  const temporizador = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0' },
+      signal: controller.signal,
+    });
+  } catch (erro) {
+    if (erro.name === 'AbortError') {
+      throw new ErroFonte('timeout', `Tempo esgotado (${timeoutMs} ms)`);
+    }
+    throw new ErroFonte('rede', erro.message);
+  } finally {
+    clearTimeout(temporizador);
+  }
+}
+
+/** GET ao Yahoo com 1 retry em falhas transitórias (timeout, rede, 5xx). */
+async function pedirYahoo(url) {
+  let ultimoErro;
+
+  for (let tentativa = 0; tentativa < YAHOO_TENTATIVAS; tentativa++) {
+    try {
+      const resposta = await fetchComTimeout(url);
+
+      if (resposta.status === 404) {
+        throw new ErroFonte('sem-dados', 'Símbolo sem dados na fonte', 404);
+      }
+      if (resposta.status >= 500) {
+        throw new ErroFonte('fonte', `Fonte indisponível (HTTP ${resposta.status})`);
+      }
+      if (!resposta.ok) {
+        // 4xx (exceto 404) não melhora com retry.
+        throw new ErroFonte('fonte', `Pedido rejeitado (HTTP ${resposta.status})`, 502);
+      }
+
+      return resposta;
+    } catch (erro) {
+      ultimoErro = erro;
+      const transitorio = erro.tipo === 'timeout' || erro.tipo === 'rede' || erro.tipo === 'fonte';
+      const podeRepetir = transitorio && tentativa < YAHOO_TENTATIVAS - 1;
+
+      if (!podeRepetir) break;
+      await new Promise((resolver) => setTimeout(resolver, 300 * 2 ** tentativa));
+    }
+  }
+
+  throw ultimoErro;
+}
+
+// Último resultado válido por símbolo: permite degradação graciosa quando a
+// fonte falha, em vez de devolver um erro ao utilizador.
+const ultimosDados = new Map(); // chave -> { dados, ts }
+const MAX_ULTIMOS_DADOS = 60;
+
+function guardarUltimoBom(chave, dados) {
+  ultimosDados.delete(chave);
+  ultimosDados.set(chave, { dados, ts: Date.now() });
+
+  while (ultimosDados.size > MAX_ULTIMOS_DADOS) {
+    const maisAntigo = ultimosDados.keys().next().value;
+    ultimosDados.delete(maisAntigo);
+  }
+}
+
+function obterUltimoBom(chave, validadeMs) {
+  const entrada = ultimosDados.get(chave);
+  if (!entrada) return null;
+  if (Date.now() - entrada.ts > validadeMs) return null;
+  return entrada.dados;
+}
+
+/** Limita a concorrência de pedidos outbound (evita rajadas ao Yahoo). */
+async function mapComLimite(itens, limite, fn) {
+  const resultados = new Array(itens.length);
+  let proximo = 0;
+
+  async function trabalhador() {
+    while (proximo < itens.length) {
+      const indice = proximo++;
+      resultados[indice] = await fn(itens[indice], indice);
+    }
+  }
+
+  await Promise.all(Array.from({ length: Math.min(limite, itens.length) }, trabalhador));
+  return resultados;
+}
 
 // ============ FUNÇÕES UTILITÁRIAS ==========
 
@@ -204,7 +353,9 @@ function listarArquivosDeSetores() {
       && file !== 'daily-summary.json'
       && file !== 'curiosidades.json'
     )
-    .map(file => file.replace('.json', ''));
+    .map(file => file.replace('.json', ''))
+    // Só setores da allowlist: mantém /api/setores e /api/setor/:setor coerentes.
+    .filter(id => SETORES_VALIDOS.has(id));
 }
 
 /**
@@ -327,6 +478,7 @@ app.get('/api/setores', (req, res) => {
   try {
     const setores = listarArquivosDeSetores().sort();
 
+    cachePublico(res);
     res.json({ 
       sucesso: true,
       total: setores.length,
@@ -334,9 +486,10 @@ app.get('/api/setores', (req, res) => {
     });
   } catch (erro) {
     console.error('Erro ao listar setores:', erro);
+    semCache(res);
     res.status(500).json({ 
       sucesso: false, 
-      erro: erro.message 
+      erro: 'Não foi possível listar os setores'
     });
   }
 });
@@ -344,22 +497,47 @@ app.get('/api/setores', (req, res) => {
 /**
  * Obter dados detalhados de um setor específico
  * GET /api/setor/:setor
+ *
+ * O parâmetro é validado por allowlist (SETORES_VALIDOS) antes de ser usado
+ * em qualquer caminho de ficheiro. Valores malformados -> 400; ids válidos mas
+ * inexistentes -> 404. Nunca devolve caminhos internos.
  */
 app.get('/api/setor/:setor', (req, res) => {
+  const { setor } = req.params;
+
+  if (!SETOR_RE.test(setor)) {
+    semCache(res);
+    return res.status(400).json({
+      sucesso: false,
+      codigo: 'SETOR_INVALIDO',
+      erro: 'Identificador de setor inválido'
+    });
+  }
+
+  if (!SETORES_VALIDOS.has(setor)) {
+    semCache(res);
+    return res.status(404).json({
+      sucesso: false,
+      codigo: 'SETOR_NAO_ENCONTRADO',
+      erro: 'Setor não encontrado'
+    });
+  }
+
   try {
-    const { setor } = req.params;
     const dados = carregarDados(setor);
-    
+
+    cachePublico(res);
     res.json({
       sucesso: true,
       setor,
       dados
     });
   } catch (erro) {
-    console.error(`Erro ao carregar setor ${req.params.setor}:`, erro);
-    res.status(404).json({ 
+    console.error(`Erro ao carregar setor ${setor}:`, erro);
+    semCache(res);
+    res.status(500).json({
       sucesso: false,
-      erro: erro.message 
+      erro: 'Não foi possível carregar os dados do setor'
     });
   }
 });
@@ -384,15 +562,17 @@ app.get('/api/inteligencia-setorial', (req, res) => {
 
     const dados = buildSectorIntelligence(datasets);
 
+    cachePublico(res);
     res.json({
       sucesso: true,
       dados
     });
   } catch (erro) {
     console.error('Erro ao calcular inteligência setorial:', erro);
+    semCache(res);
     res.status(500).json({
       sucesso: false,
-      erro: erro.message
+      erro: 'Não foi possível calcular a inteligência setorial'
     });
   }
 });
@@ -420,6 +600,7 @@ app.get('/api/curiosidades', (req, res) => {
 
       const curiosidade = montarCuriosidade(empresa, indice + 1, ordenadas.length);
 
+      cachePublico(res);
       return res.json({
         sucesso: true,
         dados: {
@@ -437,6 +618,7 @@ app.get('/api/curiosidades', (req, res) => {
     const caminhoJson = encontrarCuriosidades();
     
     if (!caminhoJson) {
+      semCache(res);
       return res.status(404).json({
         sucesso: false,
         erro: 'Nenhum dado de empresas encontrado e arquivo de curiosidades não disponível'
@@ -445,22 +627,24 @@ app.get('/api/curiosidades', (req, res) => {
     
     const dados = lerJsonComCache(caminhoJson);
 
+    cachePublico(res);
     res.json({
       sucesso: true,
       dados
     });
   } catch (erro) {
     console.error('Erro ao carregar curiosidades:', erro);
-    
+    semCache(res);
+
     if (erro instanceof SyntaxError) {
       res.status(400).json({
         sucesso: false,
-        erro: 'Erro ao parsear JSON de curiosidades: ' + erro.message
+        erro: 'Não foi possível interpretar os dados de curiosidades'
       });
     } else {
       res.status(500).json({
         sucesso: false,
-        erro: erro.message
+        erro: 'Não foi possível carregar as curiosidades'
       });
     }
   }
@@ -474,68 +658,218 @@ app.get('/api/curiosidades', (req, res) => {
 // (ex.: AAPL, BRK.B). Rejeita input arbitrário antes de construir a URL.
 const SIMBOLO_RE = /^[A-Za-z][A-Za-z0-9.\-]{0,9}$/;
 
+const MAX_SIMBOLOS_COTACAO = 25;
+const COTACAO_CACHE_MS = 60 * 1000; // preços mudam durante o pregão
+const COTACAO_STALE_MS = 24 * 60 * 60 * 1000;
+const HISTORICO_STALE_MS = 24 * 60 * 60 * 1000;
+
+const cotacoesCache = new Map(); // símbolo -> { preco, data, moeda, ts }
+const MAX_COTACOES_CACHE = 600;
+
+/** Extrai a série diária do payload do Yahoo; null quando não há dados. */
+function lerSerieDiaria(json) {
+  const resultado = json?.chart?.result?.[0];
+  const quote = resultado?.indicators?.quote?.[0];
+  const timestamps = resultado?.timestamp || [];
+
+  if (!quote || timestamps.length === 0) return null;
+
+  const registros = timestamps
+    .map((ts, i) => {
+      const d = new Date(ts * 1000);
+      const data =
+        `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
+
+      return {
+        data,
+        open: quote.open?.[i] ?? null,
+        high: quote.high?.[i] ?? null,
+        low: quote.low?.[i] ?? null,
+        close: quote.close?.[i] ?? null,
+        volume: quote.volume?.[i] ?? null,
+      };
+    })
+    .filter(r => r.close !== null && r.close !== undefined && !Number.isNaN(r.close));
+
+  return registros.length > 0 ? registros : null;
+}
+
+function urlChart(ticker, range, interval) {
+  return `${YAHOO_BASE}/v8/finance/chart/${encodeURIComponent(ticker)}?range=${range}&interval=${interval}`;
+}
+
+/** Mensagem segura: distingue timeout, falha externa e ausência de dados. */
+function mensagemSegura(erro) {
+  if (erro.tipo === 'timeout') return 'A fonte de dados demorou demasiado a responder';
+  if (erro.tipo === 'sem-dados') return 'Sem dados de preço para o símbolo';
+  return 'Não foi possível obter dados da fonte externa';
+}
+
 app.get('/api/historico/:symbol', historicoLimiter, async (req, res) => {
   const { symbol } = req.params;
 
   if (!SIMBOLO_RE.test(symbol)) {
+    semCache(res);
     return res.status(400).json({ sucesso: false, erro: 'Símbolo inválido' });
   }
 
+  const chave = symbol.toUpperCase();
+
   try {
-    const ticker = symbol.toUpperCase().replace(/\./g, '-');
-
-    const url =
-      `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?range=2y&interval=1d`;
-
-    const resposta = await fetch(url, { 
-      headers: { 'User-Agent': 'Mozilla/5.0' } 
-    });
-
-    if (!resposta.ok) {
-      throw new Error(`Falha ao buscar histórico: ${resposta.statusText}`);
-    }
-
+    const ticker = chave.replace(/\./g, '-');
+    const resposta = await pedirYahoo(urlChart(ticker, '2y', '1d'));
     const json = await resposta.json();
-    const resultado = json?.chart?.result?.[0];
-    const quote = resultado?.indicators?.quote?.[0];
-    const timestamps = resultado?.timestamp || [];
+    const registros = lerSerieDiaria(json);
 
-    if (!quote || timestamps.length === 0) {
-      throw new Error('Sem dados de preço para o símbolo');
+    if (!registros) {
+      throw new ErroFonte('sem-dados', 'Sem dados de preço para o símbolo', 404);
     }
 
-    const registros = timestamps
-      .map((ts, i) => {
-        const d = new Date(ts * 1000);
-        const data =
-          `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
+    guardarUltimoBom(`hist:${chave}`, registros);
 
-        return {
-          data,
-          open: quote.open?.[i] ?? null,
-          high: quote.high?.[i] ?? null,
-          low: quote.low?.[i] ?? null,
-          close: quote.close?.[i] ?? null,
-          volume: quote.volume?.[i] ?? null,
-        };
-      })
-      .filter(r => r.close !== null && r.close !== undefined && !Number.isNaN(r.close));
-
-    if (registros.length === 0) {
-      throw new Error('Nenhum registro de preço válido encontrado');
-    }
-
-    res.json({ 
-      sucesso: true, 
-      symbol, 
+    // Série diária: 2 min é suficiente para o gráfico e alivia o Render.
+    cachePublico(res, 120, 600);
+    res.json({
+      sucesso: true,
+      symbol,
       total: registros.length,
-      registros 
+      registros
     });
   } catch (erro) {
-    console.error(`Erro ao buscar histórico de ${req.params.symbol}:`, erro);
-    res.status(502).json({ 
-      sucesso: false, 
-      erro: erro.message 
+    const ultimoBom = obterUltimoBom(`hist:${chave}`, HISTORICO_STALE_MS);
+
+    // Degradação graciosa: devolve o último resultado válido em vez de erro.
+    if (ultimoBom) {
+      console.warn(`Histórico de ${chave} servido do cache local após falha: ${erro.message}`);
+      semCache(res);
+      res.set('Warning', '110 - Resposta em cache local');
+      return res.json({
+        sucesso: true,
+        symbol,
+        total: ultimoBom.length,
+        registros: ultimoBom,
+        aviso: 'dados em cache local'
+      });
+    }
+
+    console.error(`Erro ao buscar histórico de ${chave}:`, erro);
+    semCache(res);
+    res.status(erro.status || 502).json({
+      sucesso: false,
+      codigo:
+        erro.tipo === 'timeout'
+          ? 'UPSTREAM_TIMEOUT'
+          : erro.tipo === 'sem-dados'
+            ? 'SEM_DADOS'
+            : 'UPSTREAM_ERROR',
+      erro: mensagemSegura(erro)
+    });
+  }
+});
+
+/**
+ * Cotações atuais em lote (uma chamada para vários símbolos).
+ * GET /api/cotacoes?symbols=AAPL,MSFT
+ *
+ * Usado pelos alertas de preço no browser: substitui N pedidos de 2 anos de
+ * histórico por 1 pedido de cotações. Cada símbolo é cacheado 60 s e a
+ * concorrência com o Yahoo é limitada a 4.
+ */
+app.get('/api/cotacoes', historicoLimiter, async (req, res) => {
+  const bruto = String(req.query.symbols || '');
+  const pedidos = bruto
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
+
+  if (pedidos.length === 0) {
+    semCache(res);
+    return res.status(400).json({
+      sucesso: false,
+      codigo: 'SIMBOLOS_OBRIGATORIOS',
+      erro: 'Indique pelo menos um símbolo em ?symbols='
+    });
+  }
+
+  if (pedidos.length > MAX_SIMBOLOS_COTACAO) {
+    semCache(res);
+    return res.status(400).json({
+      sucesso: false,
+      codigo: 'DEMASIADOS_SIMBOLOS',
+      erro: `Máximo de ${MAX_SIMBOLOS_COTACAO} símbolos por pedido`
+    });
+  }
+
+  if (pedidos.some(s => !SIMBOLO_RE.test(s))) {
+    semCache(res);
+    return res.status(400).json({
+      sucesso: false,
+      codigo: 'SIMBOLO_INVALIDO',
+      erro: 'Um ou mais símbolos são inválidos'
+    });
+  }
+
+  const simbolos = [...new Set(pedidos.map(s => s.toUpperCase()))];
+
+  async function obterCotacao(simbolo) {
+    const emCache = cotacoesCache.get(simbolo);
+    if (emCache && Date.now() - emCache.ts < COTACAO_CACHE_MS) {
+      return { preco: emCache.preco, data: emCache.data, moeda: emCache.moeda, stale: false };
+    }
+
+    try {
+      const ticker = simbolo.replace(/\./g, '-');
+      const resposta = await pedirYahoo(urlChart(ticker, '5d', '1d'));
+      const json = await resposta.json();
+      const registros = lerSerieDiaria(json);
+
+      if (!registros) {
+        throw new ErroFonte('sem-dados', 'Sem dados de preço para o símbolo', 404);
+      }
+
+      const ultimo = registros[registros.length - 1];
+      const cotacao = {
+        preco: Number(ultimo.close),
+        data: ultimo.data,
+        moeda: json?.chart?.result?.[0]?.meta?.currency || 'USD',
+      };
+
+      cotacoesCache.delete(simbolo);
+      cotacoesCache.set(simbolo, { ...cotacao, ts: Date.now() });
+
+      while (cotacoesCache.size > MAX_COTACOES_CACHE) {
+        cotacoesCache.delete(cotacoesCache.keys().next().value);
+      }
+
+      return { ...cotacao, stale: false };
+    } catch (erro) {
+      const antiga = cotacoesCache.get(simbolo);
+      if (antiga && Date.now() - antiga.ts < COTACAO_STALE_MS) {
+        return { preco: antiga.preco, data: antiga.data, moeda: antiga.moeda, stale: true };
+      }
+
+      console.warn(`Cotação de ${simbolo} indisponível: ${erro.message}`);
+      return { erro: 'indisponivel' };
+    }
+  }
+
+  try {
+    const resultados = await mapComLimite(simbolos, 4, obterCotacao);
+    const cotacoes = {};
+    simbolos.forEach((simbolo, i) => {
+      cotacoes[simbolo] = resultados[i];
+    });
+
+    // Curto: as cotações mudam durante o pregão.
+    cachePublico(res, 60, 300);
+    res.json({ sucesso: true, total: simbolos.length, cotacoes });
+  } catch (erro) {
+    console.error('Erro ao obter cotações:', erro);
+    semCache(res);
+    res.status(502).json({
+      sucesso: false,
+      codigo: 'UPSTREAM_ERROR',
+      erro: 'Não foi possível obter as cotações'
     });
   }
 });
@@ -549,6 +883,7 @@ app.get('/api/resumo-dia', (req, res) => {
     const caminhoJson = path.join(__dirname, 'data', 'daily-summary.json');
 
     if (!fs.existsSync(caminhoJson)) {
+      semCache(res);
       return res.status(404).json({
         sucesso: false,
         erro: 'Resumo do dia ainda não gerado'
@@ -557,15 +892,17 @@ app.get('/api/resumo-dia', (req, res) => {
 
     const dados = lerJsonComCache(caminhoJson);
 
+    cachePublico(res);
     res.json({ 
       sucesso: true, 
       dados 
     });
   } catch (erro) {
     console.error('Erro ao carregar resumo do dia:', erro);
+    semCache(res);
     res.status(500).json({ 
       sucesso: false, 
-      erro: erro.message 
+      erro: 'Não foi possível carregar o resumo do dia'
     });
   }
 });
@@ -575,6 +912,7 @@ app.get('/api/resumo-dia', (req, res) => {
  * GET /api/health
  */
 app.get('/api/health', (req, res) => {
+  semCache(res);
   res.json({ 
     status: '✅ Backend rodando!',
     versao: VERSION,
@@ -624,6 +962,11 @@ app.get('/', (req, res) => {
       },
       {
         metodo: 'GET',
+        rota: '/api/cotacoes?symbols=AAPL,MSFT',
+        descricao: 'Obtém cotações atuais em lote (máx. 25 símbolos)'
+      },
+      {
+        metodo: 'GET',
         rota: '/api/resumo-dia',
         descricao: 'Obtém resumo do dia com maiores altas e baixas'
       }
@@ -635,11 +978,10 @@ app.get('/', (req, res) => {
  * Middleware para erros 404
  */
 app.use((req, res) => {
+  semCache(res);
   res.status(404).json({ 
     sucesso: false,
-    erro: 'Rota não encontrada',
-    rota: req.originalUrl,
-    metodo: req.method
+    erro: 'Rota não encontrada'
   });
 });
 
@@ -648,6 +990,7 @@ app.use((req, res) => {
  */
 app.use((err, req, res, next) => {
   console.error('Erro não tratado:', err);
+  semCache(res);
   res.status(500).json({ 
     sucesso: false,
     erro: 'Erro interno do servidor',

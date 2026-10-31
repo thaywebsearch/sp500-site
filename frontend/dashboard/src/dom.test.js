@@ -13,6 +13,7 @@ import { loadDailySummary } from './daily-summary.js';
 import { loadCuriosidades } from './daily-curiosity.js';
 import { openCompanyDetails } from './company-details.js';
 import { openPriceChart } from './price-chart.js';
+import { resetSectorStore } from './sector-store.js';
 
 function mockFetch(routes) {
   globalThis.fetch = vi.fn((url) => {
@@ -213,6 +214,13 @@ describe('loadHeatmap', () => {
     expect(html).toContain('#ffeb3b');
     expect(html).toContain('#8bc34a');
 
+    // Segunda renderização dentro do TTL reutiliza o store (sem fetch).
+    const chamadas = globalThis.fetch.mock.calls.length;
+    await loadHeatmap();
+    expect(globalThis.fetch).toHaveBeenCalledTimes(chamadas);
+
+    // Fora do cache, uma falha de rede tem de ser visível.
+    resetSectorStore();
     globalThis.fetch = vi.fn(() => Promise.reject(new Error('boom')));
     await loadHeatmap();
     expect(document.getElementById('heatmap-view').innerHTML).toContain('Erro ao carregar heatmap');

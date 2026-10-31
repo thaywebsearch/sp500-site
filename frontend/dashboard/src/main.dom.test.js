@@ -532,16 +532,31 @@ describe('alertas de preço', () => {
   it('startPriceAlertPolling verifica alertas periodicamente', async () => {
     const main = await boot();
     main.setPriceAlert('AAPL', 100, 'above');
+    main.stopPriceAlertPolling();
     vi.useFakeTimers();
     const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
     main.startPriceAlertPolling();
-    await vi.advanceTimersByTimeAsync(60000);
+    await vi.advanceTimersByTimeAsync(main.PRICE_ALERT_POLL_MS - 1);
+    expect(setItemSpy).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(1);
     expect(setItemSpy).toHaveBeenCalled();
+  });
+
+  it('startPriceAlertPolling não cria loops duplicados', async () => {
+    const main = await boot();
+    main.setPriceAlert('AAPL', 100, 'above');
+    main.stopPriceAlertPolling();
+    vi.useFakeTimers();
+    const setIntervalSpy = vi.spyOn(globalThis, 'setInterval');
+    main.startPriceAlertPolling();
+    main.startPriceAlertPolling();
+    main.startPriceAlertPolling();
+    expect(setIntervalSpy).toHaveBeenCalledTimes(1);
   });
 
   it('checkPriceAlerts dispara e marca o alerta atingido', async () => {
     const routes = routesFor(defaultSectors());
-    routes['/api/historico/AAPL'] = { registros: [{ data: '2026-10-01', close: 150 }] };
+    routes['/api/cotacoes'] = { cotacoes: { AAPL: { preco: 150, data: '2026-10-01' } } };
     globalThis.alert = vi.fn();
     const main = await boot({ routes });
 
@@ -553,6 +568,28 @@ describe('alertas de preço', () => {
     expect(main.loadPriceAlerts()).toEqual([
       ['AAPL', expect.objectContaining({ triggered: true, triggeredPrice: 150 })],
     ]);
+  });
+
+  it('checkPriceAlerts usa um único pedido batch para vários símbolos', async () => {
+    const routes = routesFor(defaultSectors());
+    routes['/api/cotacoes'] = {
+      cotacoes: { AAPL: { preco: 150 }, MSFT: { preco: 50 } },
+    };
+    const main = await boot({ routes });
+
+    main.setPriceAlert('AAPL', 100, 'above');
+    main.setPriceAlert('MSFT', 100, 'above');
+    const before = globalThis.fetch.mock.calls.filter(([url]) =>
+      String(url).includes('/api/cotacoes')
+    ).length;
+
+    const triggered = await main.checkPriceAlerts();
+    const depois = globalThis.fetch.mock.calls.filter(([url]) =>
+      String(url).includes('/api/cotacoes')
+    ).length;
+
+    expect(triggered).toEqual(['AAPL ($150.00)']);
+    expect(depois - before).toBe(1);
   });
 
   it('checkPriceAlerts não dispara sem preço válido', async () => {

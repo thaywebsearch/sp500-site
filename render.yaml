@@ -10,6 +10,21 @@
 #   Obrigatorio: por omissao a API tem CORS restritivo.
 #
 # Nota: o plano free dorme apos 15 min sem trafego e leva ~1 minuto a acordar.
+#
+# autoDeploy: cada push em main reinicia a API — incluindo os commits
+# automáticos dos workflows de dados (preços, resumo, setores, tabela). Esses
+# commits só mudam JSON e não exigem reinício do processo Node.
+#
+# Ação manual recomendada no painel (NÃO alterar aqui sem confirmar):
+#   Render Dashboard -> sp500-api -> Settings -> Build & Deploy
+#   -> Auto-Deploy: "No" (ou "After CI checks pass").
+#   Depois, deploys de código passam a ser manuais (Deploy latest commit) ou
+#   via Deploy Hook no workflow de release. Isto evita reinícios causados
+#   apenas por atualização de dados.
+#
+# Variáveis opcionais de resiliência (não obrigatórias):
+#   YAHOO_TIMEOUT_MS = 8000          (timeout de cada chamada ao Yahoo)
+#   YAHOO_BASE_URL   = https://query1.finance.yahoo.com  (stub em testes)
 
 services:
   - type: web
@@ -20,6 +35,8 @@ services:
     buildCommand: npm ci
     startCommand: npm start
     healthCheckPath: /api/health
+    # Mantido true para não bloquear deploys de código; ver nota acima sobre
+    # desativar no painel para ignorar commits automáticos de dados.
     autoDeploy: true
     envVars:
       - key: CORS_ORIGINS

@@ -3870,3 +3870,22 @@ button:disabled {
     padding: 12px 10px;
   }
 }
+
+/* ========== DISCLAIMERS ========== */
+.site-disclaimer {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 20px clamp(12px, 4vw, 40px) 32px;
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.site-disclaimer p {
+  margin: 0 0 6px;
+}
+
+.site-disclaimer p:last-child {
+  margin-bottom: 0;
+}

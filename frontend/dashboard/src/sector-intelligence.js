@@ -4,7 +4,7 @@
 // GET /api/inteligencia-setorial; as funções puras abaixo permitem recalcular
 // no browser (fallback) e são testadas isoladamente.
 
-import { API_BASE_URL, SECTORS } from './config.js';
+import { getAllSectors, getSectorName } from './sector-store.js';
 import { getSectorIntelligence } from './api.js';
 import { escapeHtml, formatMarketCap } from './utils.js';
 
@@ -612,33 +612,17 @@ function hasSectors(data) {
 
 /** Recalcula o relatório a partir das rotas por setor (fallback sem a rota nova). */
 export async function fetchSectorIntelligenceFallback() {
-  const response = await fetch(`${API_BASE_URL}/api/setores`);
-  if (!response.ok) throw new Error(`HTTP ${response.status} ao listar setores`);
+  // Reutiliza o store: os 11 setores já podem estar em memória (ou em curso).
+  const setores = await getAllSectors();
 
-  const payload = await response.json();
-  const ids = Array.isArray(payload.setores) ? payload.setores : [];
+  const datasets = setores.map((s) => ({
+    id: s.id,
+    name: s.name || getSectorName(s.id),
+    companies: s.companies,
+    generatedAt: s.generatedAt,
+  }));
 
-  const datasets = await Promise.all(
-    ids.map(async (id) => {
-      try {
-        const sectorResponse = await fetch(`${API_BASE_URL}/api/setor/${id}`);
-        if (!sectorResponse.ok) return null;
-        const sectorPayload = await sectorResponse.json();
-        const dados = sectorPayload.dados || {};
-        return {
-          id,
-          name: dados.sector || SECTORS.find((s) => s.id === id)?.name || id,
-          companies: Array.isArray(dados.companies) ? dados.companies : [],
-          generatedAt: dados.generatedAt || null,
-        };
-      } catch (erro) {
-        console.error(`Erro ao carregar o setor ${id}:`, erro);
-        return null;
-      }
-    })
-  );
-
-  return buildSectorIntelligence(datasets.filter(Boolean));
+  return buildSectorIntelligence(datasets);
 }
 
 export async function loadSectorIntelligence(containerId = 'sector-intelligence-view') {

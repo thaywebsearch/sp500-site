@@ -96,16 +96,35 @@ const SECTORS = [
 
 async function loadSectorData() {
   const sectorData = [];
-  
+
+  // A API é a fonte preferencial. O caminho relativo fica como fallback para
+  // builds que publiquem os JSON por setor ao lado desta página.
+  const local = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  const API_BASE = local ? 'http://localhost:5001' : 'https://sp500-api.onrender.com';
+
+  async function obterSetor(id) {
+    try {
+      const resposta = await fetch(`${API_BASE}/api/setor/${id}`);
+      if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+      const payload = await resposta.json();
+      if (payload && payload.dados) return payload.dados;
+      throw new Error('Resposta sem dados');
+    } catch (erroApi) {
+      const resposta = await fetch(`../${id}/${id}.json`);
+      if (!resposta.ok) throw erroApi;
+      return resposta.json();
+    }
+  }
+
   for (const sector of SECTORS) {
     try {
-      const response = await fetch(`../${sector.id}/${sector.id}.json`);
-      const data = await response.json();
-      const totalMarketCap = data.companies.reduce((sum, c) => sum + (c.marketCap || 0), 0);
+      const data = await obterSetor(sector.id);
+      const companies = Array.isArray(data.companies) ? data.companies : [];
+      const totalMarketCap = companies.reduce((sum, c) => sum + (c.marketCap || 0), 0);
       sectorData.push({
         ...sector,
         marketCap: totalMarketCap,
-        count: data.companies.length
+        count: companies.length
       });
     } catch (e) {
       console.error(`Erro ao carregar ${sector.id}:`, e);

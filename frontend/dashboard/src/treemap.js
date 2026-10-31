@@ -1,3 +1,5 @@
+import { getAllSectors } from './sector-store.js';
+
 export function getColor(value, max) {
   const pct = (value / max) * 100;
   if (pct >= 80) return '#ff5252';
@@ -23,33 +25,31 @@ export async function loadTreemap() {
     '<div style="display:flex;align-items:center;justify-content:center;min-height:60vh;width:100%;font-size:14px;color:var(--text-secondary)">Carregando mapa de setores...</div>';
 
   try {
-    // Usar variáveis globais de config.js
-    const res = await fetch(`${window.API_BASE_URL}/api/setores`);
-    const data = await res.json();
-    const setores = data.setores || [];
+    // Store partilhado: sem pedidos repetidos quando a home já carregou os setores.
+    const setores = await getAllSectors();
 
-    const stats = await Promise.all(
-      setores.map(async (id) => {
-        const r = await fetch(`${window.API_BASE_URL}/api/setor/${id}`);
-        const d = await r.json();
-        const s = window.SECTORS.find((x) => x.id === id);
-        const cos = d.dados?.companies || [];
-        const totalCap = cos.reduce((a, c) => a + (c.marketCap || 0), 0);
-        const avgDiv =
-          cos.length > 0 ? cos.reduce((a, c) => a + (c.dividendYield || 0), 0) / cos.length : 0;
-        const withDiv = cos.filter((c) => c.hasDividend === 'Sim').length;
+    const stats = setores.map(({ id, name, companies: cos }) => {
+      const totalCap = cos.reduce((a, c) => a + (c.marketCap || 0), 0);
+      const avgDiv =
+        cos.length > 0 ? cos.reduce((a, c) => a + (c.dividendYield || 0), 0) / cos.length : 0;
+      const withDiv = cos.filter((c) => c.hasDividend === 'Sim').length;
+      // Maior empresa por market cap (o array não vem necessariamente ordenado).
+      const topCompany =
+        cos.length > 0
+          ? cos.reduce((maior, c) => ((c.marketCap || 0) > (maior.marketCap || 0) ? c : maior))
+              .symbol
+          : 'N/A';
 
-        return {
-          id,
-          name: s?.name || id,
-          cap: (totalCap / 1e9).toFixed(1),
-          companies: cos.length,
-          avgDiv: parseFloat(avgDiv.toFixed(2)),
-          withDiv: withDiv,
-          topCompany: cos.length > 0 ? cos[0].symbol : 'N/A',
-        };
-      })
-    );
+      return {
+        id,
+        name,
+        cap: (totalCap / 1e9).toFixed(1),
+        companies: cos.length,
+        avgDiv: parseFloat(avgDiv.toFixed(2)),
+        withDiv: withDiv,
+        topCompany,
+      };
+    });
 
     const maxCap = Math.max(...stats.map((s) => parseFloat(s.cap)));
 

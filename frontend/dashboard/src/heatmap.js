@@ -1,3 +1,5 @@
+import { getAllSectors } from './sector-store.js';
+
 export async function loadHeatmap() {
   const container = document.getElementById('heatmap-view');
   if (!container) return;
@@ -15,10 +17,9 @@ export async function loadHeatmap() {
     '<div style="text-align:center;color:var(--text-secondary)">Carregando heatmap...</div>';
 
   try {
-    // Usar variáveis globais de config.js
-    const res = await fetch(`${window.API_BASE_URL}/api/setores`);
-    const data = await res.json();
-    const setores = data.setores || [];
+    // Store partilhado: todos os setores são obtidos em paralelo e sem
+    // repetir pedidos já feitos pela home/treemap.
+    const setores = await getAllSectors();
 
     let html = `
       <div>
@@ -38,17 +39,13 @@ export async function loadHeatmap() {
       </div>
     `;
 
-    // Carregar dados de cada setor
-    for (const sectorId of setores) {
-      const r = await fetch(`${window.API_BASE_URL}/api/setor/${sectorId}`);
-      const d = await r.json();
-      const s = window.SECTORS.find((x) => x.id === sectorId);
-      const companies = d.dados?.companies || [];
-
+    for (const { id: sectorId, name, companies } of setores) {
       if (companies.length === 0) continue;
 
-      // Top 4 por Market Cap
-      const top4 = companies.sort((a, b) => (b.marketCap || 0) - (a.marketCap || 0)).slice(0, 4);
+      // Copia antes de ordenar: o array do store não pode ser mutado.
+      const top4 = [...companies]
+        .sort((a, b) => (b.marketCap || 0) - (a.marketCap || 0))
+        .slice(0, 4);
 
       html += `
         <div style="margin-bottom: 40px;">
@@ -57,7 +54,7 @@ export async function loadHeatmap() {
             margin: 0 0 20px 0;
             color: var(--text-primary);
             font-weight: 600;
-          ">${s?.name || sectorId}</h3>
+          ">${name || sectorId}</h3>
 
           <div style="
             display: grid;

@@ -2,6 +2,15 @@
 // Em ambiente jsdom (testes de renderização) os globais já existem e não são
 // sobrescritos. Os módulos do dashboard referenciam window/document/localStorage
 // no topo ou em funções; aqui garantimos que os imports não rebentem em Node.
+import { beforeEach } from 'vitest';
+
+// O store de setores é um singleton de módulo: cada teste começa limpo para
+// não herdar caches de outro teste. Import dinâmico porque config.js usa
+// window, que só existe depois dos stubs abaixo.
+beforeEach(async () => {
+  const { resetSectorStore } = await import('./sector-store.js');
+  resetSectorStore();
+});
 
 if (typeof globalThis.document === 'undefined') {
   globalThis.window = {

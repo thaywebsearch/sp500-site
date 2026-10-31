@@ -1,3 +1,14 @@
+# Fonte de verdade da configuração Netlify (site ligado a este repositório).
+# O ficheiro .netlify/netlify.toml é um artefacto local do `netlify link`
+# (ignorado pelo git) e não é usado no deploy.
+#
+# - base: diretório do projeto Vite
+# - command: build que gera ../docs
+# - publish: saída relativa à base (frontend/docs)
+#
+# frontend/docs é a pasta publicada; os ficheiros de frontend/dashboard/public
+# (robots.txt, sitemap.xml, sector.html, sector-weights.html, _headers) são
+# copiados para lá pelo Vite.
 [build]
   base = "frontend/dashboard"
   command = "npm run build"
