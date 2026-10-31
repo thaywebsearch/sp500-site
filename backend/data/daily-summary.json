@@ -1,205 +1,205 @@
 {
-  "generatedAt": "2026-10-30 01:16:44 UTC",
-  "referenceDate": "2026-10-28",
+  "generatedAt": "2026-10-31 00:58:03 UTC",
+  "referenceDate": "2026-10-29",
   "topGainers": [
     {
-      "symbol": "VRT",
-      "name": "Vertiv",
+      "symbol": "GEN",
+      "name": "Gen Digital",
+      "sector": "Information Technology",
+      "lastPrice": 28.2,
+      "changePct": 15.81
+    },
+    {
+      "symbol": "CVNA",
+      "name": "Carvana",
+      "sector": "Consumer Discretionary",
+      "lastPrice": 68.31,
+      "changePct": 15.68
+    },
+    {
+      "symbol": "NCLH",
+      "name": "Norwegian Cruise Line Holdings",
+      "sector": "Consumer Discretionary",
+      "lastPrice": 18.22,
+      "changePct": 13.45
+    },
+    {
+      "symbol": "HII",
+      "name": "Huntington Ingalls Industries",
       "sector": "Industrials",
-      "lastPrice": 242.94,
-      "changePct": 16.48
+      "lastPrice": 316.21,
+      "changePct": 13.23
     },
     {
-      "symbol": "FLEX",
-      "name": "Flex Ltd.",
-      "sector": "Information Technology",
-      "lastPrice": 93.03,
-      "changePct": 11.61
+      "symbol": "TXT",
+      "name": "Textron",
+      "sector": "Industrials",
+      "lastPrice": 87.46,
+      "changePct": 11.67
     },
     {
-      "symbol": "ORCL",
-      "name": "Oracle Corporation",
-      "sector": "Information Technology",
-      "lastPrice": 144.54,
-      "changePct": 10.73
+      "symbol": "CMG",
+      "name": "Chipotle Mexican Grill",
+      "sector": "Consumer Discretionary",
+      "lastPrice": 31.28,
+      "changePct": 8.88
     },
     {
-      "symbol": "LH",
-      "name": "Labcorp",
+      "symbol": "LHX",
+      "name": "L3Harris",
+      "sector": "Industrials",
+      "lastPrice": 278.43,
+      "changePct": 6.84
+    },
+    {
+      "symbol": "LLY",
+      "name": "Lilly (Eli)",
       "sector": "Health Care",
-      "lastPrice": 360.25,
-      "changePct": 8.78
-    },
-    {
-      "symbol": "SNDK",
-      "name": "Sandisk",
-      "sector": "Information Technology",
-      "lastPrice": 1404.77,
-      "changePct": 7.66
-    },
-    {
-      "symbol": "GEHC",
-      "name": "GE HealthCare",
-      "sector": "Health Care",
-      "lastPrice": 75.82,
-      "changePct": 6.62
-    },
-    {
-      "symbol": "MU",
-      "name": "Micron Technology",
-      "sector": "Information Technology",
-      "lastPrice": 983.23,
-      "changePct": 5.86
-    },
-    {
-      "symbol": "LITE",
-      "name": "Lumentum",
-      "sector": "Information Technology",
-      "lastPrice": 913.95,
-      "changePct": 5.52
+      "lastPrice": 1373.7,
+      "changePct": 6.63
     }
   ],
   "topLosers": [
     {
-      "symbol": "FFIV",
-      "name": "F5, Inc.",
+      "symbol": "NOW",
+      "name": "ServiceNow",
       "sector": "Information Technology",
-      "lastPrice": 365.53,
-      "changePct": -20.43
-    },
-    {
-      "symbol": "CSGP",
-      "name": "CoStar Group",
-      "sector": "Real Estate",
-      "lastPrice": 27.54,
-      "changePct": -13.96
-    },
-    {
-      "symbol": "CHRW",
-      "name": "C.H. Robinson",
-      "sector": "Industrials",
-      "lastPrice": 127.6,
-      "changePct": -11.14
-    },
-    {
-      "symbol": "LII",
-      "name": "Lennox International",
-      "sector": "Industrials",
-      "lastPrice": 332.64,
-      "changePct": -10.59
-    },
-    {
-      "symbol": "BKR",
-      "name": "Baker Hughes",
-      "sector": "Energy",
-      "lastPrice": 54.66,
-      "changePct": -7.36
-    },
-    {
-      "symbol": "ODFL",
-      "name": "Old Dominion",
-      "sector": "Industrials",
-      "lastPrice": 173.32,
-      "changePct": -7.33
+      "lastPrice": 109.67,
+      "changePct": -26.95
     },
     {
       "symbol": "FTNT",
       "name": "Fortinet",
       "sector": "Information Technology",
-      "lastPrice": 174.08,
-      "changePct": -5.9
+      "lastPrice": 139.1,
+      "changePct": -20.09
     },
     {
-      "symbol": "BSX",
-      "name": "Boston Scientific",
+      "symbol": "MRVL",
+      "name": "Marvell Technology",
+      "sector": "Information Technology",
+      "lastPrice": 218.34,
+      "changePct": -13.24
+    },
+    {
+      "symbol": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "sector": "Communication Services",
+      "lastPrice": 283.82,
+      "changePct": -12.64
+    },
+    {
+      "symbol": "GOOG",
+      "name": "Alphabet Inc. (Class C)",
+      "sector": "Communication Services",
+      "lastPrice": 282.32,
+      "changePct": -12.29
+    },
+    {
+      "symbol": "HONA",
+      "name": "Honeywell Aerospace",
+      "sector": "Industrials",
+      "lastPrice": 160.04,
+      "changePct": -9.6
+    },
+    {
+      "symbol": "CAT",
+      "name": "Caterpillar Inc.",
+      "sector": "Industrials",
+      "lastPrice": 647.39,
+      "changePct": -9.25
+    },
+    {
+      "symbol": "BAX",
+      "name": "Baxter International",
       "sector": "Health Care",
-      "lastPrice": 42.43,
-      "changePct": -5.84
+      "lastPrice": 23.5,
+      "changePct": -7.7
     }
   ],
   "sectorPerformance": [
     {
-      "name": "Information Technology",
-      "avgChangePct": 0.69,
-      "gainers": 42,
-      "losers": 33,
-      "total": 75
-    },
-    {
-      "name": "Health Care",
-      "avgChangePct": 0.48,
-      "gainers": 36,
-      "losers": 24,
-      "total": 60
-    },
-    {
-      "name": "Financials",
-      "avgChangePct": 0.3,
-      "gainers": 45,
-      "losers": 31,
-      "total": 76
-    },
-    {
-      "name": "Industrials",
-      "avgChangePct": 0.04,
-      "gainers": 45,
-      "losers": 38,
-      "total": 83
-    },
-    {
-      "name": "Materials",
-      "avgChangePct": -0.14,
-      "gainers": 12,
-      "losers": 12,
-      "total": 24
-    },
-    {
-      "name": "Energy",
-      "avgChangePct": -0.2,
-      "gainers": 14,
-      "losers": 7,
-      "total": 21
-    },
-    {
       "name": "Consumer Discretionary",
-      "avgChangePct": -0.24,
-      "gainers": 22,
-      "losers": 25,
+      "avgChangePct": 3.21,
+      "gainers": 43,
+      "losers": 4,
       "total": 47
     },
     {
-      "name": "Communication Services",
-      "avgChangePct": -0.54,
-      "gainers": 8,
-      "losers": 14,
-      "total": 22
+      "name": "Real Estate",
+      "avgChangePct": 2.19,
+      "gainers": 29,
+      "losers": 1,
+      "total": 30
     },
     {
-      "name": "Consumer Staples",
-      "avgChangePct": -0.61,
-      "gainers": 8,
-      "losers": 26,
-      "total": 34
+      "name": "Industrials",
+      "avgChangePct": 1.71,
+      "gainers": 72,
+      "losers": 11,
+      "total": 83
+    },
+    {
+      "name": "Financials",
+      "avgChangePct": 1.59,
+      "gainers": 71,
+      "losers": 5,
+      "total": 76
+    },
+    {
+      "name": "Health Care",
+      "avgChangePct": 1.53,
+      "gainers": 55,
+      "losers": 5,
+      "total": 60
     },
     {
       "name": "Utilities",
-      "avgChangePct": -0.64,
-      "gainers": 6,
-      "losers": 25,
+      "avgChangePct": 1.51,
+      "gainers": 30,
+      "losers": 1,
       "total": 31
     },
     {
-      "name": "Real Estate",
-      "avgChangePct": -1.37,
-      "gainers": 9,
-      "losers": 21,
-      "total": 30
+      "name": "Materials",
+      "avgChangePct": 1.31,
+      "gainers": 16,
+      "losers": 8,
+      "total": 24
+    },
+    {
+      "name": "Consumer Staples",
+      "avgChangePct": 1.11,
+      "gainers": 30,
+      "losers": 4,
+      "total": 34
+    },
+    {
+      "name": "Energy",
+      "avgChangePct": 0.07,
+      "gainers": 13,
+      "losers": 8,
+      "total": 21
+    },
+    {
+      "name": "Communication Services",
+      "avgChangePct": 0.0,
+      "gainers": 16,
+      "losers": 6,
+      "total": 22
+    },
+    {
+      "name": "Information Technology",
+      "avgChangePct": -1.15,
+      "gainers": 31,
+      "losers": 44,
+      "total": 75
     }
   ],
-  "marketMood": "neutral",
+  "marketMood": "bullish",
   "stats": {
-    "gainers": 247,
-    "losers": 256,
+    "gainers": 406,
+    "losers": 97,
     "neutral": 0,
     "total": 503
   }
