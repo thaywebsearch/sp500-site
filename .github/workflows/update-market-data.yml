@@ -2,9 +2,10 @@ name: Atualização de Dados de Mercado (S&P 500)
 
 on:
   schedule:
-    # A cada ~48h (dias 1, 3, 5, ... do mês) às 06:00 UTC.
-    # O GitHub Actions não suporta "a cada 48h" nativo; usa-se o dia ímpar.
-    - cron: "0 6 */2 * *"
+    # Diariamente (seg-sex) às 06:00 UTC. Ao contrário do antigo "*/2" (que
+    # saltava fins de semana e podia deixar os dados >48 h), garante um dia
+    # útil consecutivo por execução.
+    - cron: "0 6 * * 1-5"
   workflow_dispatch:
 
 permissions:
@@ -44,6 +45,15 @@ jobs:
 
       - name: Testes (unittest) e verificação de integridade
         run: python -m unittest discover -s tests -v
+
+      - name: Configurar Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+
+      - name: Validar snapshot único (schema + hash + frescor)
+        working-directory: ${{ github.workspace }}/backend
+        run: node scripts/build-snapshot.mjs --check
 
       - name: Verificar mudanças
         id: changes
