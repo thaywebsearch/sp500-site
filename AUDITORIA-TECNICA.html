@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auditoria Técnica — sp500-site</title>
+<style>
+  :root{
+    --ink:#111827; --muted:#4b5563; --line:#e5e7eb; --soft:#f9fafb;
+    --accent:#0f766e; --accent-soft:#ecfdf5; --warn:#b45309; --bad:#b91c1c;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:#eef1f4; color:var(--ink);
+    font:15px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  }
+  .page{max-width:900px;margin:32px auto;background:#fff;padding:64px 72px;
+        box-shadow:0 10px 40px rgba(0,0,0,.08);border-radius:6px}
+  header.cover{border-bottom:3px solid var(--accent);padding-bottom:24px;margin-bottom:36px}
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:34px;line-height:1.15;margin:10px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14px}
+  .meta{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 28px;margin-top:22px;font-size:13px}
+  .meta div{display:flex;justify-content:space-between;border-bottom:1px dotted var(--line);padding:6px 0}
+  .meta span:first-child{color:var(--muted)}
+  h2{font-size:22px;margin:44px 0 12px;padding-top:10px;border-top:1px solid var(--line);letter-spacing:-.01em}
+  h2:first-of-type{border-top:none}
+  h3{font-size:16px;margin:26px 0 10px;color:#1f2937}
+  p{margin:10px 0}
+  ul,ol{margin:10px 0 10px 20px;padding:0}
+  li{margin:4px 0}
+  table{width:100%;border-collapse:collapse;margin:14px 0 18px;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:var(--soft);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em;color:#374151}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  tr:nth-child(even) td{background:#fcfcfd}
+  code{font-family:ui-monospace,Consolas,"Cascadia Code",monospace;font-size:.88em;
+       background:#f3f4f6;padding:1px 5px;border-radius:4px}
+  pre{background:#0f172a;color:#e2e8f0;padding:18px 20px;border-radius:8px;overflow:auto;
+      font:12.5px/1.55 ui-monospace,Consolas,"Cascadia Code",monospace;margin:16px 0}
+  pre code{background:none;padding:0;color:inherit;font-size:inherit}
+  blockquote{margin:16px 0;padding:12px 16px;border-left:4px solid var(--warn);
+             background:#fffbeb;color:#78350f;font-size:13.5px;border-radius:0 6px 6px 0}
+  .callout{background:var(--accent-soft);border:1px solid #a7f3d0;border-radius:8px;padding:16px 18px;margin:18px 0}
+  .callout strong{color:#065f46}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;
+        text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+  .p-high{background:#fee2e2;color:#991b1b}
+  .p-med{background:#fef3c7;color:#92400e}
+  .p-low{background:#e0f2fe;color:#075985}
+  .p-zero{background:#dcfce7;color:#166534}
+  .footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);
+          color:var(--muted);font-size:12px;font-style:italic}
+  .toc{columns:2;column-gap:36px;font-size:13.5px;margin:18px 0 8px}
+  .toc a{color:#0f766e;text-decoration:none;display:block;padding:3px 0}
+  .toc a:hover{text-decoration:underline}
+  @media print{
+    body{background:#fff}
+    .page{box-shadow:none;margin:0;padding:0 6mm;max-width:none;border-radius:0}
+    h2{break-after:avoid} table,pre,blockquote{break-inside:avoid}
+    a{color:inherit;text-decoration:none}
+    @page{margin:16mm 14mm}
+  }
+  @media (max-width:720px){
+    .page{padding:32px 20px;margin:0;border-radius:0}
+    h1{font-size:26px}
+    .meta,.toc{grid-template-columns:1fr;columns:1}
+    table{font-size:12px}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="cover">
+  <div class="eyebrow">Auditoria Técnica · Somente Leitura</div>
+  <h1>sp500-site</h1>
+  <p class="sub">Como os dados financeiros são obtidos, armazenados e atualizados — arquitetura, riscos, custos e recomendações.</p>
+  <div class="meta">
+    <div><span>Projeto</span><strong>sp500-site</strong></div>
+    <div><span>Data</span><strong>31/10/2026</strong></div>
+    <div><span>Escopo</span><strong>Repositório + API em produção</strong></div>
+    <div><span>Alterações</span><strong>Nenhuma</strong></div>
+  </div>
+</header>
+
+<nav class="toc">
+  <a href="#resumo">1. Resumo executivo</a>
+  <a href="#arquitetura">2. Arquitetura atual</a>
+  <a href="#dados">3. Inventário de dados</a>
+  <a href="#abas">4. Mapa aba → fonte</a>
+  <a href="#deps">5. Dependências externas</a>
+  <a href="#pipelines">6. Pipelines e backend</a>
+  <a href="#custos">7. Custos atuais</a>
+  <a href="#riscos">8. Riscos</a>
+  <a href="#comparacao">9. FMP + Netlify Functions</a>
+  <a href="#recomendacoes">10. Recomendações</a>
+  <a href="#conclusao">11. Conclusão</a>
+</nav>
+
+<h2 id="resumo">1. Resumo executivo</h2>
+<p>O sistema é um dashboard estático (Vite / JavaScript puro) servido pela Netlify, alimentado por uma API Express no Render (free tier), cujos dados são arquivos JSON commitados no próprio repositório por GitHub Actions.</p>
+<p>A única fonte de dados de mercado ao vivo é o <strong>Yahoo Finance</strong>, acessado por endpoints não oficiais (<code>yfinance</code> + <code>query1.finance.yahoo.com</code> com cookie/crumb). Não há provedor pago, banco de dados, cache HTTP ou persistência externa: <strong>o Git é o banco de dados</strong>.</p>
+
+<div class="callout">
+  <strong>Veredito:</strong> funciona e custa <strong>US$ 0 em dinheiro</strong>, mas é frágil em quatro eixos simultâneos — confiabilidade, performance, conformidade e frescor.
+</div>
+
+<table>
+  <thead><tr><th>Eixo</th><th>Situação</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Confiabilidade</strong></td><td>API dorme após 15 min (cold start 30–60 s); cada commit do bot reinicia o serviço (<code>autoDeploy: true</code>)</td></tr>
+    <tr><td><strong>Performance</strong></td><td>13 requisições no load inicial, ~39 numa navegação completa; sem <code>Cache-Control</code>; CDN em <code>DYNAMIC</code></td></tr>
+    <tr><td><strong>Conformidade</strong></td><td>Yahoo ToS proíbe uso comercial/coleta automatizada; sem licença de exibição para S&amp;P 500, GICS, Dow e Nasdaq-100</td></tr>
+    <tr><td><strong>Frescor</strong></td><td><code>daily-summary</code> com <code>referenceDate</code> um dia atrás; cron <code>*/2</code> não significa "a cada 48 h"</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Custo real:</strong> ~US$ 0/mês em caixa, com passivo jurídico não precificado e dívida operacional crescente.</p>
+<p><strong>Caminho recomendado:</strong> quick wins de cache/segurança/duplicação (uma tarde) → consolidação em snapshot único (1–2 semanas) → migração para FMP + Netlify Functions com Blobs (2–4 semanas).</p>
+
+<h2 id="arquitetura">2. Arquitetura atual</h2>
+<pre><code>┌─────────────────────────── FONTES EXTERNAS ────────────────────────────┐
+│  GitHub: datasets/s-and-p-500-companies (CSV, PDDL-1.0)                 │
+│  Yahoo Finance (endpoints NÃO oficiais)                                 │
+│    • /v8/finance/chart          (séries de preço)                       │
+│    • /v10/finance/quoteSummary  (cookie + crumb)                        │
+│    • yfinance &gt;= 0.2.55                                                 │
+└───────────────┬──────────────────────────────────┬──────────────────────┘
+                │ GitHub Actions (cron)            │ HTTPS não oficial
+                ▼                                  ▼
+   ┌────────────────────────────┐      ┌───────────────────────────────┐
+   │ update_sectors.py          │      │ update_live_data.py           │
+   │ update_sp500_table.py      │      │ update_daily_summary.py       │
+   │ (JSON + README + TOP50)    │      │ (marketCap, dividendYield,    │
+   └────────────┬───────────────┘      │  daily-summary.json)          │
+                │                      └──────────────┬────────────────┘
+                ▼                                     ▼
+   ┌──────────────────────────────────────────────────────────────────┐
+   │  frontend/&lt;setor&gt;/&lt;setor&gt;.json   ← CANÔNICO (fonte da verdade)   │
+   │  backend/data/*.json             ← espelho (sync-data.mjs)        │
+   │  backend/data/daily-summary.json                                 │
+   └────────────┬─────────────────────────────────────────────────────┘
+                │ git commit + push (bot)
+                ▼
+   ┌────────────────────────────┐        ┌──────────────────────────────┐
+   │ Render (autoDeploy: true)  │        │ Netlify                      │
+   │ Express server.js          │◄───────│ publica frontend/dashboard   │
+   │ • cache em memória (mtime) │  HTTPS │ SPA consome VITE_API_URL     │
+   │ • rate limit 300/15min     │        │ (fallback p/ Render)         │
+   │ • /api/historico → Yahoo   │        └──────────────────────────────┘
+   └────────────────────────────┘</code></pre>
+
+<h3>Observações estruturais</h3>
+<ul>
+  <li>O <code>prestart</code> (<code>backend/scripts/sync-data.mjs</code>) copia <code>frontend/</code> → <code>backend/data</code>. Se o canônico não existir, preserva a versão versionada. Há <strong>duas cópias do mesmo dado</strong>, hoje idênticas byte a byte, mas sem verificação em runtime.</li>
+  <li>Não existe etapa de build de dados: o dashboard lê JSON cru em runtime, não um snapshot com hash/versão.</li>
+  <li>Não há banco, fila, cache distribuído ou storage de objetos. Persistência = commits.</li>
+  <li><code>netlify.toml</code> (raiz) publica <code>frontend/docs</code>, enquanto <code>.netlify/netlify.toml</code> aponta para <code>frontend/dashboard/docs</code> — <strong>duas configurações conflitantes</strong>. <code>frontend/docs/sector-weights.html</code> referencia <code>../&lt;setor&gt;/&lt;setor&gt;.json</code>, provável 404 quando apenas <code>docs/</code> é publicado.</li>
+</ul>
+
+<h2 id="dados">3. Inventário de dados</h2>
+<h3>3.1 Setores (canônico + espelho)</h3>
+<p>11 arquivos GICS, <strong>503 empresas</strong>, <strong>207.734 bytes</strong> no total (≈ 203 KB):</p>
+<table>
+  <thead><tr><th>Setor</th><th class="num">Bytes</th></tr></thead>
+  <tbody>
+    <tr><td>information-technology</td><td class="num">31.398</td></tr>
+    <tr><td>industrials</td><td class="num">34.221</td></tr>
+    <tr><td>financials</td><td class="num">31.143</td></tr>
+    <tr><td>health-care</td><td class="num">24.341</td></tr>
+    <tr><td>consumer-discretionary</td><td class="num">19.564</td></tr>
+    <tr><td>consumer-staples</td><td class="num">14.172</td></tr>
+    <tr><td>utilities</td><td class="num">12.461</td></tr>
+    <tr><td>real-estate</td><td class="num">12.229</td></tr>
+    <tr><td>materials</td><td class="num">9.950</td></tr>
+    <tr><td>communication-services</td><td class="num">9.548</td></tr>
+    <tr><td>energy</td><td class="num">8.707</td></tr>
+    <tr><td><strong>Total</strong></td><td class="num"><strong>207.734</strong></td></tr>
+  </tbody>
+</table>
+<p>Cada arquivo contém identidade, classificação setorial e métricas derivadas (<code>marketCap</code>, <code>dividendYield</code>, pesos). <code>backend/data/</code> mantém cópias idênticas.</p>
+
+<h3>3.2 Outros conjuntos</h3>
+<table>
+  <thead><tr><th>Arquivo</th><th>Conteúdo</th><th>Atualização</th></tr></thead>
+  <tbody>
+    <tr><td><code>backend/data/daily-summary.json</code></td><td>Resumo diário (gerado 31/10/2026 00:58 UTC, <code>referenceDate</code> 29/10)</td><td>Dias úteis 21:30 UTC</td></tr>
+    <tr><td><code>frontend/src/data/curiosidades.json</code></td><td>Curiosidades (617 B)</td><td>Manual/estático</td></tr>
+    <tr><td><code>frontend/dashboard/src/{dow-jones,dividend-kings,dividend-aristocrats,nasdaq-100}.js</code></td><td>Arrays hardcoded no bundle</td><td>Manual</td></tr>
+    <tr><td><code>frontend/docs/*</code></td><td>Páginas estáticas auxiliares</td><td>Manual</td></tr>
+  </tbody>
+</table>
+
+<h3>3.3 Qualidade dos dados estáticos</h3>
+<table>
+  <thead><tr><th>Conjunto</th><th class="num">Registros</th><th>Campos</th><th>Lacuna</th></tr></thead>
+  <tbody>
+    <tr><td>Dow Jones</td><td class="num">30</td><td><code>company, ticker, sector</code></td><td>Sem peso, preço ou variação</td></tr>
+    <tr><td>Dividend Kings</td><td class="num">38</td><td>identidade, setor, anos</td><td>Sem métricas financeiras</td></tr>
+    <tr><td>Dividend Aristocrats</td><td class="num">71</td><td>identidade, setor, anos</td><td>Sem métricas financeiras</td></tr>
+    <tr><td>Nasdaq-100</td><td class="num">100</td><td><code>rank, ticker, company, sector, weight, cap, category, cumulative, concentration</code></td><td><strong>Congelado</strong> — pesos e ranks não são recalculados</td></tr>
+  </tbody>
+</table>
+<p>Por estarem compilados no bundle, não têm <code>updatedAt</code>, não passam por teste de integridade e só mudam com rebuild do frontend.</p>
+
+<h2 id="abas">4. Mapa aba → fonte de dados</h2>
+<table>
+  <thead><tr><th>Aba / componente</th><th>Fonte</th><th class="num">Chamadas</th><th>Cache</th><th>Risco</th></tr></thead>
+  <tbody>
+    <tr><td>Visão geral / cards</td><td><code>/api/setores</code></td><td class="num">1</td><td>Nenhum header</td><td>—</td></tr>
+    <tr><td>S&amp;P 500 (tabela)</td><td>11× <code>/api/setor/&lt;setor&gt;</code></td><td class="num">11</td><td>Nenhum</td><td>12 chamadas só na home</td></tr>
+    <tr><td>Resumo do dia</td><td><code>/api/resumo-dia</code></td><td class="num">1</td><td>Nenhum</td><td>Dado com 1 dia de atraso</td></tr>
+    <tr><td>Curiosidades</td><td><code>/api/curiosidades</code></td><td class="num">0–1</td><td>Nenhum</td><td>Estático</td></tr>
+    <tr><td>Treemap</td><td>11× setor (<strong>repetido</strong>)</td><td class="num">11</td><td>Nenhum</td><td>Duplica o fetch da home</td></tr>
+    <tr><td>Heatmap</td><td>11× setor (<strong>repetido, sequencial</strong>)</td><td class="num">11</td><td>Nenhum</td><td>Duplica + waterfall</td></tr>
+    <tr><td>Sector Intelligence</td><td><code>/api/setores</code> + fallback 11 setores</td><td class="num">1 (ou 12)</td><td>Nenhum</td><td>Fallback caro</td></tr>
+    <tr><td>Histórico / gráfico</td><td><code>/api/historico?symbol=…</code></td><td class="num">sob demanda</td><td><strong>Nenhum</strong></td><td>Sem timeout/retry</td></tr>
+    <tr><td>Dow Jones</td><td>array no bundle</td><td class="num">0</td><td>Bundle</td><td>Estático</td></tr>
+    <tr><td>Dividend Kings</td><td>array no bundle</td><td class="num">0</td><td>Bundle</td><td>Estático</td></tr>
+    <tr><td>Dividend Aristocrats</td><td>array no bundle</td><td class="num">0</td><td>Bundle</td><td>Estático</td></tr>
+    <tr><td>Nasdaq-100</td><td>array no bundle</td><td class="num">0</td><td>Bundle</td><td>Congelado</td></tr>
+    <tr><td>Alertas de preço</td><td><code>/api/historico</code> por alerta, a cada 60 s</td><td class="num">1/alerta/min</td><td>Nenhum</td><td>Ver §6.3</td></tr>
+  </tbody>
+</table>
+<p><strong>Contagem:</strong> load inicial = <strong>13</strong>; tour completo ≈ <strong>39</strong>; desses, <strong>33 são o mesmo payload de setor</strong> (11 × 3 consumidores).</p>
+
+<h2 id="deps">5. Dependências externas</h2>
+<table>
+  <thead><tr><th>Dependência</th><th>Uso</th><th>Criticidade</th><th>Observação</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Yahoo Finance</strong> (não oficial)</td><td>Preços, histórico, market cap, yield</td><td><span class="pill p-high">Crítica</span></td><td>Sem SLA nem contrato; ToS restritivo; quebra sem aviso</td></tr>
+    <tr><td><code>yfinance &gt;= 0.2.55</code></td><td>Coleta em lote (4 workers)</td><td><span class="pill p-high">Crítica</span></td><td>Depende de scraping; muda com frequência</td></tr>
+    <tr><td><code>yahoo_quotes.py</code> (cookie + crumb)</td><td>Fallback de cotação</td><td><span class="pill p-med">Alta</span></td><td>Mais frágil que o <code>yfinance</code></td></tr>
+    <tr><td>GitHub <code>datasets/s-and-p-500-companies</code></td><td>Constituintes e setores</td><td><span class="pill p-med">Média</span></td><td>PDDL-1.0, estável</td></tr>
+    <tr><td><strong>Render</strong> (free)</td><td>Hospedagem da API</td><td><span class="pill p-high">Crítica</span></td><td>Sleep 15 min; cold start 30–60 s</td></tr>
+    <tr><td><strong>Netlify</strong> (free)</td><td>Hospedagem do SPA</td><td><span class="pill p-high">Crítica</span></td><td>Limites de build/banda</td></tr>
+    <tr><td><strong>GitHub Actions</strong></td><td>Agendamento e persistência</td><td><span class="pill p-high">Crítica</span></td><td>Repo público = gratuito</td></tr>
+    <tr><td>CDNs de UI / fontes</td><td>Assets</td><td><span class="pill p-low">Baixa</span></td><td>—</td></tr>
+  </tbody>
+</table>
+<p><strong>Não existe:</strong> FMP, Alpha Vantage, Polygon, Tiingo, Finnhub, IEX, banco de dados, Redis, Sentry ou analytics de erro.</p>
+
+<h2 id="pipelines">6. Pipelines, agendamentos e backend</h2>
+<h3>6.1 Workflows</h3>
+<table>
+  <thead><tr><th>Workflow</th><th>Cron</th><th>Função</th><th>Commite?</th></tr></thead>
+  <tbody>
+    <tr><td><code>update-sectors.yml</code></td><td><code>0 6 * * 1</code></td><td>Regenera 11 JSONs + README + TOP50</td><td>Sim</td></tr>
+    <tr><td><code>update-market-data.yml</code></td><td><code>0 6 */2 * *</code></td><td>marketCap + dividendYield, 503 tickers, 4 workers</td><td>Sim</td></tr>
+    <tr><td><code>update-daily-summary.yml</code></td><td><code>30 21 * * 1-5</code></td><td><code>/v8/chart</code> 5d/1d, grava <code>daily-summary.json</code></td><td>Sim</td></tr>
+    <tr><td><code>update-sp500-table.yml</code></td><td><code>0 0 * * 1</code></td><td>Lista/tabela de constituintes</td><td>Sim</td></tr>
+    <tr><td><code>deploy-dashboard.yml</code></td><td><code>0 7 * * 1</code> + push</td><td>Rebuild/deploy Netlify</td><td>Não</td></tr>
+    <tr><td><code>tests.yml</code></td><td>em <code>paths</code></td><td><code>test_data_integrity.py</code></td><td>Não</td></tr>
+  </tbody>
+</table>
+
+<h3>6.2 Problemas nos agendamentos</h3>
+<ol>
+  <li><strong><code>0 6 */2 * *</code> não é "a cada 48 h".</strong> O cron reinicia no dia 1; em meses de 31 dias há intervalo de 24 h, em fevereiro até 72 h.</li>
+  <li><strong>Defasagem do resumo diário.</strong> Agendado para 21:30 UTC, mas gerado às 00:58 UTC (~3,5 h de atraso), com <code>referenceDate</code> um pregão atrás.</li>
+  <li><strong>Cada commit do bot dispara <code>autoDeploy</code></strong> no Render, reiniciando a API — inclusive em horário de pico.</li>
+  <li><strong>Acoplamento Git↔dados:</strong> force-push, rebase ou conflito quebra a ingestão silenciosamente, sem alerta.</li>
+  <li><strong>Deploy semanal ≠ dados semanais:</strong> rebuild só às segundas 07:00 ou em push no dashboard.</li>
+</ol>
+
+<h3>6.3 Backend (Express / Render)</h3>
+<table>
+  <thead><tr><th>Rota</th><th>Função</th></tr></thead>
+  <tbody>
+    <tr><td><code>GET /api/setores</code></td><td>Lista de setores + metadados</td></tr>
+    <tr><td><code>GET /api/setor/:setor</code></td><td>JSON do setor</td></tr>
+    <tr><td><code>GET /api/resumo-dia</code></td><td><code>daily-summary.json</code></td></tr>
+    <tr><td><code>GET /api/curiosidades</code></td><td>Curiosidades</td></tr>
+    <tr><td><code>GET /api/historico?symbol=</code></td><td>Proxy Yahoo (séries)</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Cache e HTTP</strong></p>
+<ul>
+  <li>Cache em memória por <code>mtime</code> + <code>size</code>: evita releitura de disco, não evita transferência nem latência de rede.</li>
+  <li><strong>Nenhum <code>Cache-Control</code></strong> → navegador e CDN não reutilizam nada.</li>
+  <li>ETags fracos (<code>W/</code>) presentes, inúteis sem <code>Cache-Control</code>.</li>
+  <li><code>cf-cache-status: DYNAMIC</code> → Cloudflare não cacheia; todo request chega ao Render.</li>
+  <li><code>/api/historico</code> sem cache algum.</li>
+</ul>
+
+<p><strong>Alertas de preço (bug crítico)</strong></p>
+<ul>
+  <li>Polling a cada 60 s, 1 request de 2 anos de histórico por alerta, sequencial.</li>
+  <li>5 alertas → <strong>75 req/15 min</strong>, acima do limite de <strong>60/15 min</strong> → 429 garantido.</li>
+  <li><code>startPriceAlertPolling()</code> retorna cedo quando não há alertas no boot: alertas criados depois <strong>nunca são pollados</strong> até reload.</li>
+  <li>Para checar preço atual, busca-se 2 anos de série — custo desnecessário.</li>
+</ul>
+
+<p><strong>Rate limiting</strong></p>
+<table>
+  <thead><tr><th>Escopo</th><th>Limite</th></tr></thead>
+  <tbody>
+    <tr><td>Global</td><td>300 req / 15 min / IP</td></tr>
+    <tr><td><code>/api/historico</code></td><td>60 req / 15 min / IP</td></tr>
+  </tbody>
+</table>
+<p>Um load inicial (13) + tour (39) consome ~17% da cota global; F5 e troca de abas esgotam rápido. Usuários atrás de NAT compartilham o limite.</p>
+
+<p><strong>Segurança</strong></p>
+<ul>
+  <li><strong>Path traversal / information disclosure:</strong> <code>/api/setor/:setor</code> interpola entrada do usuário em <code>path.join</code> <strong>sem allowlist</strong> — entradas com <code>..</code> escapam do diretório de dados.</li>
+  <li><strong>Sem timeout/retry</strong> em chamadas externas: um hang do Yahoo prende a request.</li>
+  <li><strong>CORS</strong> restrito, mas com URL de produção hardcoded como fallback em <code>VITE_API_URL</code>.</li>
+  <li><strong>Sem autenticação</strong> em nenhuma rota (aceitável para dados públicos, mas <code>/api/historico</code> é amplificador de scraping).</li>
+  <li><code>express.json()</code> habilitado num serviço somente GET (superfície desnecessária).</li>
+</ul>
+
+<h3>6.4 Frontend</h3>
+<ul>
+  <li><code>main.js</code> concentra load inicial e dispatch de abas; <code>heatmap.js</code>, <code>treemap.js</code> e <code>sector-intelligence.js</code> refazem o fetch dos 11 setores.</li>
+  <li>Heatmap é sequencial (11 awaits em cadeia) → waterfall perceptível.</li>
+  <li><code>api.js</code> expõe helpers não usados em produção (código morto).</li>
+  <li>Sem <code>AbortController</code>, retry, estado de erro global ou skeleton consistente.</li>
+</ul>
+
+<h2 id="custos">7. Custos atuais</h2>
+<table>
+  <thead><tr><th>Item</th><th>Plano</th><th class="num">Custo/mês</th><th>Limite relevante</th></tr></thead>
+  <tbody>
+    <tr><td>Render</td><td>Free</td><td class="num"><strong>US$ 0</strong></td><td>Sleep 15 min; cold start 30–60 s</td></tr>
+    <tr><td>Netlify</td><td>Free</td><td class="num"><strong>US$ 0</strong></td><td>100 GB banda, 300 min build</td></tr>
+    <tr><td>GitHub Actions</td><td>Repo público</td><td class="num"><strong>US$ 0</strong></td><td>Ilimitado no padrão</td></tr>
+    <tr><td>Yahoo Finance</td><td>"Grátis"</td><td class="num"><strong>US$ 0</strong></td><td><strong>Sem contrato; uso não autorizado</strong></td></tr>
+    <tr><td><strong>Total em caixa</strong></td><td></td><td class="num"><strong>≈ US$ 0</strong></td><td></td></tr>
+  </tbody>
+</table>
+
+<p><strong>Custo oculto</strong></p>
+<ul>
+  <li><strong>US$ 7/mês</strong> para eliminar cold start (Render pago).</li>
+  <li><strong>US$ 9–20/mês</strong> se a Netlify sair do Free (modelo de créditos 2026: 300 / 1.000 / 3.000).</li>
+  <li><strong>Passivo jurídico</strong> por dados Yahoo + marcas indexadas — não quantificável.</li>
+  <li><strong>Tempo de engenharia:</strong> cada quebra do Yahoo exige patch manual sem observabilidade.</li>
+</ul>
+
+<h2 id="riscos">8. Riscos</h2>
+<h3>8.1 Técnicos</h3>
+<table>
+  <thead><tr><th>#</th><th>Risco</th><th>Sev.</th><th>Prob.</th><th>Impacto</th></tr></thead>
+  <tbody>
+    <tr><td>T1</td><td>Yahoo bloqueia/altera endpoint; dados param sem alerta</td><td><span class="pill p-high">Alta</span></td><td>Alta</td><td>Dashboard congela silenciosamente</td></tr>
+    <tr><td>T2</td><td>Path traversal em <code>/api/setor/:setor</code></td><td><span class="pill p-high">Alta</span></td><td>Média</td><td>Vazamento de arquivos</td></tr>
+    <tr><td>T3</td><td>429 nos alertas (75 &gt; 60 req/15 min)</td><td><span class="pill p-med">Média</span></td><td><strong>Certa</strong></td><td>Alertas param de funcionar</td></tr>
+    <tr><td>T4</td><td>Cold start + restart a cada commit do bot</td><td><span class="pill p-med">Média</span></td><td>Alta</td><td>UX ruim, timeouts</td></tr>
+    <tr><td>T5</td><td>Sem <code>Cache-Control</code>; todo tráfego no Render</td><td><span class="pill p-med">Média</span></td><td><strong>Certa</strong></td><td>Custo, latência, rate limit</td></tr>
+    <tr><td>T6</td><td><code>referenceDate</code> defasado no resumo</td><td><span class="pill p-med">Média</span></td><td>Alta</td><td>Informação incorreta</td></tr>
+    <tr><td>T7</td><td>Cron <code>*/2</code> com deriva em virada de mês</td><td><span class="pill p-low">Baixa</span></td><td>Certa</td><td>Frescor irregular</td></tr>
+    <tr><td>T8</td><td>Configs Netlify conflitantes; <code>sector-weights.html</code> 404</td><td><span class="pill p-med">Média</span></td><td>Alta</td><td>Deploy publica árvore errada</td></tr>
+    <tr><td>T9</td><td>Sem timeout/retry em outbound</td><td><span class="pill p-med">Média</span></td><td>Média</td><td>Requests penduradas</td></tr>
+    <tr><td>T10</td><td>Dados estáticos congelados no bundle</td><td><span class="pill p-low">Baixa</span></td><td>Certa</td><td>Pesos/ranks desatualizados</td></tr>
+    <tr><td>T11</td><td>Sem observabilidade</td><td><span class="pill p-high">Alta</span></td><td>Certa</td><td>Falhas descobertas pelo usuário</td></tr>
+    <tr><td>T12</td><td>Canônico/espelho sem verificação em runtime</td><td><span class="pill p-low">Baixa</span></td><td>Baixa</td><td>Divergência silenciosa</td></tr>
+  </tbody>
+</table>
+
+<h3>8.2 Licenciamento e conformidade</h3>
+<table>
+  <thead><tr><th>#</th><th>Risco</th><th>Detalhe</th></tr></thead>
+  <tbody>
+    <tr><td>L1</td><td><strong>Yahoo ToS</strong></td><td>Proíbe coleta automatizada e reuso comercial; não há API oficial contratada</td></tr>
+    <tr><td>L2</td><td><strong>S&amp;P 500 / GICS</strong></td><td>Marcas da S&amp;P Dow Jones Indices; exibição pública exige licença</td></tr>
+    <tr><td>L3</td><td><strong>Dow Jones / Nasdaq-100</strong></td><td>Uso de pesos e composição não é coberto por uso nominativo</td></tr>
+    <tr><td>L4</td><td><strong>"Dividend Aristocrats/Kings"</strong></td><td>Marcas registradas; a lista pode ser conteúdo proprietário</td></tr>
+    <tr><td>L5</td><td><strong>FMP</strong></td><td>Exibição pública exige Data Display and Licensing Agreement — o preço da API não inclui redistribuição</td></tr>
+    <tr><td>L6</td><td><strong>Constituintes</strong></td><td>Base PDDL-1.0 é ok, mas o enriquecimento com Yahoo contamina a licença do conjunto</td></tr>
+    <tr><td>L7</td><td><strong>Sem disclaimers</strong></td><td>Falta aviso de "não é recomendação", "dados não oficiais" e "marcas de terceiros"</td></tr>
+  </tbody>
+</table>
+
+<h2 id="comparacao">9. Comparação: atual vs. FMP + Netlify Functions</h2>
+<table>
+  <thead><tr><th>Critério</th><th>Atual (Yahoo + Render + Git)</th><th>Proposta (FMP + Functions + Blobs)</th></tr></thead>
+  <tbody>
+    <tr><td>Fonte</td><td>Yahoo não oficial</td><td>FMP contratado</td></tr>
+    <tr><td>Coleta</td><td>503 requisições individuais</td><td><strong>1–poucas chamadas em batch</strong></td></tr>
+    <tr><td>Frequência</td><td>Cron GitHub (48 h nominal)</td><td>Function agendada (15 min / 1 h)</td></tr>
+    <tr><td>Persistência</td><td>Commits no Git</td><td><strong>Netlify Blobs</strong> (snapshot versionado)</td></tr>
+    <tr><td>Leitura</td><td>Express no Render (sleep)</td><td>Function HTTP + <strong>CDN</strong></td></tr>
+    <tr><td>Cache</td><td>Nenhum</td><td><code>Cache-Control</code> + <code>ETag</code> + <code>stale-while-revalidate</code></td></tr>
+    <tr><td>Cold start</td><td>30–60 s</td><td>~0 (edge)</td></tr>
+    <tr><td>Load inicial</td><td>13 requests</td><td><strong>1–2</strong></td></tr>
+    <tr><td>Conformidade</td><td>Frágil</td><td>Depende de contrato de exibição</td></tr>
+    <tr><td>Custo</td><td>US$ 0 (+ passivo)</td><td>US$ 19–49 + US$ 0–9</td></tr>
+    <tr><td>Observabilidade</td><td>Nenhuma</td><td>Logs + alarme de frescor</td></tr>
+    <tr><td>Manutenção</td><td>Patch manual quando Yahoo quebra</td><td>Estável sob contrato</td></tr>
+  </tbody>
+</table>
+
+<h3>9.1 Preços FMP (consultados em 31/10/2026)</h3>
+<table>
+  <thead><tr><th>Plano</th><th class="num">Anual</th><th class="num">Mensal</th><th class="num">Calls/min</th><th>Cobertura</th><th>Histórico</th></tr></thead>
+  <tbody>
+    <tr><td>Basic</td><td class="num">US$ 0</td><td class="num">US$ 0</td><td class="num">—</td><td>250 calls/<strong>dia</strong></td><td>Limitado</td></tr>
+    <tr><td><strong>Starter</strong></td><td class="num"><strong>US$ 19</strong></td><td class="num">US$ 29</td><td class="num">300</td><td>EUA</td><td>5 anos</td></tr>
+    <tr><td><strong>Premium</strong></td><td class="num"><strong>US$ 49</strong></td><td class="num">US$ 69</td><td class="num">750</td><td>Global</td><td>30 anos + intraday</td></tr>
+    <tr><td>Ultimate</td><td class="num">US$ 99</td><td class="num">US$ 139</td><td class="num">—</td><td>Global</td><td>Completo</td></tr>
+  </tbody>
+</table>
+<blockquote><strong>Atenção:</strong> o endpoint de batch quote é descrito como recurso premium/pago. No Starter, validar se o multi-símbolo atende 503 tickers por chamada ou se será necessário fatiar.</blockquote>
+
+<h3>9.2 Limites Netlify Functions (2026)</h3>
+<table>
+  <thead><tr><th>Tipo</th><th class="num">Timeout</th><th class="num">Payload</th></tr></thead>
+  <tbody>
+    <tr><td>Síncrona (HTTP)</td><td class="num">60 s</td><td class="num">6 MB</td></tr>
+    <tr><td>Agendada</td><td class="num">30 s</td><td class="num">—</td></tr>
+    <tr><td>Background</td><td class="num">15 min</td><td class="num">—</td></tr>
+  </tbody>
+</table>
+<ul>
+  <li>Function agendada exige deploy publicado.</li>
+  <li>Functions não persistem arquivos: é obrigatório usar <strong>Blobs</strong>, Netlify DB ou snapshots em build.</li>
+  <li>207 KB cabe folgado em qualquer modo.</li>
+</ul>
+
+<h3>9.3 Desenho proposto</h3>
+<pre><code>FMP (batch quotes + profiles + ratios TTM)
+        │  1–N chamadas/dia (background function, 15 min de folga)
+        ▼
+Netlify Background Function  ──►  Netlify Blobs (snapshot.json + versão)
+                                        │
+                                        ▼
+                              Netlify Function HTTP (GET /api/snapshot)
+                                        │  Cache-Control: public, max-age=300,
+                                        │  stale-while-revalidate=86400
+                                        ▼
+                                     CDN Netlify
+                                        │
+                                        ▼
+                                   Dashboard (1 fetch)</code></pre>
+<p>Ganhos: elimina 503 loops, elimina cold start, elimina commits de dados, reduz load inicial de 13 → 1 e torna o frescor auditável.</p>
+
+<h2 id="recomendacoes">10. Recomendações priorizadas</h2>
+<h3>Fase 0 — Quick wins (1–3 dias)</h3>
+<table>
+  <thead><tr><th>#</th><th>Ação</th><th>Impacto</th><th>Esforço</th></tr></thead>
+  <tbody>
+    <tr><td>Q1</td><td><code>Cache-Control</code> + ETag fortes (<code>public, max-age=300, stale-while-revalidate=86400</code>)</td><td>Mata T5; habilita CDN</td><td>Baixo</td></tr>
+    <tr><td>Q2</td><td>Allowlist de setores em <code>/api/setor/:setor</code></td><td>Fecha T2</td><td>Baixo</td></tr>
+    <tr><td>Q3</td><td>Store único de setores no frontend (promise compartilhada)</td><td>39 → ~15 requests</td><td>Baixo</td></tr>
+    <tr><td>Q4</td><td>Corrigir alertas: polling na criação, cotação atual, 5 min, batch</td><td>Fecha T3 e o bug de "não polla"</td><td>Baixo/Médio</td></tr>
+    <tr><td>Q5</td><td>Timeout + retry com backoff; servir último snapshot bom</td><td>T9 + degradação graciosa</td><td>Baixo</td></tr>
+    <tr><td>Q6</td><td>Unificar config Netlify e corrigir caminho de <code>sector-weights.html</code></td><td>T8</td><td>Baixo</td></tr>
+    <tr><td>Q7</td><td>Disclaimers (não é recomendação, dados não oficiais, marcas)</td><td>L7</td><td>Baixo</td></tr>
+    <tr><td>Q8</td><td>Desligar <code>autoDeploy</code> para commits de dados</td><td>T4</td><td>Baixo</td></tr>
+    <tr><td>Q9</td><td>Expor frescor na UI (<code>generatedAt</code>, <code>referenceDate</code>, badge "atrasado")</td><td>T6/T11</td><td>Baixo</td></tr>
+    <tr><td>Q10</td><td>Alerta de falha de workflow (issue/e-mail)</td><td>T1/T11</td><td>Baixo</td></tr>
+  </tbody>
+</table>
+
+<h3>Fase 1 — Consolidação (1–2 semanas)</h3>
+<ul>
+  <li><strong>Snapshot único</strong> gerado em CI com setores + resumo + metadados + hash, servido com URL versionada → load inicial de 1 request e cache imutável.</li>
+  <li><strong>Migrar dados estáticos para JSON gerado</strong> (Dow, Kings, Aristocrats, Nasdaq-100) com <code>updatedAt</code> e validação por schema.</li>
+  <li><strong>Schema + validação no CI</strong>, incluindo o guard de yield (<code>MAX_YIELD_PERCENT = 25.0</code>) e checagem de frescor (<code>referenceDate</code> ≤ 2 dias úteis).</li>
+  <li><strong>Remover código morto</strong> em <code>api.js</code> e <code>express.json()</code>.</li>
+  <li><strong>Corrigir cron</strong> de mercado para execução diária em dia útil.</li>
+</ul>
+
+<h3>Fase 2 — Arquitetura (2–4 semanas)</h3>
+<ul>
+  <li><strong>Contratar FMP</strong> (Starter para validar; Premium se precisar de histórico longo/intraday) <strong>e</strong> negociar a licença de exibição.</li>
+  <li><strong>Migrar ingestão para Netlify Background Function + Blobs</strong>; aposentar commits de dados e o Render.</li>
+  <li><strong>Function HTTP com cache CDN</strong> como única porta de leitura.</li>
+  <li><strong>Substituir o proxy <code>/api/historico</code></strong> por chamadas cacheadas ou histórico pré-materializado no snapshot.</li>
+  <li><strong>Observabilidade:</strong> logs estruturados, alarme de frescor &gt; 24 h, métrica de erro por endpoint.</li>
+</ul>
+
+<h3>O que não fazer</h3>
+<ul>
+  <li>Trocar Yahoo por outro scraping gratuito (Alpha Vantage free, Stooq): resolve o sintoma, não o risco legal.</li>
+  <li>Colocar Redis/banco relacional para 200 KB de JSON: Blobs/arquivo versionado basta.</li>
+  <li>Aumentar o rate limit para "resolver" os alertas: o problema é o padrão de polling.</li>
+</ul>
+
+<h2 id="conclusao">11. Conclusão</h2>
+<p>O projeto é um protótipo bem organizado com ambição de produto: pipeline claro, testes de integridade, separação canônico/espelho e UI consistente. O que o impede de ser produção não é código — é a ausência de uma fonte licenciada, de cache HTTP e de observabilidade.</p>
+<p>Sequência de melhor retorno:</p>
+<ol>
+  <li><strong>Q1 + Q2 + Q3 + Q4</strong> — uma tarde de trabalho resolve cache, segurança, duplicação e alertas.</li>
+  <li><strong>Fase 1</strong> — transforma o carregamento em 1 request e torna o frescor auditável.</li>
+  <li><strong>Fase 2</strong> — única etapa que resolve o risco jurídico e o acoplamento Yahoo/Git.</li>
+</ol>
+<p>Enquanto a Fase 2 não acontece, o sistema continua funcionando a US$ 0/mês — mas com uma data de validade que ninguém controla.</p>
+
+<div class="footer">
+  Auditoria somente-leitura. Nenhum arquivo do repositório foi modificado durante a investigação; <code>git status</code> permaneceu com apenas o <code>frontend/dashboard/agent.md</code> não rastreado pré-existente. O clone local está atrás do remoto (dados ao vivo mais recentes que o HEAD).
+</div>
+
+</div>
+</body>
+</html>
