@@ -1,5 +1,5 @@
 // ========== RESUMO DO DIA ==========
-import { API_BASE_URL } from './config.js';
+import { getResumoDia } from './sector-store.js';
 import { escapeHtml } from './utils.js';
 
 const MARKET_MOOD = {
@@ -15,10 +15,10 @@ export async function loadDailySummary(containerId = 'daily-summary') {
   container.innerHTML = '<p class="summary-empty">Carregando resumo do dia...</p>';
 
   try {
-    const response = await fetch(`${API_BASE_URL}/api/resumo-dia`);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const payload = await response.json();
-    renderDailySummary(container, payload.dados || {});
+    // O resumo vem do snapshot já carregado pelo dashboard (sem pedido extra)
+    // e recorre a /api/resumo-dia quando o snapshot não está disponível.
+    const dados = await getResumoDia();
+    renderDailySummary(container, dados || {});
   } catch (error) {
     console.error('Erro ao carregar Resumo do Dia:', error);
     container.innerHTML = '<p class="summary-empty">Resumo do dia indisponível no momento.</p>';

@@ -2,38 +2,9 @@
 
 import { escapeHtml } from './utils.js';
 
-export const DOW_JONES = [
-  { company: '3M', ticker: 'MMM', sector: 'Industrials' },
-  { company: 'American Express', ticker: 'AXP', sector: 'Financials' },
-  { company: 'Amgen', ticker: 'AMGN', sector: 'Health Care' },
-  { company: 'Apple', ticker: 'AAPL', sector: 'Information Technology' },
-  { company: 'Boeing', ticker: 'BA', sector: 'Industrials' },
-  { company: 'Caterpillar', ticker: 'CAT', sector: 'Industrials' },
-  { company: 'Chevron', ticker: 'CVX', sector: 'Energy' },
-  { company: 'Cisco Systems', ticker: 'CSCO', sector: 'Information Technology' },
-  { company: 'Coca-Cola', ticker: 'KO', sector: 'Consumer Staples' },
-  { company: 'Dow Inc.', ticker: 'DOW', sector: 'Materials' },
-  { company: 'Goldman Sachs', ticker: 'GS', sector: 'Financials' },
-  { company: 'Home Depot', ticker: 'HD', sector: 'Consumer Discretionary' },
-  { company: 'Honeywell', ticker: 'HON', sector: 'Industrials' },
-  { company: 'IBM', ticker: 'IBM', sector: 'Information Technology' },
-  { company: 'Intel', ticker: 'INTC', sector: 'Information Technology' },
-  { company: 'Johnson & Johnson', ticker: 'JNJ', sector: 'Health Care' },
-  { company: 'JPMorgan Chase', ticker: 'JPM', sector: 'Financials' },
-  { company: "McDonald's", ticker: 'MCD', sector: 'Consumer Discretionary' },
-  { company: 'Merck', ticker: 'MRK', sector: 'Health Care' },
-  { company: 'Microsoft', ticker: 'MSFT', sector: 'Information Technology' },
-  { company: 'Nike', ticker: 'NKE', sector: 'Consumer Discretionary' },
-  { company: 'Procter & Gamble', ticker: 'PG', sector: 'Consumer Staples' },
-  { company: 'Salesforce', ticker: 'CRM', sector: 'Information Technology' },
-  { company: 'The Travelers Companies', ticker: 'TRV', sector: 'Financials' },
-  { company: 'UnitedHealth Group', ticker: 'UNH', sector: 'Health Care' },
-  { company: 'Verizon', ticker: 'VZ', sector: 'Communication Services' },
-  { company: 'Visa', ticker: 'V', sector: 'Financials' },
-  { company: 'Walgreens Boots Alliance', ticker: 'WBA', sector: 'Consumer Staples' },
-  { company: 'Walt Disney', ticker: 'DIS', sector: 'Communication Services' },
-  { company: 'Nvidia', ticker: 'NVDA', sector: 'Information Technology' },
-];
+import dados from './data/dow-jones.json';
+
+export const DOW_JONES = dados.items;
 
 const SECTOR_COLORS = {
   'Communication Services': '#00d4ff',

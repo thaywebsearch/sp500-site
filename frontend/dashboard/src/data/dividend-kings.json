@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-11-01",
+  "source": "Dividend Kings (50+ anos de aumento de dividendos)",
+  "items": [
+    {
+      "company": "American States Water",
+      "ticker": "AWR",
+      "sector": "Utilities"
+    },
+    {
+      "company": "California Water Service",
+      "ticker": "CWT",
+      "sector": "Utilities"
+    },
+    {
+      "company": "Northwest Natural",
+      "ticker": "NWN",
+      "sector": "Utilities"
+    },
+    {
+      "company": "Procter & Gamble",
+      "ticker": "PG",
+      "sector": "Consumer Defensive"
+    },
+    {
+      "company": "Coca-Cola",
+      "ticker": "KO",
+      "sector": "Consumer Defensive"
+    },
+    {
+      "company": "Johnson & Johnson",
+      "ticker": "JNJ",
+      "sector": "Healthcare"
+    },
+    {
+      "company": "Colgate-Palmolive",
+      "ticker": "CL",
+      "sector": "Consumer Defensive"
+    },
+    {
+      "company": "Genuine Parts",
+      "ticker": "GPC",
+      "sector": "Consumer Cyclical"
+    },
+    {
+      "company": "Emerson Electric",
+      "ticker": "EMR",
+      "sector": "Industrials"
+    },
+    {
+      "company": "Dover",
+      "ticker": "DOV",
+      "sector": "Industrials"
+    },
+    {
+      "company": "Lowe's",
+      "ticker": "LOW",
+      "sector": "Consumer Cyclical"
+    },
+    {
+      "company": "Federal Realty",
+      "ticker": "FRT",
+      "sector": "Real Estate"
+    },
+    {
+      "company": "ABM Industries",
+      "ticker": "ABM",
+      "sector": "Industrials"
+    },
+    {
+      "company": "Stepan",
+      "ticker": "SCL",
+      "sector": "Basic Materials"
+    },
+    {
+      "company": "H.B. Fuller",
+      "ticker": "FUL",
+      "sector": "Basic Materials"
+    },
+    {
+      "company": "Universal Corp",
+      "ticker": "UVV",
+      "sector": "Consumer Defensive"
+    },
+    {
+      "company": "Hormel Foods",
+      "ticker": "HRL",
+      "sector": "Consumer Defensive"
+    },
+    {
+      "company": "Kimberly-Clark",
+      "ticker": "KMB",
+      "sector": "Consumer Defensive"
+    },
+    {
+      "company": "Middlesex Water",
+      "ticker": "MSEX",
+      "sector": "Utilities"
+    },
+    {
+      "company": "MSA Safety",
+      "ticker": "MSA",
+      "sector": "Industrials"
+    },
+    {
+      "company": "PPG Industries",
+      "ticker": "PPG",
+      "sector": "Basic Materials"
+    },
+    {
+      "company": "RPM International",
+      "ticker": "RPM",
+      "sector": "Basic Materials"
+    },
+    {
+      "company": "Black Hills",
+      "ticker": "BKH",
+      "sector": "Utilities"
+    },
+    {
+      "company": "National Fuel Gas",
+      "ticker": "NFG",
+      "sector": "Energy"
+    },
+    {
+      "company": "PepsiCo",
+      "ticker": "PEP",
+      "sector": "Consumer Defensive"
+    },
+    {
+      "company": "Altria",
+      "ticker": "MO",
+      "sector": "Consumer Defensive"
+    },
+    {
+      "company": "Stanley Black & Decker",
+      "ticker": "SWK",
+      "sector": "Industrials"
+    },
+    {
+      "company": "Target",
+      "ticker": "TGT",
+      "sector": "Consumer Cyclical"
+    },
+    {
+      "company": "Sysco",
+      "ticker": "SYY",
+      "sector": "Consumer Defensive"
+    },
+    {
+      "company": "Cincinnati Financial",
+      "ticker": "CINF",
+      "sector": "Financials"
+    },
+    {
+      "company": "Tootsie Roll",
+      "ticker": "TR",
+      "sector": "Consumer Defensive"
+    },
+    {
+      "company": "Gorman-Rupp",
+      "ticker": "GRC",
+      "sector": "Industrials"
+    },
+    {
+      "company": "Pentair",
+      "ticker": "PNR",
+      "sector": "Industrials"
+    },
+    {
+      "company": "H2O America",
+      "ticker": "HTO",
+      "sector": "Utilities"
+    },
+    {
+      "company": "MGE Energy",
+      "ticker": "MGEE",
+      "sector": "Utilities"
+    },
+    {
+      "company": "RLI Corp",
+      "ticker": "RLI",
+      "sector": "Financials"
+    },
+    {
+      "company": "S&P Global",
+      "ticker": "SPGI",
+      "sector": "Financials"
+    },
+    {
+      "company": "Automatic Data Processing",
+      "ticker": "ADP",
+      "sector": "Industrials"
+    }
+  ]
+}

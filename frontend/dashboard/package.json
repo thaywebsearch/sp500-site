@@ -11,6 +11,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "validate:data": "node scripts/validate-static-data.mjs",
+    "pretest": "npm run validate:data",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },

@@ -1,9 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   getAllSectors,
+  getResumoDia,
   getSectorIds,
   getSectorName,
   getSectorPayload,
+  getSnapshot,
   resetSectorStore,
 } from './sector-store.js';
 
@@ -13,6 +15,95 @@ function respostaOk(payload) {
 
 beforeEach(() => {
   resetSectorStore();
+});
+
+describe('getSnapshot', () => {
+  const snapshot = {
+    versao: 'abc123',
+    setores: [
+      {
+        id: 'energy',
+        name: 'Energy',
+        generatedAt: '2026-10-30T00:00:00Z',
+        count: 1,
+        companies: [{ symbol: 'XOM', name: 'Exxon' }],
+      },
+    ],
+    resumoDia: { referenceDate: '2026-10-30', stats: { total: 1 } },
+  };
+
+  it('devolve o snapshot e alimenta os caches de setores', async () => {
+    globalThis.fetch = vi.fn(() => respostaOk({ dados: snapshot }));
+
+    const resultado = await getSnapshot();
+
+    expect(resultado).toEqual(snapshot);
+    expect(await getSectorIds()).toEqual(['energy']);
+    expect(await getSectorPayload('energy')).toEqual({
+      sector: 'Energy',
+      generatedAt: '2026-10-30T00:00:00Z',
+      liveUpdatedAt: null,
+      count: 1,
+      companies: [{ symbol: 'XOM', name: 'Exxon' }],
+    });
+    // Só o snapshot foi pedido: a lista e o payload vêm do cache.
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('deduplica pedidos concorrentes e reutiliza o cache', async () => {
+    globalThis.fetch = vi.fn(() => respostaOk({ dados: snapshot }));
+
+    const [a, b] = await Promise.all([getSnapshot(), getSnapshot()]);
+    const c = await getSnapshot();
+
+    expect(a).toEqual(snapshot);
+    expect(b).toEqual(snapshot);
+    expect(c).toEqual(snapshot);
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('force ignora o cache', async () => {
+    globalThis.fetch = vi.fn(() => respostaOk({ dados: snapshot }));
+
+    await getSnapshot();
+    await getSnapshot({ force: true });
+
+    expect(globalThis.fetch).toHaveBeenCalledTimes(2);
+  });
+
+  it('rejeita payload inválido sem envenenar o cache', async () => {
+    globalThis.fetch = vi
+      .fn()
+      .mockImplementationOnce(() => respostaOk({}))
+      .mockImplementationOnce(() => respostaOk({ dados: snapshot }));
+
+    await expect(getSnapshot()).rejects.toThrow('Snapshot inválido');
+    await expect(getSnapshot()).resolves.toEqual(snapshot);
+  });
+});
+
+describe('getResumoDia', () => {
+  it('usa o resumo do snapshot sem pedir /api/resumo-dia', async () => {
+    const resumo = { referenceDate: '2026-10-30', stats: { total: 3 } };
+    globalThis.fetch = vi.fn(() =>
+      respostaOk({ dados: { setores: [{ id: 'energy', companies: [] }], resumoDia: resumo } })
+    );
+
+    expect(await getResumoDia()).toEqual(resumo);
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+    expect(String(globalThis.fetch.mock.calls[0][0])).toContain('/api/snapshot');
+  });
+
+  it('recorre a /api/resumo-dia quando o snapshot falha', async () => {
+    globalThis.fetch = vi.fn((url) => {
+      if (String(url).includes('/api/snapshot')) {
+        return Promise.resolve({ ok: false, status: 404, json: async () => ({}) });
+      }
+      return respostaOk({ dados: { stats: { total: 7 } } });
+    });
+
+    expect(await getResumoDia()).toEqual({ stats: { total: 7 } });
+  });
 });
 
 describe('getSectorIds', () => {

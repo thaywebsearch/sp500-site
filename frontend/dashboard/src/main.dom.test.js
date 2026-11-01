@@ -108,6 +108,26 @@ function routesFor(sectors, generatedAt = new Date().toISOString()) {
     routes[`/api/setor/${id}`] = { dados: { generatedAt, companies } };
   }
   routes['/api/resumo-dia'] = { dados: { stats: { gainers: 1 }, marketMood: 'bullish' } };
+
+  // Caminho normal (Fase 1): um único snapshot com setores + resumo.
+  routes['/api/snapshot'] = {
+    dados: {
+      schemaVersion: 1,
+      versao: 'teste0000001',
+      generatedAt,
+      referenceDate: '2026-10-30',
+      setores: Object.entries(sectors).map(([id, companies]) => ({
+        id,
+        name: id,
+        generatedAt,
+        count: companies.length,
+        companies,
+      })),
+      resumoDia: { referenceDate: '2026-10-30', stats: { gainers: 1 }, marketMood: 'bullish' },
+      totais: { setores: Object.keys(sectors).length, empresas: Object.keys(sectors).length },
+    },
+  };
+
   return routes;
 }
 
@@ -150,6 +170,14 @@ afterEach(() => {
 });
 
 describe('carregamento e renderização', () => {
+  it('faz o load inicial com um único pedido (snapshot)', async () => {
+    await boot();
+
+    const chamadas = globalThis.fetch.mock.calls.map(([url]) => String(url));
+    expect(chamadas).toHaveLength(1);
+    expect(chamadas[0]).toContain('/api/snapshot');
+  });
+
   it('carrega dados, preenche tabela, filtros e estatísticas', async () => {
     await boot();
     expect(document.querySelectorAll('#table-body tr')).toHaveLength(5);

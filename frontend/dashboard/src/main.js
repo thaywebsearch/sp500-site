@@ -3,7 +3,7 @@ import { SECTORS } from './config.js';
 import { loadCuriosidades } from './daily-curiosity.js';
 import { escapeHtml, formatDividendYield, formatMarketCap, getCountry } from './utils.js';
 import { getQuotes } from './api.js';
-import { getSectorIds, getSectorPayload, getSectorName } from './sector-store.js';
+import { getSnapshot, getSectorIds, getSectorPayload, getSectorName } from './sector-store.js';
 import { openCompanyDetails } from './company-details.js';
 import { loadTreemap } from './treemap.js';
 import { loadHeatmap } from './heatmap.js';
@@ -415,36 +415,64 @@ function updateTabButtons() {
 }
 
 // ========== CARREGAMENTO DE DADOS ==========
+/**
+ * Carrega os setores para o dashboard.
+ * Caminho preferido: 1 pedido a /api/snapshot. Se falhar, mantém a
+ * compatibilidade com as rotas antigas (/api/setores + /api/setor/:id).
+ */
+async function carregarSetores({ force = false } = {}) {
+  try {
+    const snapshot = await getSnapshot({ force });
+
+    return snapshot.setores.map((setor) => {
+      const id = String(setor.id);
+      return {
+        generatedAt: setor.generatedAt || null,
+        companies: (Array.isArray(setor.companies) ? setor.companies : []).map((c) => ({
+          ...c,
+          sector: id,
+          sectorName: setor.name || getSectorName(id),
+        })),
+      };
+    });
+  } catch (erroSnapshot) {
+    console.error('Snapshot indisponível, a usar rotas por setor:', erroSnapshot);
+  }
+
+  // Fallback Fase 0: lista + um pedido por setor.
+  const setores = await getSectorIds({ force });
+
+  return Promise.all(
+    setores.map(async (setorId) => {
+      try {
+        const dados = await getSectorPayload(setorId, { force });
+
+        if (dados && Array.isArray(dados.companies)) {
+          return {
+            generatedAt: dados.generatedAt || null,
+            companies: dados.companies.map((c) => ({
+              ...c,
+              sector: setorId,
+              sectorName: getSectorName(setorId),
+            })),
+          };
+        }
+        return { generatedAt: null, companies: [] };
+      } catch (e) {
+        console.error(`❌ Erro ao carregar ${setorId}:`, e);
+        return { generatedAt: null, companies: [] };
+      }
+    })
+  );
+}
+
 async function loadDashboardData() {
   if (statsEl) statsEl.textContent = 'Carregando dados...';
 
   try {
     // Refresh explícito: a entrada no dashboard força dados frescos. As abas
     // (treemap/heatmap/inteligência) reutilizam este resultado via store.
-    const setores = await getSectorIds({ force: true });
-
-    const results = await Promise.all(
-      setores.map(async (setorId) => {
-        try {
-          const dados = await getSectorPayload(setorId, { force: true });
-
-          if (dados && Array.isArray(dados.companies)) {
-            return {
-              generatedAt: dados.generatedAt || null,
-              companies: dados.companies.map((c) => ({
-                ...c,
-                sector: setorId,
-                sectorName: getSectorName(setorId),
-              })),
-            };
-          }
-          return { generatedAt: null, companies: [] };
-        } catch (e) {
-          console.error(`❌ Erro ao carregar ${setorId}:`, e);
-          return { generatedAt: null, companies: [] };
-        }
-      })
-    );
+    const results = await carregarSetores({ force: true });
 
     allCompanies = results.flatMap((r) => r.companies);
 
