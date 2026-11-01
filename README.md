@@ -15,7 +15,15 @@ Plataforma para explorar o índice **S&P 500** por setor GICS: datasets atualiza
 
 ## Deploy
 
-- **Dashboard estático** → Netlify e GitHub Pages (`/docs`)
+- **Dashboard estático (frontend principal)** → GitHub Pages:
+  `https://thaywebsearch.github.io/sp500-site/frontend/docs/`. É publicado a
+  partir de `frontend/docs/` pelo workflow `deploy-dashboard.yml`, a cada push
+  em `main`.
+- **Dashboard estático (secundário)** → Netlify:
+  `https://sp500-dashboard.netlify.app`. Os deploys de produção estão suspensos
+  por limite de crédito da conta e o site continua a servir o último build
+  publicado; a troca de frontend principal não exige alterações no código do
+  dashboard.
 - **API Express** → Render (plano gratuito, Blueprint `render.yaml`); o Railway
   fica mantido como rollback. Passo-a-passo em `backend/README.md` → "Deploy".
   URL atual: `https://sp500-api.onrender.com`. O URL da API no frontend pode
