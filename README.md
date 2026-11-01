@@ -8,7 +8,7 @@ Plataforma para explorar o índice **S&P 500** por setor GICS: datasets atualiza
 |------------|-------|-----------|
 | `frontend/` | Python + Vite | Datasets por setor (`<setor>/<setor>.json` — fonte única) + dashboard interativo |
 | `frontend/dashboard/` | Vite + Vanilla JS | Dashboard com tabela, treemap, heatmap e bubble chart |
-| `backend/` | Express | API REST (`/api/setores`, `/api/setor/:setor`, `/api/resumo-dia`) + datasets |
+| `backend/` | Express | API REST (`/api/snapshot`, `/api/setores`, `/api/setor/:setor`, `/api/resumo-dia`) + datasets |
 | `backend/dowjones/` | — | Dataset do Dow Jones (30 empresas) |
 | `backend/dividend-aristocrats/` | — | 69 Aristocratas de Dividendos |
 | `backend/dividend-kings/` | — | Kings de Dividendos (50+ anos) |
@@ -37,6 +37,31 @@ frontend/<setor>/<setor>.json   ← fonte única (canônica)
 A cópia `backend/data/` é regerada antes do boot da API (`npm start` → hook
 `prestart` → `backend/scripts/sync-data.mjs`) a partir da fonte canônica quando
 ela está disponível, evitando divergência entre as cópias.
+
+### Snapshot único (Fase 1)
+
+O mesmo `prestart` executa `backend/scripts/build-snapshot.mjs`, que junta os 11
+setores, o resumo do dia e metadados num único `backend/data/snapshot.json`
+(gerado, não versionado):
+
+- `schemaVersion`, `generatedAt`, `referenceDate` e totais (setores/empresas);
+- `versao`: SHA-256 (12 caracteres) do conteúdo, estável entre execuções;
+- `resumoDia`: altas, baixas, humor e desempenho por setor.
+
+O dashboard faz o load inicial com **1 pedido** (`/api/snapshot`) em vez de 13 e
+reutiliza o resultado nas abas. `GET /api/snapshot/:versao` serve a mesma versão
+com `Cache-Control: public, max-age=31536000, immutable`.
+
+Validação executada no CI e em `npm test`:
+
+```bash
+cd backend
+npm run validate:data   # schema + hash + guard de yield (25%) + frescor
+```
+
+O frescor exige `referenceDate` a menos de 2 dias úteis. Para um cenário
+controlado (ex.: feriado prolongado), `SNAPSHOT_ALLOW_STALE=1` desativa apenas
+essa verificação; nunca deve ser usado em produção.
 
 O README de cada setor e o consolidado `TOP50-MARKET-CAP.md` são gerados pelo mesmo pipeline, preservando o enriquecimento (marketCap, dividendYield) existente.
 
@@ -92,7 +117,7 @@ As workflows ficam em `.github/workflows/` (raiz do repositório):
 |----------|---------|------|
 | `update-sectors.yml` | Segunda 06:00 | Regenera JSONs/READMEs dos setores + sincroniza cópias |
 | `update-sp500-table.yml` | Segunda 00:00 | Atualiza `backend/sp500-table/sp500-table.csv` |
-| `update-market-data.yml` | A cada ~48h (06:00 UTC) | Atualiza `marketCap`/`dividendYield` + Resumo do Dia |
+| `update-market-data.yml` | Dias úteis 06:00 UTC | Atualiza `marketCap`/`dividendYield` + Resumo do Dia |
 | `update-daily-summary.yml` | Dias úteis 21:30 UTC | Regenera o Resumo do Dia (`backend/data/daily-summary.json`) |
 | `deploy-dashboard.yml` | Após push + Segunda 07:00 | Builda o dashboard em `frontend/docs/` |
 
@@ -100,12 +125,14 @@ As workflows ficam em `.github/workflows/` (raiz do repositório):
 
 ```
 GET /api/health             → status + versão
+GET /api/snapshot           → snapshot único (setores + resumo + metadados + hash)
+GET /api/snapshot/:versao   → mesma versão, cache imutável (404 se desconhecida)
 GET /api/setores            → lista dos 11 setores
 GET /api/setor/:setor       → empresas do setor
 GET /api/inteligencia-setorial → métricas agregadas por setor (participação, HHI, dividendos)
 GET /api/curiosidades       → curiosidade do dia
 GET /api/historico/:symbol  → histórico de preços (últimos 2 anos)
-GET /api/resumo-dia         → maiores altas e baixas do dia
+GET /api/resumo-dia         → maiores altas e baixas do dia (compatibilidade)
 ```
 
 A rota raiz `/` documenta os endpoints. A versão é lida de `backend/VERSION`
@@ -135,8 +162,9 @@ python scripts/update_sectors.py
 
 ## Testes e Qualidade
 
-- **Dashboard**: ESLint + Prettier + Vitest — `npm run lint`, `npm run format`, `npm test`, `npm run test:coverage`, `npm run build`
-- **API**: testes de CORS com o runner nativo do Node (`node --test`) — `cd backend && npm test`
+- **Dashboard**: ESLint + Prettier + Vitest - `npm run lint`, `npm run format`, `npm test`, `npm run test:coverage`, `npm run build`
+- **API**: testes de CORS com o runner nativo do Node (`node --test`) - `cd backend && npm test`
+- **Dados**: `npm run validate:data` no dashboard (schema dos dados estáticos) e `cd backend && npm run validate:data` (snapshot, hash, yield e frescor)
 - **Python**: sem framework de testes configurado ainda
 
 ## Licença

@@ -52,5 +52,8 @@ marketing/
 
 # Cópia derivada do dashboard (não versionada; gerada apenas quando necessário)
 frontend/dashboard/public/data/
+
+# Snapshot único gerado a partir de backend/data (prestart/CI)
+backend/data/snapshot.json
 # Local Netlify folder
 .netlify

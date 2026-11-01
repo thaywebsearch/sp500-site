@@ -5,7 +5,10 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "prestart": "node scripts/sync-data.mjs",
+    "prestart": "node scripts/sync-data.mjs && node scripts/build-snapshot.mjs",
+    "snapshot": "node scripts/build-snapshot.mjs",
+    "validate:data": "node scripts/build-snapshot.mjs --check",
+    "pretest": "node scripts/build-snapshot.mjs",
     "dev": "node server.js",
     "start": "node server.js",
     "test": "node --test"

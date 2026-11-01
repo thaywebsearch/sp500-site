@@ -72,33 +72,3 @@ export async function getSectorIntelligence() {
     return null;
   }
 }
-
-/**
- * Obtém resumo do dia (maiores altas e baixas)
- * @returns {Promise<Object>} Dados do resumo do dia
- */
-export async function getDailySummary() {
-  try {
-    const response = await fetchComTimeout(`${API_BASE_URL}/api/resumo-dia`);
-    if (!response.ok) throw new Error('Erro ao buscar resumo do dia');
-    const data = await response.json();
-    return data.dados || {};
-  } catch (erro) {
-    console.error('Erro ao buscar resumo do dia:', erro);
-    return {};
-  }
-}
-
-/**
- * Health check - verifica se servidor está rodando
- * @returns {Promise<boolean>} true se servidor está OK
- */
-export async function healthCheck() {
-  try {
-    const response = await fetchComTimeout(`${API_BASE_URL}/api/health`);
-    return response.ok;
-  } catch (erro) {
-    console.error('Erro ao fazer health check:', erro);
-    return false;
-  }
-}

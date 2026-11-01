@@ -42,6 +42,15 @@ jobs:
       - name: Testes (unittest) e verificação de integridade
         run: python -m unittest discover -s tests -v
 
+      - name: Configurar Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+
+      - name: Validar snapshot único (schema + hash + frescor)
+        working-directory: ${{ github.workspace }}/backend
+        run: node scripts/build-snapshot.mjs --check
+
       - name: Verificar mudanças
         id: changes
         run: |

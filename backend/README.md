@@ -2,20 +2,28 @@
 
 API REST (**Express**) que serve os dados do S&P 500 por setor e o resumo do dia.
 Os dados ficam em `data/*.json` e são regerados a partir da fonte canônica
-(`frontend/<setor>/<setor>.json`) no boot, via `scripts/sync-data.mjs`
-(hook `prestart`).
+(`frontend/<setor>/<setor>.json`) no boot, via `scripts/sync-data.mjs` e
+`scripts/build-snapshot.mjs` (hook `prestart`).
 
 ## Endpoints
 
 ```
 GET /api/health             → status + versão
+GET /api/snapshot           → snapshot único (setores + resumo + metadados + hash)
+GET /api/snapshot/:versao   → a mesma versão, com cache imutável (404 se desconhecida)
 GET /api/setores            → lista dos 11 setores
 GET /api/setor/:setor       → empresas do setor
 GET /api/inteligencia-setorial  → métricas agregadas por setor (participação, HHI, dividendos)
 GET /api/curiosidades       → curiosidade do dia
 GET /api/historico/:symbol  → histórico de preços (últimos 2 anos)
-GET /api/resumo-dia         → maiores altas e baixas do dia
+GET /api/resumo-dia         → maiores altas e baixas do dia (compatibilidade)
 ```
+
+O `snapshot.json` não é versionado: é gerado no `prestart`/CI a partir de
+`data/<setor>.json` + `data/daily-summary.json`. A versão é um SHA-256 (12
+caracteres) do conteúdo, sem timestamps, e o CI valida schema, hash, yield máximo
+(25%) e frescor (`referenceDate` ≤ 2 dias úteis; `SNAPSHOT_ALLOW_STALE=1` para
+desativar apenas o frescor).
 
 A rota raiz `/` documenta os endpoints. A versão é lida do ficheiro `VERSION`
 e exposta em `/` e em `/api/health`.
@@ -101,15 +109,17 @@ Testes:
 
 ```bash
 cd backend
-npm test               # node --test (CORS: preflight, origens, avisos)
+npm test               # node --test (CORS, snapshot, cache e hardening)
+npm run validate:data  # snapshot: schema + hash + yield + frescor
 ```
 
 ## Estrutura
 
 - `server.js` — servidor Express
-- `data/` — JSONs por setor (cópia derivada, sincronizada no boot)
+- `data/` — JSONs por setor (cópia derivada, sincronizada no boot) + `snapshot.json` gerado
 - `scripts/sync-data.mjs` — sincroniza a fonte canônica para `data/`
-- `test/` — testes de CORS (`node --test`, sem dependências extra)
+- `scripts/build-snapshot.mjs` — gera/valida o snapshot único (`--check`)
+- `test/` — testes de CORS, snapshot e hardening (`node --test`, sem dependências extra)
 - `.env.example` — variáveis para desenvolvimento local (`CORS_ORIGINS`, `PORT`)
 - `VERSION` — versão da API
 - `sp500-table/` — dataset CSV do S&P 500 (atualizado semanalmente via GitHub Actions)

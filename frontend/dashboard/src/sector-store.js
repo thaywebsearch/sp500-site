@@ -23,6 +23,9 @@ let idsEmCurso = null;
 const setoresCache = new Map(); // id -> { dados, ts }
 const setoresEmCurso = new Map(); // id -> Promise
 
+let snapshotCache = null; // { snapshot, ts }
+let snapshotEmCurso = null;
+
 export function getSectorName(id) {
   return SECTORS.find((s) => s.id === id)?.name || id;
 }
@@ -35,6 +38,81 @@ async function pedirJson(url) {
 
 function emCache(entrada) {
   return Boolean(entrada) && Date.now() - entrada.ts < SECTOR_CACHE_TTL_MS;
+}
+
+/**
+ * Popula os caches de setores a partir de um snapshot.
+ * Assim o treemap/heatmap/inteligência não repetem pedidos depois do load
+ * inicial de 1 request.
+ */
+function aplicarSnapshot(snapshot) {
+  const setores = Array.isArray(snapshot && snapshot.setores) ? snapshot.setores : [];
+  if (setores.length === 0) return;
+
+  const agora = Date.now();
+  idsCache = { ids: setores.map((setor) => String(setor.id)), ts: agora };
+
+  for (const setor of setores) {
+    setoresCache.set(String(setor.id), {
+      dados: {
+        sector: setor.name || getSectorName(setor.id),
+        generatedAt: setor.generatedAt || null,
+        liveUpdatedAt: setor.liveUpdatedAt || null,
+        count: setor.count,
+        companies: Array.isArray(setor.companies) ? setor.companies : [],
+      },
+      ts: agora,
+    });
+  }
+}
+
+/**
+ * Snapshot único: setores + resumo do dia + metadados + versão.
+ * Deduplica pedidos concorrentes e alimenta os caches de setores.
+ */
+export function getSnapshot({ force = false } = {}) {
+  if (!force && emCache(snapshotCache)) return Promise.resolve(snapshotCache.snapshot);
+  if (!force && snapshotEmCurso) return snapshotEmCurso;
+
+  const promessa = pedirJson(`${API_BASE_URL}/api/snapshot`).then((payload) => {
+    const snapshot = payload && payload.dados;
+    if (!snapshot || !Array.isArray(snapshot.setores) || snapshot.setores.length === 0) {
+      throw new Error('Snapshot inválido');
+    }
+
+    snapshotCache = { snapshot, ts: Date.now() };
+    aplicarSnapshot(snapshot);
+    return snapshot;
+  });
+
+  snapshotEmCurso = promessa;
+  promessa
+    .catch(() => {})
+    .finally(() => {
+      if (snapshotEmCurso === promessa) snapshotEmCurso = null;
+    });
+
+  return promessa;
+}
+
+/**
+ * Resumo do dia a partir do snapshot (sem pedido extra quando já carregado).
+ * Se o snapshot falhar ou não trouxer resumo, recorre à rota antiga.
+ */
+export async function getResumoDia({ force = false } = {}) {
+  if (!force && emCache(snapshotCache) && snapshotCache.snapshot.resumoDia) {
+    return snapshotCache.snapshot.resumoDia;
+  }
+
+  try {
+    const snapshot = await getSnapshot({ force });
+    if (snapshot && snapshot.resumoDia) return snapshot.resumoDia;
+  } catch {
+    // Fallback abaixo: a rota /api/resumo-dia continua disponível.
+  }
+
+  const payload = await pedirJson(`${API_BASE_URL}/api/resumo-dia`);
+  return (payload && payload.dados) || {};
 }
 
 /** Lista de ids de setores (partilhada e cacheada). */
@@ -119,4 +197,6 @@ export function resetSectorStore() {
   idsEmCurso = null;
   setoresCache.clear();
   setoresEmCurso.clear();
+  snapshotCache = null;
+  snapshotEmCurso = null;
 }
