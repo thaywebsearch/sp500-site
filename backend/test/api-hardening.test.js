@@ -142,6 +142,45 @@ describe('cache HTTP e hardening das rotas de setores', () => {
     assert.ok(Array.isArray(corpo.dados.companies));
   });
 
+  it('/api/snapshot junta setores e resumo com cache público', async () => {
+    const resposta = await fetch(`${servidor.base}/api/snapshot`);
+    assert.equal(resposta.status, 200);
+
+    const cache = resposta.headers.get('cache-control') || '';
+    assert.match(cache, /public/);
+    assert.match(cache, /max-age=300/);
+    assert.match(cache, /stale-while-revalidate=86400/);
+
+    const corpo = await resposta.json();
+    assert.equal(corpo.sucesso, true);
+    assert.equal(corpo.dados.setores.length, 11);
+    assert.equal(corpo.dados.totais.setores, 11);
+    assert.equal(corpo.dados.totais.empresas, 503);
+    assert.ok(corpo.dados.resumoDia);
+    assert.equal(corpo.url, `/api/snapshot/${corpo.dados.versao}`);
+  });
+
+  it('/api/snapshot/:versao serve a versão atual com cache imutável', async () => {
+    const atual = await (await fetch(`${servidor.base}/api/snapshot`)).json();
+    const resposta = await fetch(`${servidor.base}/api/snapshot/${atual.dados.versao}`);
+
+    assert.equal(resposta.status, 200);
+    const cache = resposta.headers.get('cache-control') || '';
+    assert.match(cache, /max-age=31536000/);
+    assert.match(cache, /immutable/);
+
+    const corpo = await resposta.json();
+    assert.equal(corpo.dados.versao, atual.dados.versao);
+  });
+
+  it('devolve 404 sem cache para versão de snapshot desconhecida', async () => {
+    const resposta = await fetch(`${servidor.base}/api/snapshot/000000000000`);
+    assert.equal(resposta.status, 404);
+    assert.match(resposta.headers.get('cache-control') || '', /no-store/);
+    const corpo = await resposta.json();
+    assert.equal(corpo.codigo, 'SNAPSHOT_NAO_ENCONTRADO');
+  });
+
   it('rejeita path traversal com 400 e sem cache', async () => {
     const tentativas = [
       '/api/setor/..%2f..%2fpackage',

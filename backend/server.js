@@ -8,6 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { buildSectorIntelligence } from './sector-intelligence.mjs';
+import { construirSnapshot } from './scripts/build-snapshot.mjs';
 
 const app = express();
 
@@ -105,6 +106,25 @@ function cachePublico(res, maxAge = CACHE_MAX_AGE_PADRAO, swr = CACHE_SWR_PADRAO
 /** Impede qualquer cache (erros, health check, dados sabidamente obsoletos). */
 function semCache(res) {
   res.set('Cache-Control', 'no-store');
+}
+
+// ============ SNAPSHOT ÚNICO ============
+// O snapshot é gerado no prestart/CI (scripts/build-snapshot.mjs). Se o
+// ficheiro não existir (ex.: `node server.js` em dev), é construído em memória
+// a partir de backend/data para que a API nunca fique sem /api/snapshot.
+const SNAPSHOT_PATH = path.join(__dirname, 'data', 'snapshot.json');
+let snapshotEmMemoria = null;
+
+function obterSnapshot() {
+  if (snapshotEmMemoria) return snapshotEmMemoria;
+
+  if (fs.existsSync(SNAPSHOT_PATH)) {
+    snapshotEmMemoria = lerJsonComCache(SNAPSHOT_PATH);
+  } else {
+    snapshotEmMemoria = construirSnapshot();
+  }
+
+  return snapshotEmMemoria;
 }
 
 // Data de referência da "Curiosidade do Dia": neste dia a lista começa
@@ -490,6 +510,69 @@ app.get('/api/setores', (req, res) => {
     res.status(500).json({ 
       sucesso: false, 
       erro: 'Não foi possível listar os setores'
+    });
+  }
+});
+
+/**
+ * Snapshot único do dashboard (setores + resumo + metadados + hash).
+ * GET /api/snapshot
+ *
+ * Substitui o load inicial de 13 pedidos por 1. A versão estável permite ao
+ * cliente usar /api/snapshot/:versao com cache imutável.
+ */
+app.get('/api/snapshot', (req, res) => {
+  try {
+    const snapshot = obterSnapshot();
+
+    cachePublico(res);
+    res.json({
+      sucesso: true,
+      url: `/api/snapshot/${snapshot.versao}`,
+      dados: snapshot
+    });
+  } catch (erro) {
+    console.error('Erro ao gerar snapshot:', erro);
+    semCache(res);
+    res.status(500).json({
+      sucesso: false,
+      codigo: 'SNAPSHOT_INDISPONIVEL',
+      erro: 'Não foi possível gerar o snapshot'
+    });
+  }
+});
+
+/**
+ * Snapshot por versão (hash do conteúdo de dados). O hash ignora timestamps,
+ * pelo que o conteúdo de uma versão nunca muda e pode ser cacheado de forma
+ * imutável.
+ * GET /api/snapshot/:versao
+ */
+app.get('/api/snapshot/:versao', (req, res) => {
+  try {
+    const snapshot = obterSnapshot();
+
+    if (req.params.versao !== snapshot.versao) {
+      semCache(res);
+      return res.status(404).json({
+        sucesso: false,
+        codigo: 'SNAPSHOT_NAO_ENCONTRADO',
+        erro: 'Versão de snapshot não encontrada'
+      });
+    }
+
+    res.set('Cache-Control', 'public, max-age=31536000, immutable');
+    res.json({
+      sucesso: true,
+      dados: snapshot
+    });
+  } catch (erro) {
+    console.error('Erro ao servir snapshot versionado:', erro);
+    semCache(res);
+    res.status(500).json({
+      sucesso: false,
+      codigo: 'SNAPSHOT_INDISPONIVEL',
+      erro: 'Não foi possível gerar o snapshot'
     });
   }
 });
@@ -934,6 +1017,16 @@ app.get('/', (req, res) => {
         metodo: 'GET',
         rota: '/api/health',
         descricao: 'Verifica se o servidor está rodando'
+      },
+      {
+        metodo: 'GET',
+        rota: '/api/snapshot',
+        descricao: 'Snapshot único com setores, resumo do dia, metadados e hash'
+      },
+      {
+        metodo: 'GET',
+        rota: '/api/snapshot/:versao',
+        descricao: 'Snapshot imutável para uma versão (hash) específica'
       },
       {
         metodo: 'GET',
