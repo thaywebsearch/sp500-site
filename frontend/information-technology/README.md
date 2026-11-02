@@ -4,78 +4,78 @@
 
 | # | Símbolo | Empresa | Market Cap | Subindústria | Sedes | Dividend Yield |
 |---|---------|---------|------------|--------------|-------|----------------|
-| 1 | NVDA | Nvidia | $5.09T | Semiconductors | Santa Clara, California | 0.47% |
-| 2 | AAPL | Apple Inc. | $5.07T | Technology Hardware, Storage & Peripherals | Cupertino, California | 0.31% |
-| 3 | MSFT | Microsoft | $3.89T | Systems Software | Redmond, Washington | 0.75% |
-| 4 | AVGO | Broadcom | $1.54T | Semiconductors | Palo Alto, California | 0.81% |
-| 5 | MU | Micron Technology | $992.88B | Semiconductors | Boise, Idaho | 0.07% |
-| 6 | AMD | Advanced Micro Devices | $843.65B | Semiconductors | Santa Clara, California | — |
-| 7 | PLTR | Palantir Technologies | $472.80B | Application Software | Aventura, Florida | — |
-| 8 | INTC | Intel | $459.68B | Semiconductors | Santa Clara, California | — |
-| 9 | CSCO | Cisco | $419.89B | Communications Equipment | San Jose, California | 1.58% |
-| 10 | ORCL | Oracle Corporation | $382.45B | Application Software | Austin, Texas | 1.59% |
-| 11 | PANW | Palo Alto Networks | $311.29B | Systems Software | Santa Clara, California | — |
-| 12 | AMAT | Applied Materials | $299.38B | Semiconductor Materials & Equipment | Santa Clara, California | 0.56% |
-| 13 | DELL | Dell Technologies | $290.21B | Technology Hardware, Storage & Peripherals | Round Rock, Texas | 0.55% |
-| 14 | LRCX | Lam Research | $287.95B | Semiconductor Materials & Equipment | Fremont, California | 0.57% |
-| 15 | CRWD | CrowdStrike | $263.73B | Systems Software | Austin, Texas | — |
-| 16 | TXN | Texas Instruments | $259.99B | Semiconductors | Dallas, Texas | 2.14% |
-| 17 | IBM | IBM | $239.64B | IT Consulting & Other Services | Armonk, New York | 2.67% |
-| 18 | ANET | Arista Networks | $217.40B | Communications Equipment | Santa Clara, California | — |
-| 19 | MRVL | Marvell Technology | $205.36B | Semiconductors | Santa Clara, California | 0.11% |
-| 20 | CRM | Salesforce | $204.57B | Application Software | San Francisco, California | 0.71% |
-| 21 | KLAC | KLA Corporation | $190.02B | Semiconductor Materials & Equipment | Milpitas, California | 0.63% |
-| 22 | ADI | Analog Devices | $189.50B | Semiconductors | Wilmington, Massachusetts | 1.13% |
-| 23 | QCOM | Qualcomm | $187.84B | Semiconductors | San Diego, California | 2.09% |
-| 24 | APH | Amphenol | $182.70B | Electronic Components | Wallingford, Connecticut | 0.67% |
-| 25 | SNDK | Sandisk | $178.93B | Technology Hardware, Storage & Peripherals | Milpitas, California | — |
-| 26 | NOW | ServiceNow | $164.34B | Systems Software | Santa Clara, California | — |
-| 27 | ACN | Accenture | $152.60B | IT Consulting & Other Services | Dublin, Ireland | 2.74% |
-| 28 | STX | Seagate Technology | $143.37B | Technology Hardware, Storage & Peripherals | Dublin, Ireland | 0.47% |
-| 29 | FTNT | Fortinet | $132.06B | Systems Software | Sunnyvale, California | — |
-| 30 | WDC | Western Digital | $128.64B | Technology Hardware, Storage & Peripherals | San Jose, California | 0.20% |
-| 31 | GLW | Corning Inc. | $106.55B | Electronic Components | Corning, New York | 0.91% |
-| 32 | ADBE | Adobe Inc. | $102.68B | Application Software | San Jose, California | — |
-| 33 | DDOG | Datadog | $96.82B | Application Software | New York City, New York | — |
-| 34 | INTU | Intuit | $91.77B | Application Software | Mountain View, California | 1.61% |
-| 35 | CDNS | Cadence Design Systems | $87.16B | Application Software | San Jose, California | — |
-| 36 | SNPS | Synopsys | $82.43B | Application Software | Sunnyvale, California | — |
-| 37 | MSI | Motorola Solutions | $79.74B | Communications Equipment | Chicago, Illinois | 1.00% |
-| 38 | HPE | Hewlett Packard Enterprise | $75.25B | Technology Hardware, Storage & Peripherals | Houston, Texas | 1.01% |
-| 39 | LITE | Lumentum | $68.50B | Communications Equipment | San Jose, California | — |
-| 40 | TEL | TE Connectivity | $60.23B | Electronic Manufacturing Services | Galway, Ireland | 1.50% |
-| 41 | NXPI | NXP Semiconductors | $59.24B | Semiconductors | Eindhoven, Netherlands | 1.73% |
-| 42 | MPWR | Monolithic Power Systems | $56.03B | Semiconductors | Kirkland, Washington | 0.70% |
-| 43 | KEYS | Keysight Technologies | $53.59B | Electronic Equipment & Instruments | Santa Rosa, California | — |
-| 44 | ADSK | Autodesk | $52.71B | Application Software | San Francisco, California | — |
-| 45 | WDAY | Workday, Inc. | $50.61B | Application Software | Pleasanton, California | — |
-| 46 | TER | Teradyne | $48.29B | Semiconductor Materials & Equipment | North Reading, Massachusetts | 0.17% |
-| 47 | CIEN | Ciena | $45.42B | Communications Equipment | Hanover, Maryland | — |
-| 48 | ROP | Roper Technologies | $43.33B | Electronic Equipment & Instruments | Sarasota, Florida | 0.83% |
-| 49 | NTAP | NetApp | $42.32B | Technology Hardware, Storage & Peripherals | San Jose, California | 0.97% |
-| 50 | COHR | Coherent Corp. | $41.22B | Electronic Components | Saxonburg, Pennsylvania | — |
-| 51 | P | Everpure | $41.10B | Technology Hardware, Storage & Peripherals | Santa Clara, California | — |
-| 52 | MCHP | Microchip Technology | $40.21B | Semiconductors | Chandler, Arizona | 2.46% |
-| 53 | TWLO | Twilio | $40.20B | Systems Software | San Francisco, California | — |
-| 54 | CTSH | Cognizant | $31.77B | IT Consulting & Other Services | Teaneck, New Jersey | 1.87% |
-| 55 | HPQ | HP Inc. | $30.34B | Technology Hardware, Storage & Peripherals | Palo Alto, California | 3.57% |
-| 56 | TDY | Teledyne Technologies | $28.99B | Electronic Equipment & Instruments | Thousand Oaks, California | — |
-| 57 | JBL | Jabil | $28.71B | Electronic Manufacturing Services | St. Petersburg, Florida | 0.12% |
-| 58 | FLEX | Flex Ltd. | $28.28B | Electronic Manufacturing Services | Austin, Texas | — |
-| 59 | ON | ON Semiconductor | $28.13B | Semiconductors | Phoenix, Arizona | — |
-| 60 | VRSN | Verisign | $26.94B | Internet Services & Infrastructure | Reston, Virginia | 1.08% |
-| 61 | FFIV | F5, Inc. | $25.79B | Communications Equipment | Seattle, Washington | — |
-| 62 | Q | Qnity Electronics | $22.98B | Semiconductor Materials & Equipment | Wilmington, Delaware | 0.29% |
-| 63 | SMCI | Supermicro | $21.64B | Technology Hardware, Storage & Peripherals | San Jose, California | — |
-| 64 | PTC | PTC Inc. | $21.05B | Application Software | Boston, Massachusetts | — |
-| 65 | CDW | CDW Corporation | $20.64B | Technology Distributors | Vernon Hills, Illinois | 1.53% |
-| 66 | SWKS | Skyworks Solutions | $19.62B | Semiconductors | Irvine, California | 3.45% |
-| 67 | FSLR | First Solar | $18.48B | Semiconductors | Tempe, Arizona | — |
-| 68 | ZBRA | Zebra Technologies | $18.28B | Electronic Equipment & Instruments | Lincolnshire, Illinois | — |
-| 69 | FICO | Fair Isaac | $17.61B | Application Software | Bozeman, Montana | — |
-| 70 | TYL | Tyler Technologies | $15.98B | Application Software | Plano, Texas | — |
-| 71 | GEN | Gen Digital | $14.89B | Systems Software | Tempe, Arizona | 2.01% |
-| 72 | TRMB | Trimble Inc. | $14.80B | Application Software | Westminster, Colorado | — |
-| 73 | IT | Gartner | $14.54B | IT Consulting & Other Services | Stamford, Connecticut | — |
-| 74 | GDDY | GoDaddy | $14.28B | Internet Services & Infrastructure | Tempe, Arizona | — |
-| 75 | AKAM | Akamai Technologies | $13.44B | Internet Services & Infrastructure | Cambridge, Massachusetts | — |
+| 1 | AAPL | Apple Inc. | $5.03T | Technology Hardware, Storage & Peripherals | Cupertino, California | 0.31% |
+| 2 | NVDA | Nvidia | $4.94T | Semiconductors | Santa Clara, California | 0.49% |
+| 3 | MSFT | Microsoft | $3.88T | Systems Software | Redmond, Washington | 0.75% |
+| 4 | AVGO | Broadcom | $1.56T | Semiconductors | Palo Alto, California | 0.80% |
+| 5 | MU | Micron Technology | $1.00T | Semiconductors | Boise, Idaho | 0.07% |
+| 6 | AMD | Advanced Micro Devices | $824.07B | Semiconductors | Santa Clara, California | — |
+| 7 | PLTR | Palantir Technologies | $442.43B | Application Software | Aventura, Florida | — |
+| 8 | CSCO | Cisco | $412.04B | Communications Equipment | San Jose, California | 1.61% |
+| 9 | ORCL | Oracle Corporation | $396.13B | Application Software | Austin, Texas | 1.53% |
+| 10 | INTC | Intel | $349.19B | Semiconductors | Santa Clara, California | — |
+| 11 | AMAT | Applied Materials | $309.57B | Semiconductor Materials & Equipment | Santa Clara, California | 0.54% |
+| 12 | PANW | Palo Alto Networks | $299.44B | Systems Software | Santa Clara, California | — |
+| 13 | LRCX | Lam Research | $299.23B | Semiconductor Materials & Equipment | Fremont, California | 0.55% |
+| 14 | TXN | Texas Instruments | $275.04B | Semiconductors | Dallas, Texas | 2.02% |
+| 15 | DELL | Dell Technologies | $269.78B | Technology Hardware, Storage & Peripherals | Round Rock, Texas | 0.59% |
+| 16 | CRWD | CrowdStrike | $256.42B | Systems Software | Austin, Texas | — |
+| 17 | IBM | IBM | $243.66B | IT Consulting & Other Services | Armonk, New York | 2.62% |
+| 18 | ANET | Arista Networks | $212.97B | Communications Equipment | Santa Clara, California | — |
+| 19 | KLAC | KLA Corporation | $206.07B | Semiconductor Materials & Equipment | Milpitas, California | 0.58% |
+| 20 | ADI | Analog Devices | $202.12B | Semiconductors | Wilmington, Massachusetts | 1.05% |
+| 21 | APH | Amphenol | $195.55B | Electronic Components | Wallingford, Connecticut | 0.76% |
+| 22 | CRM | Salesforce | $188.61B | Application Software | San Francisco, California | 0.77% |
+| 23 | MRVL | Marvell Technology | $176.51B | Semiconductors | Santa Clara, California | 0.12% |
+| 24 | QCOM | Qualcomm | $175.97B | Semiconductors | San Diego, California | 2.23% |
+| 25 | SNDK | Sandisk | $166.34B | Technology Hardware, Storage & Peripherals | Milpitas, California | — |
+| 26 | ACN | Accenture | $158.03B | IT Consulting & Other Services | Dublin, Ireland | 2.65% |
+| 27 | STX | Seagate Technology | $148.25B | Technology Hardware, Storage & Peripherals | Dublin, Ireland | 0.47% |
+| 28 | WDC | Western Digital | $137.04B | Technology Hardware, Storage & Peripherals | San Jose, California | 0.19% |
+| 29 | NOW | ServiceNow | $109.11B | Systems Software | Santa Clara, California | — |
+| 30 | GLW | Corning Inc. | $106.22B | Electronic Components | Corning, New York | 0.91% |
+| 31 | FTNT | Fortinet | $99.84B | Systems Software | Sunnyvale, California | — |
+| 32 | ADBE | Adobe Inc. | $97.39B | Application Software | San Jose, California | — |
+| 33 | INTU | Intuit | $91.15B | Application Software | Mountain View, California | 1.62% |
+| 34 | CDNS | Cadence Design Systems | $89.97B | Application Software | San Jose, California | — |
+| 35 | SNPS | Synopsys | $89.61B | Application Software | Sunnyvale, California | — |
+| 36 | DDOG | Datadog | $84.48B | Application Software | New York City, New York | — |
+| 37 | MSI | Motorola Solutions | $81.35B | Communications Equipment | Chicago, Illinois | 0.98% |
+| 38 | LITE | Lumentum | $76.15B | Communications Equipment | San Jose, California | — |
+| 39 | HPE | Hewlett Packard Enterprise | $73.13B | Technology Hardware, Storage & Peripherals | Houston, Texas | 1.03% |
+| 40 | NXPI | NXP Semiconductors | $65.44B | Semiconductors | Eindhoven, Netherlands | 1.56% |
+| 41 | TEL | TE Connectivity | $61.25B | Electronic Manufacturing Services | Galway, Ireland | 1.46% |
+| 42 | MPWR | Monolithic Power Systems | $59.54B | Semiconductors | Kirkland, Washington | 0.66% |
+| 43 | KEYS | Keysight Technologies | $52.30B | Electronic Equipment & Instruments | Santa Rosa, California | — |
+| 44 | ADSK | Autodesk | $52.17B | Application Software | San Francisco, California | — |
+| 45 | WDAY | Workday, Inc. | $47.67B | Application Software | Pleasanton, California | — |
+| 46 | ROP | Roper Technologies | $46.15B | Electronic Equipment & Instruments | Sarasota, Florida | 0.78% |
+| 47 | CIEN | Ciena | $45.48B | Communications Equipment | Hanover, Maryland | — |
+| 48 | TER | Teradyne | $42.90B | Semiconductor Materials & Equipment | North Reading, Massachusetts | 0.19% |
+| 49 | P | Everpure | $42.31B | Technology Hardware, Storage & Peripherals | Santa Clara, California | — |
+| 50 | MCHP | Microchip Technology | $42.00B | Semiconductors | Chandler, Arizona | 2.35% |
+| 51 | COHR | Coherent Corp. | $41.42B | Electronic Components | Saxonburg, Pennsylvania | — |
+| 52 | NTAP | NetApp | $39.12B | Technology Hardware, Storage & Peripherals | San Jose, California | 1.04% |
+| 53 | FLEX | Flex Ltd. | $31.95B | Electronic Manufacturing Services | Austin, Texas | — |
+| 54 | TWLO | Twilio | $31.49B | Systems Software | San Francisco, California | — |
+| 55 | TDY | Teledyne Technologies | $30.51B | Electronic Equipment & Instruments | Thousand Oaks, California | — |
+| 56 | CTSH | Cognizant | $29.11B | IT Consulting & Other Services | Teaneck, New Jersey | 2.03% |
+| 57 | JBL | Jabil | $28.08B | Electronic Manufacturing Services | St. Petersburg, Florida | 0.12% |
+| 58 | ON | ON Semiconductor | $27.90B | Semiconductors | Phoenix, Arizona | — |
+| 59 | VRSN | Verisign | $27.56B | Internet Services & Infrastructure | Reston, Virginia | 1.05% |
+| 60 | HPQ | HP Inc. | $25.95B | Technology Hardware, Storage & Peripherals | Palo Alto, California | 4.17% |
+| 61 | Q | Qnity Electronics | $24.41B | Semiconductor Materials & Equipment | Wilmington, Delaware | 0.27% |
+| 62 | SMCI | Supermicro | $21.65B | Technology Hardware, Storage & Peripherals | San Jose, California | — |
+| 63 | PTC | PTC Inc. | $21.24B | Application Software | Boston, Massachusetts | — |
+| 64 | SWKS | Skyworks Solutions | $20.60B | Semiconductors | Irvine, California | 3.18% |
+| 65 | CDW | CDW Corporation | $19.23B | Technology Distributors | Vernon Hills, Illinois | 1.64% |
+| 66 | FFIV | F5, Inc. | $19.22B | Communications Equipment | Seattle, Washington | — |
+| 67 | FSLR | First Solar | $18.74B | Semiconductors | Tempe, Arizona | — |
+| 68 | GEN | Gen Digital | $17.44B | Systems Software | Tempe, Arizona | 1.71% |
+| 69 | ZBRA | Zebra Technologies | $17.09B | Electronic Equipment & Instruments | Lincolnshire, Illinois | — |
+| 70 | TYL | Tyler Technologies | $15.68B | Application Software | Plano, Texas | — |
+| 71 | FICO | Fair Isaac | $15.36B | Application Software | Bozeman, Montana | — |
+| 72 | TRMB | Trimble Inc. | $15.14B | Application Software | Westminster, Colorado | — |
+| 73 | GDDY | GoDaddy | $14.85B | Internet Services & Infrastructure | Tempe, Arizona | — |
+| 74 | IT | Gartner | $14.45B | IT Consulting & Other Services | Stamford, Connecticut | — |
+| 75 | AKAM | Akamai Technologies | $13.33B | Internet Services & Infrastructure | Cambridge, Massachusetts | — |

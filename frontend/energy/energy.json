@@ -1,7 +1,7 @@
 {
   "sector": "Energy",
   "count": 21,
-  "generatedAt": "2026-10-31",
+  "generatedAt": "2026-11-02",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -298,6 +298,5 @@
       "dividendYield": 2.82,
       "hasDividend": "Sim"
     }
-  ],
-  "liveUpdatedAt": "2026-10-31 11:47:17 +0000"
+  ]
 }

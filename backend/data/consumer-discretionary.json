@@ -1,7 +1,7 @@
 {
   "sector": "Consumer Discretionary",
   "count": 47,
-  "generatedAt": "2026-10-31",
+  "generatedAt": "2026-11-02",
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
   "companies": [
     {
@@ -662,6 +662,5 @@
       "dividendYield": 1.93,
       "hasDividend": "Sim"
     }
-  ],
-  "liveUpdatedAt": "2026-10-31 11:47:17 +0000"
+  ]
 }
