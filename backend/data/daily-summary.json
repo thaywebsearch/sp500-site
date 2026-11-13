@@ -1,205 +1,205 @@
 {
-  "generatedAt": "2026-11-12 14:46:07 UTC",
-  "referenceDate": "2026-11-12",
+  "generatedAt": "2026-11-13 02:02:24 UTC",
+  "referenceDate": "2026-11-11",
   "topGainers": [
-    {
-      "symbol": "AVGO",
-      "name": "Broadcom",
-      "sector": "Information Technology",
-      "lastPrice": 363.45,
-      "changePct": 5.28
-    },
-    {
-      "symbol": "AMD",
-      "name": "Advanced Micro Devices",
-      "sector": "Information Technology",
-      "lastPrice": 568.59,
-      "changePct": 2.84
-    },
-    {
-      "symbol": "SWKS",
-      "name": "Skyworks Solutions",
-      "sector": "Information Technology",
-      "lastPrice": 89.8,
-      "changePct": 2.46
-    },
-    {
-      "symbol": "ALL",
-      "name": "Allstate",
-      "sector": "Financials",
-      "lastPrice": 268.0,
-      "changePct": 2.22
-    },
-    {
-      "symbol": "AMZN",
-      "name": "Amazon",
-      "sector": "Consumer Discretionary",
-      "lastPrice": 271.37,
-      "changePct": 1.95
-    },
-    {
-      "symbol": "ECHO",
-      "name": "EchoStar",
-      "sector": "Communication Services",
-      "lastPrice": 103.87,
-      "changePct": 1.63
-    },
-    {
-      "symbol": "APH",
-      "name": "Amphenol",
-      "sector": "Information Technology",
-      "lastPrice": 80.58,
-      "changePct": 1.6
-    },
-    {
-      "symbol": "ERIE",
-      "name": "Erie Indemnity",
-      "sector": "Financials",
-      "lastPrice": 276.12,
-      "changePct": 1.45
-    }
-  ],
-  "topLosers": [
-    {
-      "symbol": "SMCI",
-      "name": "Supermicro",
-      "sector": "Information Technology",
-      "lastPrice": 27.89,
-      "changePct": -8.35
-    },
-    {
-      "symbol": "NVDA",
-      "name": "Nvidia",
-      "sector": "Information Technology",
-      "lastPrice": 160.26,
-      "changePct": -7.75
-    },
     {
       "symbol": "SNDK",
       "name": "Sandisk",
       "sector": "Information Technology",
-      "lastPrice": 921.27,
-      "changePct": -5.77
+      "lastPrice": 977.69,
+      "changePct": 13.69
     },
     {
-      "symbol": "KDP",
-      "name": "Keurig Dr Pepper",
-      "sector": "Consumer Staples",
-      "lastPrice": 36.23,
-      "changePct": -5.28
+      "symbol": "BE",
+      "name": "Bloom Energy",
+      "sector": "Industrials",
+      "lastPrice": 209.47,
+      "changePct": 12.97
+    },
+    {
+      "symbol": "MU",
+      "name": "Micron Technology",
+      "sector": "Information Technology",
+      "lastPrice": 811.3,
+      "changePct": 11.89
+    },
+    {
+      "symbol": "DELL",
+      "name": "Dell Technologies",
+      "sector": "Information Technology",
+      "lastPrice": 373.68,
+      "changePct": 11.75
     },
     {
       "symbol": "LITE",
       "name": "Lumentum",
       "sector": "Information Technology",
-      "lastPrice": 614.13,
-      "changePct": -5.24
+      "lastPrice": 648.06,
+      "changePct": 10.67
     },
     {
-      "symbol": "MOS",
-      "name": "Mosaic Company (The)",
-      "sector": "Materials",
-      "lastPrice": 21.67,
-      "changePct": -4.96
-    },
-    {
-      "symbol": "RDDT",
-      "name": "Reddit",
-      "sector": "Communication Services",
-      "lastPrice": 100.45,
-      "changePct": -4.93
-    },
-    {
-      "symbol": "PANW",
-      "name": "Palo Alto Networks",
+      "symbol": "STX",
+      "name": "Seagate Technology",
       "sector": "Information Technology",
-      "lastPrice": 319.89,
-      "changePct": -4.36
+      "lastPrice": 551.72,
+      "changePct": 9.99
+    },
+    {
+      "symbol": "SMCI",
+      "name": "Supermicro",
+      "sector": "Information Technology",
+      "lastPrice": 30.43,
+      "changePct": 9.5
+    },
+    {
+      "symbol": "MRVL",
+      "name": "Marvell Technology",
+      "sector": "Information Technology",
+      "lastPrice": 168.8,
+      "changePct": 9.33
+    }
+  ],
+  "topLosers": [
+    {
+      "symbol": "ABNB",
+      "name": "Airbnb",
+      "sector": "Consumer Discretionary",
+      "lastPrice": 181.13,
+      "changePct": -3.09
+    },
+    {
+      "symbol": "LULU",
+      "name": "Lululemon Athletica",
+      "sector": "Consumer Discretionary",
+      "lastPrice": 107.45,
+      "changePct": -2.65
+    },
+    {
+      "symbol": "MCD",
+      "name": "McDonald's",
+      "sector": "Consumer Discretionary",
+      "lastPrice": 274.8,
+      "changePct": -2.61
+    },
+    {
+      "symbol": "LDOS",
+      "name": "Leidos",
+      "sector": "Industrials",
+      "lastPrice": 133.89,
+      "changePct": -2.44
+    },
+    {
+      "symbol": "NVR",
+      "name": "NVR, Inc.",
+      "sector": "Consumer Discretionary",
+      "lastPrice": 5895.4,
+      "changePct": -2.34
+    },
+    {
+      "symbol": "BF.B",
+      "name": "Brown–Forman",
+      "sector": "Consumer Staples",
+      "lastPrice": 30.1,
+      "changePct": -2.34
+    },
+    {
+      "symbol": "MSFT",
+      "name": "Microsoft",
+      "sector": "Information Technology",
+      "lastPrice": 521.13,
+      "changePct": -2.26
+    },
+    {
+      "symbol": "WYNN",
+      "name": "Wynn Resorts",
+      "sector": "Consumer Discretionary",
+      "lastPrice": 85.38,
+      "changePct": -2.2
     }
   ],
   "sectorPerformance": [
     {
-      "name": "Utilities",
-      "avgChangePct": 0.45,
-      "gainers": 28,
-      "losers": 3,
-      "total": 31
+      "name": "Information Technology",
+      "avgChangePct": 3.75,
+      "gainers": 66,
+      "losers": 9,
+      "total": 75
     },
     {
       "name": "Energy",
-      "avgChangePct": 0.13,
-      "gainers": 13,
-      "losers": 8,
+      "avgChangePct": 2.23,
+      "gainers": 21,
+      "losers": 0,
       "total": 21
     },
     {
+      "name": "Industrials",
+      "avgChangePct": 1.18,
+      "gainers": 66,
+      "losers": 17,
+      "total": 83
+    },
+    {
+      "name": "Communication Services",
+      "avgChangePct": 1.09,
+      "gainers": 19,
+      "losers": 3,
+      "total": 22
+    },
+    {
       "name": "Financials",
-      "avgChangePct": 0.01,
-      "gainers": 42,
-      "losers": 32,
+      "avgChangePct": 0.56,
+      "gainers": 52,
+      "losers": 23,
       "total": 76
     },
     {
-      "name": "Real Estate",
-      "avgChangePct": -0.0,
+      "name": "Materials",
+      "avgChangePct": 0.26,
+      "gainers": 12,
+      "losers": 12,
+      "total": 24
+    },
+    {
+      "name": "Consumer Staples",
+      "avgChangePct": 0.23,
+      "gainers": 21,
+      "losers": 12,
+      "total": 33
+    },
+    {
+      "name": "Utilities",
+      "avgChangePct": 0.23,
       "gainers": 16,
       "losers": 14,
+      "total": 31
+    },
+    {
+      "name": "Health Care",
+      "avgChangePct": 0.12,
+      "gainers": 30,
+      "losers": 30,
+      "total": 60
+    },
+    {
+      "name": "Real Estate",
+      "avgChangePct": -0.14,
+      "gainers": 9,
+      "losers": 21,
       "total": 30
     },
     {
       "name": "Consumer Discretionary",
-      "avgChangePct": -0.02,
-      "gainers": 27,
-      "losers": 20,
+      "avgChangePct": -0.26,
+      "gainers": 19,
+      "losers": 27,
       "total": 47
-    },
-    {
-      "name": "Materials",
-      "avgChangePct": -0.04,
-      "gainers": 16,
-      "losers": 8,
-      "total": 24
-    },
-    {
-      "name": "Industrials",
-      "avgChangePct": -0.08,
-      "gainers": 47,
-      "losers": 35,
-      "total": 83
-    },
-    {
-      "name": "Consumer Staples",
-      "avgChangePct": -0.09,
-      "gainers": 20,
-      "losers": 13,
-      "total": 33
-    },
-    {
-      "name": "Health Care",
-      "avgChangePct": -0.4,
-      "gainers": 31,
-      "losers": 29,
-      "total": 60
-    },
-    {
-      "name": "Communication Services",
-      "avgChangePct": -0.43,
-      "gainers": 10,
-      "losers": 12,
-      "total": 22
-    },
-    {
-      "name": "Information Technology",
-      "avgChangePct": -1.17,
-      "gainers": 18,
-      "losers": 57,
-      "total": 75
     }
   ],
-  "marketMood": "neutral",
+  "marketMood": "bullish",
   "stats": {
-    "gainers": 268,
-    "losers": 231,
+    "gainers": 331,
+    "losers": 168,
     "neutral": 3,
     "total": 502
   }
