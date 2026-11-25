@@ -1,62 +1,62 @@
 {
-  "generatedAt": "2026-11-24 17:05:17 UTC",
+  "generatedAt": "2026-11-25 04:30:15 UTC",
   "referenceDate": "2026-11-24",
   "topGainers": [
     {
       "symbol": "DLTR",
       "name": "Dollar Tree",
       "sector": "Consumer Staples",
-      "lastPrice": 155.31,
-      "changePct": 11.65
+      "lastPrice": 154.65,
+      "changePct": 11.18
     },
     {
       "symbol": "CSGP",
       "name": "CoStar Group",
       "sector": "Real Estate",
-      "lastPrice": 32.76,
-      "changePct": 8.48
+      "lastPrice": 32.64,
+      "changePct": 8.08
     },
     {
       "symbol": "MRNA",
       "name": "Moderna",
       "sector": "Health Care",
-      "lastPrice": 226.7,
-      "changePct": 6.89
-    },
-    {
-      "symbol": "TTWO",
-      "name": "Take-Two Interactive",
-      "sector": "Communication Services",
-      "lastPrice": 223.19,
-      "changePct": 6.61
-    },
-    {
-      "symbol": "HUM",
-      "name": "Humana",
-      "sector": "Health Care",
-      "lastPrice": 404.93,
-      "changePct": 5.54
-    },
-    {
-      "symbol": "LDOS",
-      "name": "Leidos",
-      "sector": "Industrials",
-      "lastPrice": 130.23,
-      "changePct": 5.47
+      "lastPrice": 227.38,
+      "changePct": 7.21
     },
     {
       "symbol": "CHTR",
       "name": "Charter Communications",
       "sector": "Communication Services",
-      "lastPrice": 134.86,
-      "changePct": 5.43
+      "lastPrice": 135.87,
+      "changePct": 6.21
     },
     {
       "symbol": "NKE",
       "name": "Nike, Inc.",
       "sector": "Consumer Discretionary",
-      "lastPrice": 35.51,
-      "changePct": 5.18
+      "lastPrice": 35.75,
+      "changePct": 5.89
+    },
+    {
+      "symbol": "IP",
+      "name": "International Paper",
+      "sector": "Materials",
+      "lastPrice": 30.62,
+      "changePct": 5.66
+    },
+    {
+      "symbol": "AMGN",
+      "name": "Amgen",
+      "sector": "Health Care",
+      "lastPrice": 473.94,
+      "changePct": 5.55
+    },
+    {
+      "symbol": "NVR",
+      "name": "NVR, Inc.",
+      "sector": "Consumer Discretionary",
+      "lastPrice": 5868.8,
+      "changePct": 5.5
     }
   ],
   "topLosers": [
@@ -64,142 +64,142 @@
       "symbol": "ADI",
       "name": "Analog Devices",
       "sector": "Information Technology",
-      "lastPrice": 307.17,
-      "changePct": -18.9
-    },
-    {
-      "symbol": "SNDK",
-      "name": "Sandisk",
-      "sector": "Information Technology",
-      "lastPrice": 76.57,
-      "changePct": -18.88
+      "lastPrice": 312.95,
+      "changePct": -17.37
     },
     {
       "symbol": "HPE",
       "name": "Hewlett Packard Enterprise",
       "sector": "Information Technology",
-      "lastPrice": 39.71,
-      "changePct": -17.31
+      "lastPrice": 40.19,
+      "changePct": -16.31
     },
     {
       "symbol": "DELL",
       "name": "Dell Technologies",
       "sector": "Information Technology",
-      "lastPrice": 293.27,
-      "changePct": -12.43
+      "lastPrice": 295.28,
+      "changePct": -11.83
+    },
+    {
+      "symbol": "TXN",
+      "name": "Texas Instruments",
+      "sector": "Information Technology",
+      "lastPrice": 258.44,
+      "changePct": -11.25
     },
     {
       "symbol": "MU",
       "name": "Micron Technology",
       "sector": "Information Technology",
-      "lastPrice": 623.76,
-      "changePct": -11.86
+      "lastPrice": 629.79,
+      "changePct": -11.01
     },
     {
       "symbol": "MPWR",
       "name": "Monolithic Power Systems",
       "sector": "Information Technology",
-      "lastPrice": 1183.21,
-      "changePct": -11.3
+      "lastPrice": 1190.16,
+      "changePct": -10.77
     },
     {
       "symbol": "LITE",
       "name": "Lumentum",
       "sector": "Information Technology",
-      "lastPrice": 483.57,
-      "changePct": -11.17
+      "lastPrice": 487.12,
+      "changePct": -10.52
     },
     {
       "symbol": "FLEX",
       "name": "Flex Ltd.",
       "sector": "Information Technology",
-      "lastPrice": 65.81,
-      "changePct": -11.0
+      "lastPrice": 66.44,
+      "changePct": -10.14
     }
   ],
   "sectorPerformance": [
     {
       "name": "Health Care",
-      "avgChangePct": 2.08,
-      "gainers": 56,
-      "losers": 4,
+      "avgChangePct": 2.3,
+      "gainers": 54,
+      "losers": 6,
       "total": 60
     },
     {
-      "name": "Consumer Staples",
-      "avgChangePct": 2.07,
-      "gainers": 30,
-      "losers": 2,
-      "total": 33
-    },
-    {
       "name": "Communication Services",
-      "avgChangePct": 1.66,
+      "avgChangePct": 1.62,
       "gainers": 18,
       "losers": 4,
       "total": 22
     },
     {
       "name": "Consumer Discretionary",
-      "avgChangePct": 1.22,
-      "gainers": 35,
-      "losers": 12,
+      "avgChangePct": 1.55,
+      "gainers": 37,
+      "losers": 10,
       "total": 47
     },
     {
       "name": "Real Estate",
-      "avgChangePct": 0.97,
-      "gainers": 26,
-      "losers": 4,
+      "avgChangePct": 1.52,
+      "gainers": 27,
+      "losers": 3,
       "total": 30
     },
     {
+      "name": "Consumer Staples",
+      "avgChangePct": 1.35,
+      "gainers": 26,
+      "losers": 7,
+      "total": 33
+    },
+    {
       "name": "Financials",
-      "avgChangePct": 0.71,
-      "gainers": 61,
-      "losers": 15,
+      "avgChangePct": 0.96,
+      "gainers": 62,
+      "losers": 14,
       "total": 76
     },
     {
       "name": "Energy",
-      "avgChangePct": 0.4,
-      "gainers": 14,
-      "losers": 7,
+      "avgChangePct": 0.85,
+      "gainers": 16,
+      "losers": 5,
       "total": 21
     },
     {
-      "name": "Utilities",
-      "avgChangePct": 0.33,
-      "gainers": 26,
-      "losers": 5,
-      "total": 31
-    },
-    {
       "name": "Materials",
-      "avgChangePct": 0.05,
+      "avgChangePct": 0.71,
       "gainers": 17,
       "losers": 7,
       "total": 24
     },
     {
+      "name": "Utilities",
+      "avgChangePct": 0.13,
+      "gainers": 23,
+      "losers": 8,
+      "total": 31
+    },
+    {
       "name": "Industrials",
-      "avgChangePct": -0.65,
-      "gainers": 36,
-      "losers": 47,
+      "avgChangePct": -0.21,
+      "gainers": 42,
+      "losers": 41,
       "total": 83
     },
     {
       "name": "Information Technology",
-      "avgChangePct": -4.2,
-      "gainers": 23,
-      "losers": 52,
+      "avgChangePct": -3.58,
+      "gainers": 24,
+      "losers": 50,
       "total": 75
     }
   ],
   "marketMood": "bullish",
   "stats": {
-    "gainers": 342,
-    "losers": 159,
+    "gainers": 346,
+    "losers": 155,
     "neutral": 1,
     "total": 502
   }
